@@ -44,13 +44,12 @@ jobs:
             echo "pcb_ready=false" >> "$GITHUB_OUTPUT"
           fi
 
-      # Temporary bootstrap normalization: once the normalized native schematic
-      # is committed, change these two commands to --check.
       - name: Normalize converted schematic for checks
         if: steps.files.outputs.schematic == 'true'
         run: |
           python3 tools/normalize_schematic.py
           python3 tools/normalize_geometry.py
+          python3 tools/fix_u2_footprint.py
 
       - name: Prepare KiCad CI library tables
         shell: bash
@@ -66,7 +65,7 @@ jobs:
           cat > .kicad-ci/fp-lib-table <<'EOF'
           (fp_lib_table
             (version 7)
-            (lib (name "Package_TSSOP")(type "KiCad")(uri "/usr/share/kicad/footprints/Package_TSSOP.pretty")(options "")(descr "KiCad TSSOP packages"))
+            (lib (name "Package_SO")(type "KiCad")(uri "/usr/share/kicad/footprints/Package_SO.pretty")(options "")(descr "KiCad SO/TSSOP/VSSOP packages"))
           )
           EOF
 
