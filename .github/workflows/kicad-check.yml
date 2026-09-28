@@ -29,10 +29,19 @@ jobs:
           else
             echo "schematic=false" >> "$GITHUB_OUTPUT"
           fi
+
           if [ -f hardware/poa-sensor.kicad_pcb ]; then
             echo "pcb=true" >> "$GITHUB_OUTPUT"
+            # The initial native PCB is intentionally only the mechanical baseline.
+            # Enable parity DRC only after F8 has imported real footprints.
+            if grep -q '^[[:space:]]*(footprint ' hardware/poa-sensor.kicad_pcb; then
+              echo "pcb_ready=true" >> "$GITHUB_OUTPUT"
+            else
+              echo "pcb_ready=false" >> "$GITHUB_OUTPUT"
+            fi
           else
             echo "pcb=false" >> "$GITHUB_OUTPUT"
+            echo "pcb_ready=false" >> "$GITHUB_OUTPUT"
           fi
 
       # Temporary bootstrap normalization: once the normalized native schematic
@@ -86,7 +95,7 @@ jobs:
           exit $rc
 
       - name: PCB DRC
-        if: steps.files.outputs.pcb == 'true'
+        if: steps.files.outputs.pcb_ready == 'true'
         shell: bash
         run: |
           set +e
@@ -104,6 +113,12 @@ jobs:
           echo "----- KiCad DRC report -----"
           cat hardware/poa-sensor-drc.rpt || true
           exit $rc
+
+      - name: Explain PCB baseline state
+        if: steps.files.outputs.pcb == 'true' && steps.files.outputs.pcb_ready != 'true'
+        run: |
+          echo "Native PCB mechanical baseline exists, but no schematic footprints are present yet."
+          echo "Run Update PCB from Schematic (F8), save the board, then DRC/parity checks will activate."
 
       - name: Explain bootstrap state
         if: steps.files.outputs.schematic != 'true' && steps.files.outputs.pcb != 'true'
