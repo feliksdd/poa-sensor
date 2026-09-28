@@ -48,25 +48,41 @@ jobs:
 
       - name: Schematic ERC
         if: steps.files.outputs.schematic == 'true'
+        shell: bash
         run: |
+          set +e
           docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp \
             -v "$PWD:/work" \
             -w /work \
             kicad/kicad:9.0.9 \
             kicad-cli sch erc --severity-all --exit-code-violations \
             -o hardware/poa-sensor-erc.rpt \
             hardware/poa-sensor.kicad_sch
+          rc=$?
+          echo "----- KiCad ERC report -----"
+          cat hardware/poa-sensor-erc.rpt || true
+          exit $rc
 
       - name: PCB DRC
         if: steps.files.outputs.pcb == 'true'
+        shell: bash
         run: |
+          set +e
           docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            -e HOME=/tmp \
             -v "$PWD:/work" \
             -w /work \
             kicad/kicad:9.0.9 \
             kicad-cli pcb drc --severity-all --exit-code-violations --schematic-parity \
             -o hardware/poa-sensor-drc.rpt \
             hardware/poa-sensor.kicad_pcb
+          rc=$?
+          echo "----- KiCad DRC report -----"
+          cat hardware/poa-sensor-drc.rpt || true
+          exit $rc
 
       - name: Explain bootstrap state
         if: steps.files.outputs.schematic != 'true' && steps.files.outputs.pcb != 'true'
