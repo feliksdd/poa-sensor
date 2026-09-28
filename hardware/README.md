@@ -2,27 +2,34 @@
 
 KiCad is the single source of truth for the electrical and PCB design.
 
-## Current schematic v0.1
+## Current project state
 
-The first complete electrical schematic is committed as:
+The schematic has been converted to the native KiCad 8 format:
 
-- `poa-sensor.sch`
-- `poa-sensor-cache.lib`
+- `poa-sensor.kicad_pro`
+- `poa-sensor.kicad_sch`
 
-These two files use the legacy Eeschema text format as a one-time bootstrap because the automated design environment does not have a KiCad executable available. KiCad 8/9 can import/open this format and convert it to the current `.kicad_sch` format.
+The legacy bootstrap files (`poa-sensor.sch` and `poa-sensor-cache.lib`) are retained temporarily until the native project passes the first complete ERC/PCB parity review. They can then be removed.
 
-### One-time conversion
+## One-time schematic normalization after conversion
 
-1. Open `poa-sensor.sch` in KiCad / Eeschema.
-2. Let KiCad rescue/import the cached project symbols if prompted.
-3. Save the schematic as `poa-sensor.kicad_sch`.
-4. Create/save the project as `poa-sensor.kicad_pro` if KiCad has not done so automatically.
-5. Commit the converted `.kicad_sch` and `.kicad_pro` files.
-6. After the converted project has been checked, the legacy `.sch` and `-cache.lib` files can be removed.
+The legacy conversion retained a few obsolete metadata values (old NTC1 package and pre-library custom footprint names). Normalize them once with:
 
-From that point onward the project should stay in the current KiCad format only.
+```bash
+python3 tools/normalize_schematic.py
+```
 
-## Schematic scope
+The tool changes only known placed-symbol metadata:
+
+- NTC1 -> TDK `NTCG063JF103FTBA`, 0201, LCSC `C29553871`
+- NTC2 -> off-board (`on_board no`)
+- J1 -> `POA:SWD_Pogo_1x05_P2.00mm`
+- J2 -> `POA:WirePads_1x02_P2.54mm`
+- BT1 -> `POA:WirePads_1x02_P2.54mm`
+
+After running it, open/save the schematic once in KiCad and commit the resulting `.kicad_sch`.
+
+## Schematic scope v0.1
 
 Revision 0.1 contains:
 
@@ -41,18 +48,45 @@ Revision 0.1 contains:
 
 Electrical rationale and firmware requirements are in `../docs/architecture.md`.
 
-## Next hardware files
+## Footprint library
 
-After conversion/review:
+Project-local custom footprints are in:
 
-- `poa-sensor.kicad_pro`
-- `poa-sensor.kicad_sch`
-- `poa-sensor.kicad_pcb`
-- `symbols/poa-sensor.kicad_sym`
-- `footprints/poa-sensor.pretty/`
+`footprints/poa-sensor.pretty/`
 
-Project-local libraries should contain only custom parts/footprints that are not safely covered by the official KiCad libraries, especially the E73 module, reference-cell mechanics, SWD pogo pads and wire pads.
+Current custom parts:
 
-## Important before PCB routing
+- `E73-2G4M08S1C`
+- `KXOB25-14X1F`
+- `SWD_Pogo_1x05_P2.00mm`
+- `WirePads_1x02_P2.54mm`
 
-Do not route until the custom E73 and KXOB footprints have been checked dimension-by-dimension against manufacturer drawings. The irradiance shunt must use true Kelvin routing, and the E73 antenna keep-out applies to all copper layers and nearby components.
+The project library alias is `POA` via `fp-lib-table`.
+
+## PCB baseline
+
+`poa-sensor-layout-template.kicad_pcb` contains the mechanical baseline before schematic footprints are imported:
+
+- 52 x 52 mm board outline
+- optical/reference-cell zone
+- E73 placement guide at the right board edge
+- real all-layer E73 antenna rule-area keepout
+- analog-island placement guide
+- J1/J2/battery placement guides
+
+To create the first electrical PCB:
+
+1. Normalize and save `poa-sensor.kicad_sch`.
+2. Copy/rename `poa-sensor-layout-template.kicad_pcb` to `poa-sensor.kicad_pcb`.
+3. Open the project in KiCad PCB Editor.
+4. Run **Tools -> Update PCB from Schematic (F8)**.
+5. Place components according to the User.1 guides; keep U1 unrotated with its antenna end at the right board edge.
+6. Save and commit `poa-sensor.kicad_pcb`.
+
+After that point routing can be done directly on the native board file.
+
+## Routing constraints
+
+Do not route until the custom E73 and KXOB footprints have been checked dimension-by-dimension against manufacturer drawings. The irradiance shunt must use true Kelvin routing: the reference-cell current path and ADC sense pair must not share copper segments. The E73 antenna keepout applies on both copper layers and to nearby components/metalwork.
+
+The intended layer strategy is a mostly continuous GND plane on B.Cu, signals/components on F.Cu, with the RF keepout removed from both layers.
