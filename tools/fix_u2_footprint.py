@@ -1,13 +1,9 @@
 #!/usr/bin/env python3
-"""Fix the ADS1115 footprint library alias after the legacy KiCad conversion.
+"""Normalize ADS1115 U2 footprint to the project-local POA library.
 
-The converted KiCad 8 schematic contains the ADS1115 footprint string twice:
-
-1. in the embedded library-symbol definition, and
-2. in the placed U2 symbol instance.
-
-Both must use KiCad's official `Package_SO` library.  This script intentionally
-expects exactly those two occurrences and is idempotent.
+KiCad 8 stores the footprint string twice in this project: once in the embedded
+symbol definition and once in the placed U2 symbol. This script deliberately
+normalizes both occurrences and is idempotent.
 """
 from pathlib import Path
 import sys
@@ -15,41 +11,37 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 SCH = ROOT / "hardware" / "poa-sensor.kicad_sch"
 
-OLD = 'Package_TSSOP:VSSOP-10_3x3mm_P0.5mm'
-NEW = 'Package_SO:VSSOP-10_3x3mm_P0.5mm'
-EXPECTED_TOTAL = 2
+OLD_VALUES = (
+    "Package_TSSOP:VSSOP-10_3x3mm_P0.5mm",
+    "Package_SO:VSSOP-10_3x3mm_P0.5mm",
+)
+TARGET = "POA:ADS1115IDGSR_VSSOP-10"
+EXPECTED_TARGET_COUNT = 2
 
 
 def main() -> int:
     text = SCH.read_text(encoding="utf-8")
-    old_count = text.count(OLD)
-    new_count = text.count(NEW)
+    changes = 0
+    for old in OLD_VALUES:
+        count = text.count(old)
+        if count:
+            text = text.replace(old, TARGET)
+            changes += count
 
-    if old_count + new_count != EXPECTED_TOTAL:
+    target_count = text.count(TARGET)
+    if target_count != EXPECTED_TARGET_COUNT:
         print(
-            "Unexpected schematic state: expected exactly two ADS1115 footprint "
-            f"entries, found old={old_count}, corrected={new_count}",
+            "Unexpected schematic state after normalization: "
+            f"target count={target_count}, expected={EXPECTED_TARGET_COUNT}",
             file=sys.stderr,
         )
         return 1
 
-    if old_count == 0 and new_count == EXPECTED_TOTAL:
-        print(f"U2 footprint already correct in both KiCad entries: {NEW}")
-        return 0
-
-    updated = text.replace(OLD, NEW)
-
-    # Defensive postcondition: after replacement there must be no stale alias and
-    # exactly two corrected entries (embedded library symbol + placed U2).
-    if updated.count(OLD) != 0 or updated.count(NEW) != EXPECTED_TOTAL:
-        print("Internal error while normalizing U2 footprint entries.", file=sys.stderr)
-        return 1
-
-    SCH.write_text(updated, encoding="utf-8", newline="\n")
-    print(
-        f"Updated {old_count} U2/ADS1115 footprint entr"
-        f"{'y' if old_count == 1 else 'ies'}: {OLD} -> {NEW}"
-    )
+    if changes:
+        SCH.write_text(text, encoding="utf-8", newline="\n")
+        print(f"Updated {changes} U2/ADS1115 footprint entries -> {TARGET}")
+    else:
+        print(f"U2 footprint already correct: {TARGET} ({target_count} entries)")
     return 0
 
 
