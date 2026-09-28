@@ -35,12 +35,31 @@ jobs:
             echo "pcb=false" >> "$GITHUB_OUTPUT"
           fi
 
-      # Temporary bootstrap normalization: the first KiCad conversion retained a
-      # few legacy metadata values. Once the normalized schematic is committed,
-      # replace this with: python3 tools/normalize_schematic.py --check
-      - name: Normalize schematic metadata for checks
+      # Temporary bootstrap normalization: once the normalized native schematic
+      # is committed, change these two commands to --check.
+      - name: Normalize converted schematic for checks
         if: steps.files.outputs.schematic == 'true'
-        run: python3 tools/normalize_schematic.py
+        run: |
+          python3 tools/normalize_schematic.py
+          python3 tools/normalize_geometry.py
+
+      - name: Prepare KiCad CI library tables
+        shell: bash
+        run: |
+          mkdir -p .kicad-ci
+          cat > .kicad-ci/sym-lib-table <<'EOF'
+          (sym_lib_table
+            (version 7)
+            (lib (name "Device")(type "KiCad")(uri "/usr/share/kicad/symbols/Device.kicad_sym")(options "")(descr "KiCad Device symbols"))
+            (lib (name "Connector_Generic")(type "KiCad")(uri "/usr/share/kicad/symbols/Connector_Generic.kicad_sym")(options "")(descr "KiCad generic connectors"))
+          )
+          EOF
+          cat > .kicad-ci/fp-lib-table <<'EOF'
+          (fp_lib_table
+            (version 7)
+            (lib (name "Package_TSSOP")(type "KiCad")(uri "/usr/share/kicad/footprints/Package_TSSOP.pretty")(options "")(descr "KiCad TSSOP packages"))
+          )
+          EOF
 
       - name: KiCad version
         run: |
@@ -55,6 +74,7 @@ jobs:
             --user "$(id -u):$(id -g)" \
             -e HOME=/tmp \
             -v "$PWD:/work" \
+            -v "$PWD/.kicad-ci:/tmp/.config/kicad/9.0" \
             -w /work \
             kicad/kicad:9.0.9 \
             kicad-cli sch erc --severity-all --exit-code-violations \
@@ -74,6 +94,7 @@ jobs:
             --user "$(id -u):$(id -g)" \
             -e HOME=/tmp \
             -v "$PWD:/work" \
+            -v "$PWD/.kicad-ci:/tmp/.config/kicad/9.0" \
             -w /work \
             kicad/kicad:9.0.9 \
             kicad-cli pcb drc --severity-all --exit-code-violations --schematic-parity \
