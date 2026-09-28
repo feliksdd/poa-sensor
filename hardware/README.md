@@ -4,30 +4,36 @@ KiCad is the single source of truth for the electrical and PCB design.
 
 ## Current project state
 
-The schematic has been converted to the native KiCad 8 format:
+Native KiCad 8 project files now exist:
 
 - `poa-sensor.kicad_pro`
 - `poa-sensor.kicad_sch`
+- `poa-sensor.kicad_pcb`
+
+The PCB currently contains the **mechanical baseline only**: board outline, optical window guide and the RF antenna keepout. Electrical footprints are intentionally imported from the schematic in KiCad using F8 so KiCad creates the correct symbol/footprint UUID and net relationships.
 
 The legacy bootstrap files (`poa-sensor.sch` and `poa-sensor-cache.lib`) are retained temporarily until the native project passes the first complete ERC/PCB parity review. They can then be removed.
 
-## One-time schematic normalization after conversion
+## Normalize the converted schematic before first PCB sync
 
 The legacy conversion retained a few obsolete metadata values (old NTC1 package and pre-library custom footprint names). Normalize them once with:
 
 ```bash
 python3 tools/normalize_schematic.py
+python3 tools/normalize_geometry.py
 ```
 
-The tool changes only known placed-symbol metadata:
+The normalization changes only known/audited items, including:
 
 - NTC1 -> TDK `NTCG063JF103FTBA`, 0201, LCSC `C29553871`
 - NTC2 -> off-board (`on_board no`)
 - J1 -> `POA:SWD_Pogo_1x05_P2.00mm`
 - J2 -> `POA:WirePads_1x02_P2.54mm`
 - BT1 -> `POA:WirePads_1x02_P2.54mm`
+- native custom symbol IDs/pins for U1, U2 and CELL1
+- known harmless geometry artifacts from the legacy conversion
 
-After running it, open/save the schematic once in KiCad and commit the resulting `.kicad_sch`.
+After running both scripts, open/save `poa-sensor.kicad_sch` once in KiCad and commit it.
 
 ## Schematic scope v0.1
 
@@ -65,7 +71,7 @@ The project library alias is `POA` via `fp-lib-table`.
 
 ## PCB baseline
 
-`poa-sensor-layout-template.kicad_pcb` contains the mechanical baseline before schematic footprints are imported:
+`poa-sensor.kicad_pcb` is now the real board file and contains:
 
 - 52 x 52 mm board outline
 - optical/reference-cell zone
@@ -74,19 +80,56 @@ The project library alias is `POA` via `fp-lib-table`.
 - analog-island placement guide
 - J1/J2/battery placement guides
 
-To create the first electrical PCB:
+`poa-sensor-layout-template.kicad_pcb` remains only as the historical/mechanical template and may later be removed.
 
-1. Normalize and save `poa-sensor.kicad_sch`.
-2. Copy/rename `poa-sensor-layout-template.kicad_pcb` to `poa-sensor.kicad_pcb`.
-3. Open the project in KiCad PCB Editor.
+### First electrical PCB synchronization
+
+1. Run both schematic normalization scripts above.
+2. Open/save the schematic in KiCad.
+3. Open `poa-sensor.kicad_pcb` in PCB Editor.
 4. Run **Tools -> Update PCB from Schematic (F8)**.
-5. Place components according to the User.1 guides; keep U1 unrotated with its antenna end at the right board edge.
-6. Save and commit `poa-sensor.kicad_pcb`.
+5. Save the board. Do not manually route yet.
+6. Run:
 
-After that point routing can be done directly on the native board file.
+```bash
+python3 tools/place_pcb.py
+```
+
+7. Re-open/save the PCB in KiCad and visually review the placement.
+8. Commit the resulting `.kicad_sch` and `.kicad_pcb`.
+
+`place_pcb.py` only changes the top-level position/rotation of known footprints. It deliberately does not alter nets, pads, footprints, zones or routing.
+
+## Placement baseline
+
+The canonical placement currently targets:
+
+- U1 E73 at the upper-right edge, antenna facing +X/right
+- CELL1 KXOB in the optical area at upper-left/center
+- NTC1 directly underneath CELL1 (intentional courtyard overlap)
+- RSH1, R7/R8, C9 and U2 as a tight analog island immediately beside CELL1
+- LF crystal and its capacitors close to U1 XL1/XL2
+- REG0 inductor/decoupling close to U1 power pins
+- J2 at the lower-left cable-entry edge
+- J1 SWD pogo pads at lower-right
+- battery wire pads near the lower center; the 1/2-AA battery sits below the PCB
+
+The exact coordinates are version-controlled in `../tools/place_pcb.py`.
 
 ## Routing constraints
 
-Do not route until the custom E73 and KXOB footprints have been checked dimension-by-dimension against manufacturer drawings. The irradiance shunt must use true Kelvin routing: the reference-cell current path and ADC sense pair must not share copper segments. The E73 antenna keepout applies on both copper layers and to nearby components/metalwork.
+Do not route before the F8 import/placement review is complete.
 
-The intended layer strategy is a mostly continuous GND plane on B.Cu, signals/components on F.Cu, with the RF keepout removed from both layers.
+Important constraints:
+
+- the irradiance shunt must use **true Kelvin routing**; the reference-cell current path and ADS1115 sense pair must not share copper segments
+- keep the RSH1 -> R7/R8 -> U2 differential pair short and symmetric
+- keep radio/clock currents out of the analog island
+- use a mostly continuous GND plane on B.Cu
+- no copper, traces, vias or parts inside the E73 antenna keepout on either copper layer
+- avoid battery, cable and metal mounting hardware in front of the antenna
+- NTC1 is intentionally mounted below CELL1; verify physical clearance on the first assembled prototype
+
+## CI / ERC / DRC
+
+GitHub Actions runs KiCad ERC on the native schematic. PCB DRC with schematic parity activates automatically once the board actually contains imported schematic footprints. The mechanical-only PCB baseline intentionally skips parity DRC.
