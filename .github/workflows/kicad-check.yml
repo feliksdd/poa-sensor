@@ -4,10 +4,12 @@ on:
   push:
     paths:
       - 'hardware/**'
+      - 'tools/**'
       - '.github/workflows/kicad-check.yml'
   pull_request:
     paths:
       - 'hardware/**'
+      - 'tools/**'
       - '.github/workflows/kicad-check.yml'
   workflow_dispatch:
 
@@ -32,6 +34,10 @@ jobs:
           else
             echo "pcb=false" >> "$GITHUB_OUTPUT"
           fi
+
+      - name: Check schematic metadata
+        if: steps.files.outputs.schematic == 'true'
+        run: python3 tools/normalize_schematic.py --check
 
       - name: KiCad version
         run: |
