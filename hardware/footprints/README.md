@@ -1,0 +1,69 @@
+# Project-local footprints
+
+These footprints are intentionally stored in the repository so the PCB does not depend on a user's personal KiCad libraries.
+
+## `E73-2G4M08S1C.kicad_mod`
+
+For the Ebyte E73-2G4M08S1C nRF52840 module.
+
+Validation basis:
+
+- current Ebyte mechanical drawing: nominal module body approximately 18 x 13 mm, 43 pads and 1.27 mm peripheral pitch
+- pad pattern cross-checked against the long-used `joric/nrfmicro` E73 footprint
+
+Design notes:
+
+- all castellated/peripheral contacts are SMD pads; no drilled pseudo-pads are used
+- the internal row of pads is included
+- a conservative antenna region is marked on `Dwgs.User`
+- **the drawing marker is not an electrical keep-out**; add an actual KiCad copper/routing keep-out on all copper layers in the board file
+- re-check the purchased module before production release
+
+## `KXOB25-14X1F.kicad_mod`
+
+For ANYSOLAR KXOB25-14X1F SolarBIT.
+
+Mechanical baseline:
+
+- body approximately 23 x 8 mm
+- approximately 1.8 mm device thickness
+- large rear end terminals represented by two SMD pads
+
+The cell is manually assembled after JLCPCB PCBA. The custom footprint intentionally overlaps NTC1, which is placed under the centre of the cell. This is a deliberate mechanical/DRC exception and must be verified on the first prototype.
+
+The pad geometry must be checked against the actual KXOB sample before production release; SolarBIT terminal solder coverage and preferred soldering method can influence the final pad length/paste strategy.
+
+## `SWD_Pogo_1x05_P2.00mm.kicad_mod`
+
+Connectorless programming interface:
+
+- 5 pads
+- 2.00 mm pitch
+- 1.5 mm circular copper/mask opening
+- no solder-paste opening
+
+Expected pin order from schematic:
+
+1. VTref / VDD_2V4
+2. SWDIO
+3. SWCLK
+4. RESET_N
+5. GND
+
+A simple spring-pogo fixture or hand-held 5-pin adapter can be made later if required.
+
+## `WirePads_1x02_P2.54mm.kicad_mod`
+
+Two through-hole solder pads intended for the external module-temperature cable. The cable gland/enclosure provides strain relief.
+
+## Library registration
+
+`hardware/fp-lib-table` registers the library as `POA` using:
+
+`${KIPRJMOD}/footprints/poa-sensor.pretty`
+
+Footprint names used in the schematic/PCB should therefore use the `POA:` prefix.
+
+## Footprint release rule
+
+A footprint is not considered production-verified merely because it passes KiCad DRC. Before the first board order, compare every custom footprint against the actual manufacturer drawing and, where possible, a physical sample. Record any change here and in the hardware revision notes.
