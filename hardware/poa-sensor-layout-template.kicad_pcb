@@ -1,0 +1,111 @@
+(kicad_pcb
+	(version 20240108)
+	(generator "pcbnew")
+	(generator_version "8.0")
+	(general (thickness 1.6) (legacy_teardrops no))
+	(paper "A4")
+	(title_block (title "POA Sensor placement template") (rev "0.1-mech"))
+	(layers
+		(0 "F.Cu" signal)
+		(31 "B.Cu" signal)
+		(32 "B.Adhes" user "B.Adhesive")
+		(33 "F.Adhes" user "F.Adhesive")
+		(34 "B.Paste" user)
+		(35 "F.Paste" user)
+		(36 "B.SilkS" user "B.Silkscreen")
+		(37 "F.SilkS" user "F.Silkscreen")
+		(38 "B.Mask" user)
+		(39 "F.Mask" user)
+		(40 "Dwgs.User" user "User.Drawings")
+		(41 "Cmts.User" user "User.Comments")
+		(42 "Eco1.User" user "User.Eco1")
+		(43 "Eco2.User" user "User.Eco2")
+		(44 "Edge.Cuts" user)
+		(45 "Margin" user)
+		(46 "B.CrtYd" user "B.Courtyard")
+		(47 "F.CrtYd" user "F.Courtyard")
+		(48 "B.Fab" user)
+		(49 "F.Fab" user)
+		(50 "User.1" user)
+	)
+	(setup (pad_to_mask_clearance 0) (allow_soldermask_bridges_in_footprints no))
+	(net 0 "")
+	(gr_line
+		(start 100 100) (end 152 100)
+		(stroke (width 0.1) (type solid))
+		(layer "Edge.Cuts") (uuid "c05d4c75-82a3-4445-ae95-3c3843df48d8"))
+	(gr_line
+		(start 152 100) (end 152 152)
+		(stroke (width 0.1) (type solid))
+		(layer "Edge.Cuts") (uuid "6c086a7e-c0ee-4203-9658-172487236a29"))
+	(gr_line
+		(start 152 152) (end 100 152)
+		(stroke (width 0.1) (type solid))
+		(layer "Edge.Cuts") (uuid "e72d0b72-f56c-4177-bb6a-0bfc5c31bb69"))
+	(gr_line
+		(start 100 152) (end 100 100)
+		(stroke (width 0.1) (type solid))
+		(layer "Edge.Cuts") (uuid "c70672e5-77b9-401c-a997-4f901226f916"))
+	(gr_rect
+		(start 133.5 105.5) (end 151.5 118.5)
+		(stroke (width 0.15) (type dash))
+		(fill none) (layer "User.1") (uuid "f0df077f-bc0c-4e19-bbbd-7506dd57b0a1"))
+	(gr_text "U1 E73 18x13 / antenna -> right"
+		(at 142.500 104.700 0) (layer "User.1") (uuid "b6dcc158-666d-4932-9a6c-a1ffde0b1472")
+		(effects (font (size 0.8 0.8) (thickness 0.12))))
+	(gr_rect
+		(start 103.5 110) (end 126.5 118)
+		(stroke (width 0.15) (type dash))
+		(fill none) (layer "User.1") (uuid "2a90a70a-b40e-4069-b2f8-c7c8805190ad"))
+	(gr_text "CELL1 KXOB 23x8"
+		(at 115.000 109.200 0) (layer "User.1") (uuid "0fbe4585-a5d2-4a7d-ad2b-a92fce6973ca")
+		(effects (font (size 0.8 0.8) (thickness 0.12))))
+	(gr_rect
+		(start 124 116) (end 137 133)
+		(stroke (width 0.15) (type dash))
+		(fill none) (layer "User.1") (uuid "d770d0ab-dfe6-4162-aa69-813340e27c1f"))
+	(gr_text "analog island U2/RSH/filter"
+		(at 130.500 115.200 0) (layer "User.1") (uuid "eca07e67-6809-485d-9043-4db2d6a890fe")
+		(effects (font (size 0.8 0.8) (thickness 0.12))))
+	(gr_rect
+		(start 136 143) (end 148 149)
+		(stroke (width 0.15) (type dash))
+		(fill none) (layer "User.1") (uuid "a478853f-7633-4554-8fc9-15f81a02b488"))
+	(gr_text "J1 SWD pogo"
+		(at 142.000 142.200 0) (layer "User.1") (uuid "f6697070-e247-4cd3-b754-ffe072c1d1ee")
+		(effects (font (size 0.8 0.8) (thickness 0.12))))
+	(gr_rect
+		(start 102 143) (end 111 149)
+		(stroke (width 0.15) (type dash))
+		(fill none) (layer "User.1") (uuid "a197c6d3-9d17-43a8-8208-be5e8b4d601c"))
+	(gr_text "J2 module NTC cable"
+		(at 106.500 142.200 0) (layer "User.1") (uuid "134da89b-78af-4926-ab1b-ae684fb586bc")
+		(effects (font (size 0.8 0.8) (thickness 0.12))))
+	(gr_rect
+		(start 112 139) (end 132 150)
+		(stroke (width 0.15) (type dash))
+		(fill none) (layer "User.1") (uuid "b747f5e8-4707-44db-aa68-7ea65193e075"))
+	(gr_text "BT1 wire pads / battery below PCB"
+		(at 122.000 138.200 0) (layer "User.1") (uuid "ad57220d-38a2-462f-a9e6-c5312e73fc8b")
+		(effects (font (size 0.8 0.8) (thickness 0.12))))
+	(gr_rect
+		(start 101.5 101.5) (end 130.5 126.5)
+		(stroke (width 0.25) (type dash))
+		(fill none) (layer "Dwgs.User") (uuid "0a225cb4-54e7-4877-94ef-982612546352"))
+	(gr_text "OPTICAL CLEAR AREA / lid window"
+		(at 116 103 0) (layer "Dwgs.User") (uuid "cb454324-bcda-4c37-b21a-6408fd38a2b5")
+		(effects (font (size 0.9 0.9) (thickness 0.15))))
+	(zone
+		(layers "F.Cu" "B.Cu" "B.Adhes" "F.Adhes" "B.Paste" "F.Paste" "B.SilkS" "F.SilkS" "B.Mask" "F.Mask" "Edge.Cuts" "B.CrtYd" "F.CrtYd" "B.Fab" "F.Fab")
+		(uuid "6aafd6ad-0ff3-497c-a79a-80362eda2745") (name "E73 antenna keepout") (hatch edge 0.5)
+		(connect_pads (clearance 0)) (min_thickness 0.25)
+		(keepout (tracks not_allowed) (vias not_allowed) (pads not_allowed) (copperpour not_allowed) (footprints not_allowed))
+		(fill (thermal_gap 0.5) (thermal_bridge_width 0.5) (island_removal_mode 0))
+		(polygon (pts (xy 147.5 104.5) (xy 152 104.5) (xy 152 119.5) (xy 147.5 119.5))))
+	(gr_text "RF KEEPOUT"
+		(at 149.75 112 90) (layer "User.1") (uuid "28b6e63a-8934-4a57-8611-a390c21b2a23")
+		(effects (font (size 1 1) (thickness 0.18))))
+	(gr_text "52 x 52 mm / placement template - run Update PCB from Schematic, then place to guides"
+		(at 126 154 0) (layer "Dwgs.User") (uuid "7e944d37-f1f2-4f54-b6a3-d5606be8243a")
+		(effects (font (size 0.8 0.8) (thickness 0.12))))
+)
