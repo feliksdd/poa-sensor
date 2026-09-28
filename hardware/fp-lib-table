@@ -1,0 +1,3 @@
+(fp_lib_table
+  (lib (name "POA")(type "KiCad")(uri "${KIPRJMOD}/footprints/poa-sensor.pretty")(options "")(descr "POA sensor project-local footprints"))
+)
