@@ -1,0 +1,19 @@
+# KiCad backups and local state
+*-backups/
+*.lck
+*.kicad_prl
+*.kicad_pcb-bak
+*.kicad_sch-bak
+*.bak
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Generated manufacturing outputs
+manufacturing/jlcpcb/gerber/*
+!manufacturing/jlcpcb/gerber/.gitkeep
+manufacturing/jlcpcb/assembly/*
+!manufacturing/jlcpcb/assembly/.gitkeep
