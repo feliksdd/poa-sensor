@@ -76,6 +76,18 @@ Wire Wire Line
 Text Label 4050 2900 0    50   ~ 0
 GND
 Wire Wire Line
+	2100 2900 1750 2900
+Text Label 1750 2900 0    50   ~ 0
+GND
+Wire Wire Line
+	2100 1600 1750 1600
+Text Label 1750 1600 0    50   ~ 0
+XL1
+Wire Wire Line
+	2100 1700 1750 1700
+Text Label 1750 1700 0    50   ~ 0
+XL2
+Wire Wire Line
 	2100 2000 1750 2000
 Text Label 1750 2000 0    50   ~ 0
 I2C_SDA
@@ -142,22 +154,22 @@ Wire Wire Line
 $Comp
 L Device:C C3
 U 1 1 5F000005
-P 2050 1650
-F 0 "C3" H 2165 1696 50 0000 L CNN
-F 1 "100nF" H 2165 1605 50 0000 L CNN
-F 2 "Capacitor_SMD:C_0603_1608Metric" H 2088 1500 50 0001 C CNN
-F 3 "" H 2050 1650 50 0001 C CNN
-F 4 "C14663" H 2050 1650 50 0001 C CNN "LCSC"
-	1    2050 1650
+P 2050 1400
+F 0 "C3" H 2165 1446 50 0000 L CNN
+F 1 "100nF" H 2165 1355 50 0000 L CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric" H 2088 1250 50 0001 C CNN
+F 3 "" H 2050 1400 50 0001 C CNN
+F 4 "C14663" H 2050 1400 50 0001 C CNN "LCSC"
+	1    2050 1400
 	1    0    0    -1
 $EndComp
 Wire Wire Line
-	2050 1500 2050 1450
-Text Label 2050 1450 0    50   ~ 0
+	2050 1250 2050 1150
+Text Label 2050 1150 0    50   ~ 0
 VBAT
 Wire Wire Line
-	2050 1800 2050 1900
-Text Label 2050 1900 0    50   ~ 0
+	2050 1550 2050 1650
+Text Label 2050 1650 0    50   ~ 0
 GND
 $Comp
 L Device:C C2
@@ -198,71 +210,65 @@ GND
 $Comp
 L Device:Crystal Y1
 U 1 1 5F000008
-P 1500 1650
-F 0 "Y1" V 1454 1781 50 0000 L CNN
-F 1 "32.768kHz 12.5pF" V 1545 1781 50 0000 L CNN
-F 2 "Crystal:Crystal_SMD_3215-2Pin_3.2x1.5mm" H 1500 1650 50 0001 C CNN
-F 3 "" H 1500 1650 50 0001 C CNN
-F 4 "C32346" V 1500 1650 50 0001 C CNN "LCSC"
-	1    1500 1650
+P 1500 3600
+F 0 "Y1" V 1454 3731 50 0000 L CNN
+F 1 "32.768kHz 12.5pF" V 1545 3731 50 0000 L CNN
+F 2 "Crystal:Crystal_SMD_3215-2Pin_3.2x1.5mm" H 1500 3600 50 0001 C CNN
+F 3 "" H 1500 3600 50 0001 C CNN
+F 4 "C32346" V 1500 3600 50 0001 C CNN "LCSC"
+	1    1500 3600
 	0    1    1    0
 $EndComp
 Wire Wire Line
-	2100 1600 1800 1600
-Wire Wire Line
-	1800 1600 1800 1500
-Wire Wire Line
-	1800 1500 1500 1500
-Wire Wire Line
-	2100 1700 1800 1700
-Wire Wire Line
-	1800 1700 1800 1800
-Wire Wire Line
-	1800 1800 1500 1800
-Text Label 1850 1600 0    50   ~ 0
+	1500 3450 1800 3450
+Text Label 1550 3450 0    50   ~ 0
 XL1
-Text Label 1850 1700 0    50   ~ 0
+Wire Wire Line
+	1500 3750 1800 3750
+Text Label 1550 3750 0    50   ~ 0
 XL2
 $Comp
 L Device:C C7
 U 1 1 5F000009
-P 1200 1350
-F 0 "C7" H 1315 1396 50 0000 L CNN
-F 1 "22pF C0G" H 1315 1305 50 0000 L CNN
-F 2 "Capacitor_SMD:C_0603_1608Metric" H 1238 1200 50 0001 C CNN
-F 3 "" H 1200 1350 50 0001 C CNN
-F 4 "C1653" H 1200 1350 50 0001 C CNN "LCSC"
-	1    1200 1350
+P 1200 3300
+F 0 "C7" H 1315 3346 50 0000 L CNN
+F 1 "22pF C0G" H 1315 3255 50 0000 L CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric" H 1238 3150 50 0001 C CNN
+F 3 "" H 1200 3300 50 0001 C CNN
+F 4 "C1653" H 1200 3300 50 0001 C CNN "LCSC"
+	1    1200 3300
 	1    0    0    -1
 $EndComp
 Wire Wire Line
-	1200 1500 1500 1500
+	1200 3450 1500 3450
 Wire Wire Line
-	1200 1200 1200 1100
-Text Label 1200 1100 0    50   ~ 0
+	1200 3150 1200 3050
+Text Label 1200 3050 0    50   ~ 0
 GND
 $Comp
 L Device:C C8
 U 1 1 5F00000A
-P 1200 1950
-F 0 "C8" H 1315 1996 50 0000 L CNN
-F 1 "22pF C0G" H 1315 1905 50 0000 L CNN
-F 2 "Capacitor_SMD:C_0603_1608Metric" H 1238 1800 50 0001 C CNN
-F 3 "" H 1200 1950 50 0001 C CNN
-F 4 "C1653" H 1200 1950 50 0001 C CNN "LCSC"
-	1    1200 1950
+P 1200 3900
+F 0 "C8" H 1315 3946 50 0000 L CNN
+F 1 "22pF C0G" H 1315 3855 50 0000 L CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric" H 1238 3750 50 0001 C CNN
+F 3 "" H 1200 3900 50 0001 C CNN
+F 4 "C1653" H 1200 3900 50 0001 C CNN "LCSC"
+	1    1200 3900
 	1    0    0    -1
 $EndComp
 Wire Wire Line
-	1200 1800 1500 1800
+	1200 3750 1500 3750
 Wire Wire Line
-	1200 2100 1200 2200
-Text Label 1200 2200 0    50   ~ 0
+	1200 4050 1200 4150
+Text Label 1200 4150 0    50   ~ 0
 GND
+Text Notes 2350 3500 0    50   ~ 0
+LFCLK network
 Text Notes 950 3100 0    50   ~ 0
 Battery voltage: nRF52840 SAADC internal VDDH/5; no external divider.
-Text Notes 950 3250 0    50   ~ 0
-Provisioning requirement: program UICR REGOUT0=2.4V, reset, then start application.
+Text Notes 2500 3250 0    50   ~ 0
+Provisioning: program UICR REGOUT0=2.4V and reset before normal operation.
 $Comp
 L poa-sensor-cache:ADS1115IDGSR U2
 U 1 1 5F000010
@@ -675,7 +681,7 @@ NTC_MODULE
 Text Notes 900 6700 0    50   ~ 0
 Temperature topology: SENS_PWR -> 10k -> ADC node -> 10k NTC -> GND. Drive SENS_PWR only during measurement.
 Text Notes 900 6850 0    50   ~ 0
-ADS1115: irradiance PGA ±0.256V; temperature channels use range covering full 0..2.4V node voltage.
+ADS1115: irradiance PGA +/-0.256V; temperature channels use range covering full 0..2.4V node voltage.
 Text Notes 900 7150 0    50   ~ 0
 PCB constraints: E73 antenna at board edge with full keep-out; analog/shunt island away from RF/clock currents.
 $EndSCHEMATC
