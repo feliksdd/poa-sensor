@@ -1,0 +1,23 @@
+Designator,Qty,Function,Value,Manufacturer,MPN,LCSC/JLCPCB,Package,Assembly,Notes
+U1,1,Zigbee MCU module,nRF52840,Chengdu Ebyte,E73-2G4M08S1C,C356849,SMD 18x13mm,JLCPCB Extended,Main radio/MCU module
+U2,1,Precision ADC,ADS1115,Texas Instruments,ADS1115IDGSR,C37593,VSSOP-10,JLCPCB Extended,Use differential input for irradiance channel
+Y1,1,32.768 kHz crystal,32.768kHz 12.5pF,NDK,NX3215SA-32.768K-STD-MUA-8,C156245,SMD3215-2P,JLCPCB Extended,Low-power LFCLK; load capacitors to be finalized from board parasitics
+RSH1,1,Reference-cell shunt,1.000R 0.1% <=25ppm/K,Yageo,RT0805BRD071RL,TBD,0805,Prefer JLCPCB if stocked,4-wire/Kelvin routing strongly recommended
+NTC1,1,Reference-cell temperature,10k 1%,TDK,NTCG163JF103FT1S,C406719,0603,JLCPCB Extended,Attach thermally to back of reference cell
+NTC2,1,PV module temperature,10k 1%,TDK,NTCG163JF103FT1S,C406719,0603,Manual/external probe,Same characteristic as NTC1; mounted on cable at module backsheet
+R1 R2,2,NTC divider reference,47k 0.1% 10ppm/K,RESI,PTFR0603B47K0N9,C394548,0603,JLCPCB Extended,One per NTC channel; can be relaxed after error-budget review
+C1 C2 C3 C4,4,Local decoupling,100nF X7R 50V,Yageo,CC0603KRX7R9BB104,C14663,0603,JLCPCB Basic,Place at U1/U2 and measurement supply nodes
+C5,1,ADC local bulk,1uF X7R,TBD,TBD,TBD,0603/0805,JLCPCB Basic preferred,Finalize to stocked Basic part
+C6 C7,2,Radio/battery pulse buffer,47uF low-leakage ceramic or equivalent,TBD,TBD,TBD,0805/1206,JLCPCB preferred,Value/package to be finalized against DC bias and battery ESR
+C8 C9,2,LF crystal load,TBD pF C0G,TBD,TBD,TBD,0603,JLCPCB Basic preferred,Finalize after choosing crystal CL/parasitics
+R3 R4,2,I2C pull-ups,4.7k 1%,TBD,TBD,TBD,0603,JLCPCB Basic preferred,Pull up to regulated logic rail
+R5 R6,2,Battery sense divider,1M / 330k 1%,TBD,TBD,TBD,0603,JLCPCB Basic preferred,High-value divider; optionally switched to remove standby current
+R7 R8,2,ADC input filter,100R 1%,TBD,TBD,TBD,0603,JLCPCB Basic preferred,Symmetric in irradiance differential path if used
+C10,1,ADC differential filter,100nF C0G/X7R,TBD,TBD,TBD,0603,JLCPCB Basic preferred,Across ADS1115 differential inputs; value subject to settling-time review
+J1,1,SWD programming pads,Tag-Connect/pogo pad pattern,Custom,Custom,None,PCB pads,Manual,No connector BOM cost
+J2,1,External module NTC cable,2-wire solder pads,Custom,Custom,None,PCB pads,Manual,Direct-solder UV-resistant cable preferred
+CELL1,1,POA reference cell,KXOB25-14X1F,ANYSOLAR,KXOB25-14X1F-TR,Not planned for JLCPCB,23x8mm approx,Manual assembly,Install under optical window and calibrate as complete assembly
+BT1,1,Battery,Li-SOCl2 1/2-AA 3.6V,EVE/SAFT,ER14250 or LS14250,Not JLCPCB,1/2-AA,Manual assembly,Use factory tabs/leads; do not solder directly to bare cell
+ENC1,1,Outdoor enclosure,clear-lid IP67/68 polycarbonate,Hammond,1554B2GYCL,Not JLCPCB,65x65x41mm,Mechanical,Current enclosure baseline
+CG1,1,Cable gland,IP68 M8 cable gland,TBD,TBD,Not JLCPCB,M8,Mechanical,For module-temperature probe cable
+FILM1,1,Reflective lid mask,white outdoor cast vinyl,ORAFOL,ORACAL 751C white,Not JLCPCB,cut part,Mechanical,Leave only optical aperture over reference cell
