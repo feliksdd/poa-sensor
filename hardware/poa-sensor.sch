@@ -1,0 +1,681 @@
+EESchema Schematic File Version 4
+LIBS:poa-sensor-cache
+EELAYER 29 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 1 1
+Title "POA Sensor"
+Date "2026-09-28"
+Rev "0.1"
+Comp "poa-sensor"
+Comment1 "Low-cost silicon-equivalent plane-of-array irradiance sensor"
+Comment2 "KiCad source of truth / JLCPCB + LCSC oriented"
+Comment3 "Battery: Li-SOCl2 1/2-AA; Zigbee sleepy end device"
+Comment4 "Prototype schematic - PCB placement not frozen"
+$EndDescr
+Text Notes 700 800 0    100  ~ 20
+POWER + MCU / ZIGBEE
+Text Notes 5550 800 0    100  ~ 20
+PRECISION ADC
+Text Notes 5500 4350 0    100  ~ 20
+IRRADIANCE CHANNEL
+Text Notes 700 4300 0    100  ~ 20
+TEMPERATURE CHANNELS
+Text Notes 8500 800 0    100  ~ 20
+PROGRAMMING
+$Comp
+L poa-sensor-cache:E73-2G4M08S1C U1
+U 1 1 5F000001
+P 3000 2200
+F 0 "U1" H 3000 3250 50  0000 C CNN
+F 1 "E73-2G4M08S1C" H 3000 3150 50 0000 C CNN
+F 2 "POA:E73-2G4M08S1C" H 3000 2200 50 0001 C CNN
+F 3 "" H 3000 2200 50 0001 C CNN
+F 4 "C356849" H 3000 2200 50 0001 C CNN "LCSC"
+	1    3000 2200
+	1    0    0    -1
+$EndComp
+$Comp
+L Device:Battery_Cell BT1
+U 1 1 5F000002
+P 1150 1650
+F 0 "BT1" H 1268 1746 50 0000 L CNN
+F 1 "Li-SOCl2 3.6V" H 1268 1655 50 0000 L CNN
+F 2 "" V 1150 1710 50 0001 C CNN
+F 3 "" V 1150 1710 50 0001 C CNN
+	1    1150 1650
+	1    0    0    -1
+$EndComp
+Wire Wire Line
+	1150 1450 1450 1450
+Text Label 1250 1450 0    50   ~ 0
+VBAT
+Wire Wire Line
+	1150 1800 1450 1800
+Text Label 1250 1800 0    50   ~ 0
+GND
+Wire Wire Line
+	3900 1450 4300 1450
+Text Label 4000 1450 0    50   ~ 0
+VBAT
+Wire Wire Line
+	3900 1600 4550 1600
+Text Label 4050 1600 0    50   ~ 0
+VDD_2V4
+Wire Wire Line
+	3900 1800 4100 1800
+Text Label 3925 1800 0    50   ~ 0
+DCCH
+Wire Wire Line
+	3900 2800 4300 2800
+Text Label 4050 2800 0    50   ~ 0
+GND
+Wire Wire Line
+	3900 2900 4300 2900
+Text Label 4050 2900 0    50   ~ 0
+GND
+Wire Wire Line
+	2100 2000 1750 2000
+Text Label 1750 2000 0    50   ~ 0
+I2C_SDA
+Wire Wire Line
+	2100 2100 1750 2100
+Text Label 1750 2100 0    50   ~ 0
+I2C_SCL
+Wire Wire Line
+	2100 2300 1650 2300
+Text Label 1650 2300 0    50   ~ 0
+SENS_PWR
+Wire Wire Line
+	2100 2500 1650 2500
+Text Label 1650 2500 0    50   ~ 0
+RESET_N
+Wire Wire Line
+	2100 2700 1650 2700
+Text Label 1650 2700 0    50   ~ 0
+SWDIO
+Wire Wire Line
+	2100 2800 1650 2800
+Text Label 1650 2800 0    50   ~ 0
+SWDCLK
+$Comp
+L Device:L L1
+U 1 1 5F000003
+P 4450 1800
+F 0 "L1" V 4640 1800 50 0000 C CNN
+F 1 "10uH" V 4549 1800 50 0000 C CNN
+F 2 "Inductor_SMD:L_0603_1608Metric_Pad1.05x0.95mm_HandSolder" H 4450 1800 50 0001 C CNN
+F 3 "" H 4450 1800 50 0001 C CNN
+F 4 "C87216" V 4450 1800 50 0001 C CNN "LCSC"
+	1    4450 1800
+	0    -1   -1   0
+$EndComp
+Wire Wire Line
+	4100 1800 4300 1800
+Wire Wire Line
+	4600 1800 4750 1800
+Wire Wire Line
+	4750 1800 4750 1600
+Wire Wire Line
+	4550 1600 4750 1600
+Text Notes 4025 2000 0    45   ~ 0
+REG0 DC/DC: DCCH -- 10uH -- VDD
+$Comp
+L Device:C C1
+U 1 1 5F000004
+P 1550 1650
+F 0 "C1" H 1665 1696 50 0000 L CNN
+F 1 "47uF" H 1665 1605 50 0000 L CNN
+F 2 "Capacitor_SMD:C_1206_3216Metric" H 1588 1500 50 0001 C CNN
+F 3 "" H 1550 1650 50 0001 C CNN
+F 4 "C96123" H 1550 1650 50 0001 C CNN "LCSC"
+	1    1550 1650
+	1    0    0    -1
+$EndComp
+Wire Wire Line
+	1550 1500 1550 1450
+Wire Wire Line
+	1450 1450 1550 1450
+Wire Wire Line
+	1550 1800 1450 1800
+$Comp
+L Device:C C3
+U 1 1 5F000005
+P 2050 1650
+F 0 "C3" H 2165 1696 50 0000 L CNN
+F 1 "100nF" H 2165 1605 50 0000 L CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric" H 2088 1500 50 0001 C CNN
+F 3 "" H 2050 1650 50 0001 C CNN
+F 4 "C14663" H 2050 1650 50 0001 C CNN "LCSC"
+	1    2050 1650
+	1    0    0    -1
+$EndComp
+Wire Wire Line
+	2050 1500 2050 1450
+Text Label 2050 1450 0    50   ~ 0
+VBAT
+Wire Wire Line
+	2050 1800 2050 1900
+Text Label 2050 1900 0    50   ~ 0
+GND
+$Comp
+L Device:C C2
+U 1 1 5F000006
+P 5000 1750
+F 0 "C2" H 5115 1796 50 0000 L CNN
+F 1 "4.7uF" H 5115 1705 50 0000 L CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric" H 5038 1600 50 0001 C CNN
+F 3 "" H 5000 1750 50 0001 C CNN
+F 4 "C19666" H 5000 1750 50 0001 C CNN "LCSC"
+	1    5000 1750
+	1    0    0    -1
+$EndComp
+Wire Wire Line
+	5000 1600 4750 1600
+Wire Wire Line
+	5000 1900 5000 2000
+Text Label 5000 2000 0    50   ~ 0
+GND
+$Comp
+L Device:C C4
+U 1 1 5F000007
+P 5400 1750
+F 0 "C4" H 5515 1796 50 0000 L CNN
+F 1 "100nF" H 5515 1705 50 0000 L CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric" H 5438 1600 50 0001 C CNN
+F 3 "" H 5400 1750 50 0001 C CNN
+F 4 "C14663" H 5400 1750 50 0001 C CNN "LCSC"
+	1    5400 1750
+	1    0    0    -1
+$EndComp
+Wire Wire Line
+	5400 1600 5000 1600
+Wire Wire Line
+	5400 1900 5400 2000
+Text Label 5400 2000 0    50   ~ 0
+GND
+$Comp
+L Device:Crystal Y1
+U 1 1 5F000008
+P 1500 1650
+F 0 "Y1" V 1454 1781 50 0000 L CNN
+F 1 "32.768kHz 12.5pF" V 1545 1781 50 0000 L CNN
+F 2 "Crystal:Crystal_SMD_3215-2Pin_3.2x1.5mm" H 1500 1650 50 0001 C CNN
+F 3 "" H 1500 1650 50 0001 C CNN
+F 4 "C32346" V 1500 1650 50 0001 C CNN "LCSC"
+	1    1500 1650
+	0    1    1    0
+$EndComp
+Wire Wire Line
+	2100 1600 1800 1600
+Wire Wire Line
+	1800 1600 1800 1500
+Wire Wire Line
+	1800 1500 1500 1500
+Wire Wire Line
+	2100 1700 1800 1700
+Wire Wire Line
+	1800 1700 1800 1800
+Wire Wire Line
+	1800 1800 1500 1800
+Text Label 1850 1600 0    50   ~ 0
+XL1
+Text Label 1850 1700 0    50   ~ 0
+XL2
+$Comp
+L Device:C C7
+U 1 1 5F000009
+P 1200 1350
+F 0 "C7" H 1315 1396 50 0000 L CNN
+F 1 "22pF C0G" H 1315 1305 50 0000 L CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric" H 1238 1200 50 0001 C CNN
+F 3 "" H 1200 1350 50 0001 C CNN
+F 4 "C1653" H 1200 1350 50 0001 C CNN "LCSC"
+	1    1200 1350
+	1    0    0    -1
+$EndComp
+Wire Wire Line
+	1200 1500 1500 1500
+Wire Wire Line
+	1200 1200 1200 1100
+Text Label 1200 1100 0    50   ~ 0
+GND
+$Comp
+L Device:C C8
+U 1 1 5F00000A
+P 1200 1950
+F 0 "C8" H 1315 1996 50 0000 L CNN
+F 1 "22pF C0G" H 1315 1905 50 0000 L CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric" H 1238 1800 50 0001 C CNN
+F 3 "" H 1200 1950 50 0001 C CNN
+F 4 "C1653" H 1200 1950 50 0001 C CNN "LCSC"
+	1    1200 1950
+	1    0    0    -1
+$EndComp
+Wire Wire Line
+	1200 1800 1500 1800
+Wire Wire Line
+	1200 2100 1200 2200
+Text Label 1200 2200 0    50   ~ 0
+GND
+Text Notes 950 3100 0    50   ~ 0
+Battery voltage: nRF52840 SAADC internal VDDH/5; no external divider.
+Text Notes 950 3250 0    50   ~ 0
+Provisioning requirement: program UICR REGOUT0=2.4V, reset, then start application.
+$Comp
+L poa-sensor-cache:ADS1115IDGSR U2
+U 1 1 5F000010
+P 7000 3000
+F 0 "U2" H 7000 3850 50 0000 C CNN
+F 1 "ADS1115IDGSR" H 7000 3750 50 0000 C CNN
+F 2 "Package_TSSOP:VSSOP-10_3x3mm_P0.5mm" H 7000 3000 50 0001 C CNN
+F 3 "https://www.ti.com/lit/ds/symlink/ads1115.pdf" H 7000 3000 50 0001 C CNN
+F 4 "C37593" H 7000 3000 50 0001 C CNN "LCSC"
+	1    7000 3000
+	1    0    0    -1
+$EndComp
+Wire Wire Line
+	7000 2100 7000 1950
+Text Label 7000 1950 0    50   ~ 0
+VDD_2V4
+Wire Wire Line
+	7000 3900 7000 4050
+Text Label 7000 4050 0    50   ~ 0
+GND
+Wire Wire Line
+	6150 3400 6000 3400
+Text Label 6000 3400 0    50   ~ 0
+GND
+NoConn ~ 7850 3300
+Wire Wire Line
+	7850 2750 8200 2750
+Text Label 7900 2750 0    50   ~ 0
+I2C_SDA
+Wire Wire Line
+	7850 2600 8200 2600
+Text Label 7900 2600 0    50   ~ 0
+I2C_SCL
+$Comp
+L Device:R R3
+U 1 1 5F000011
+P 8350 2250
+F 0 "R3" H 8420 2296 50 0000 L CNN
+F 1 "4.7k" H 8420 2205 50 0000 L CNN
+F 2 "Resistor_SMD:R_0603_1608Metric" V 8280 2250 50 0001 C CNN
+F 3 "" H 8350 2250 50 0001 C CNN
+F 4 "C23162" H 8350 2250 50 0001 C CNN "LCSC"
+	1    8350 2250
+	1    0    0    -1
+$EndComp
+Wire Wire Line
+	8350 2400 8350 2600
+Wire Wire Line
+	8350 2600 8200 2600
+Wire Wire Line
+	8350 2100 8350 1950
+Text Label 8350 1950 0    50   ~ 0
+VDD_2V4
+$Comp
+L Device:R R4
+U 1 1 5F000012
+P 8750 2250
+F 0 "R4" H 8820 2296 50 0000 L CNN
+F 1 "4.7k" H 8820 2205 50 0000 L CNN
+F 2 "Resistor_SMD:R_0603_1608Metric" V 8680 2250 50 0001 C CNN
+F 3 "" H 8750 2250 50 0001 C CNN
+F 4 "C23162" H 8750 2250 50 0001 C CNN "LCSC"
+	1    8750 2250
+	1    0    0    -1
+$EndComp
+Wire Wire Line
+	8750 2400 8750 2750
+Wire Wire Line
+	8750 2750 8200 2750
+Wire Wire Line
+	8750 2100 8750 1950
+Text Label 8750 1950 0    50   ~ 0
+VDD_2V4
+$Comp
+L Device:C C5
+U 1 1 5F000013
+P 9100 2500
+F 0 "C5" H 9215 2546 50 0000 L CNN
+F 1 "100nF" H 9215 2455 50 0000 L CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric" H 9138 2350 50 0001 C CNN
+F 3 "" H 9100 2500 50 0001 C CNN
+F 4 "C14663" H 9100 2500 50 0001 C CNN "LCSC"
+	1    9100 2500
+	1    0    0    -1
+$EndComp
+Wire Wire Line
+	9100 2350 9100 2200
+Text Label 9100 2200 0    50   ~ 0
+VDD_2V4
+Wire Wire Line
+	9100 2650 9100 2800
+Text Label 9100 2800 0    50   ~ 0
+GND
+$Comp
+L Device:C C6
+U 1 1 5F000014
+P 9600 2500
+F 0 "C6" H 9715 2546 50 0000 L CNN
+F 1 "1uF" H 9715 2455 50 0000 L CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric" H 9638 2350 50 0001 C CNN
+F 3 "" H 9600 2500 50 0001 C CNN
+F 4 "C59782" H 9600 2500 50 0001 C CNN "LCSC"
+	1    9600 2500
+	1    0    0    -1
+$EndComp
+Wire Wire Line
+	9600 2350 9600 2200
+Text Label 9600 2200 0    50   ~ 0
+VDD_2V4
+Wire Wire Line
+	9600 2650 9600 2800
+Text Label 9600 2800 0    50   ~ 0
+GND
+$Comp
+L Connector_Generic:Conn_01x05 J1
+U 1 1 5F000015
+P 9250 1350
+F 0 "J1" H 9330 1392 50 0000 L CNN
+F 1 "SWD POGO" H 9330 1301 50 0000 L CNN
+F 2 "POA:SWD_Pogo_1x05" H 9250 1350 50 0001 C CNN
+F 3 "" H 9250 1350 50 0001 C CNN
+	1    9250 1350
+	1    0    0    -1
+$EndComp
+Wire Wire Line
+	9050 1150 8650 1150
+Text Label 8650 1150 0    50   ~ 0
+VDD_2V4
+Wire Wire Line
+	9050 1250 8650 1250
+Text Label 8650 1250 0    50   ~ 0
+SWDIO
+Wire Wire Line
+	9050 1350 8650 1350
+Text Label 8650 1350 0    50   ~ 0
+SWDCLK
+Wire Wire Line
+	9050 1450 8650 1450
+Text Label 8650 1450 0    50   ~ 0
+RESET_N
+Wire Wire Line
+	9050 1550 8650 1550
+Text Label 8650 1550 0    50   ~ 0
+GND
+Text Notes 9550 1175 0    45   ~ 0
+1 VTref
+Text Notes 9550 1275 0    45   ~ 0
+2 SWDIO
+Text Notes 9550 1375 0    45   ~ 0
+3 SWDCLK
+Text Notes 9550 1475 0    45   ~ 0
+4 RESET
+Text Notes 9550 1575 0    45   ~ 0
+5 GND
+$Comp
+L poa-sensor-cache:KXOB25-14X1F CELL1
+U 1 1 5F000020
+P 6250 5000
+F 0 "CELL1" H 6250 5350 50 0000 C CNN
+F 1 "KXOB25-14X1F" H 6250 5250 50 0000 C CNN
+F 2 "POA:KXOB25-14X1F" H 6250 5000 50 0001 C CNN
+F 3 "" H 6250 5000 50 0001 C CNN
+	1    6250 5000
+	1    0    0    -1
+$EndComp
+Wire Wire Line
+	5700 5000 5500 5000
+Text Label 5500 5000 0    50   ~ 0
+CELL_POS
+Wire Wire Line
+	6800 5000 7000 5000
+Text Label 6800 5000 0    50   ~ 0
+GND
+$Comp
+L Device:R RSH1
+U 1 1 5F000021
+P 6250 5450
+F 0 "RSH1" V 6043 5450 50 0000 C CNN
+F 1 "1.000R 0.1% 25ppm/K" V 6134 5450 50 0000 C CNN
+F 2 "Resistor_SMD:R_0805_2012Metric" V 6180 5450 50 0001 C CNN
+F 3 "" H 6250 5450 50 0001 C CNN
+F 4 "C865286" V 6250 5450 50 0001 C CNN "LCSC"
+	1    6250 5450
+	0    1    1    0
+$EndComp
+Wire Wire Line
+	6100 5450 5700 5450
+Text Label 5700 5450 0    50   ~ 0
+CELL_POS
+Wire Wire Line
+	6400 5450 6800 5450
+Text Label 6550 5450 0    50   ~ 0
+GND
+$Comp
+L Device:R R7
+U 1 1 5F000022
+P 6850 4700
+F 0 "R7" V 6643 4700 50 0000 C CNN
+F 1 "100R" V 6734 4700 50 0000 C CNN
+F 2 "Resistor_SMD:R_0603_1608Metric" V 6780 4700 50 0001 C CNN
+F 3 "" H 6850 4700 50 0001 C CNN
+F 4 "C22775" V 6850 4700 50 0001 C CNN "LCSC"
+	1    6850 4700
+	0    1    1    0
+$EndComp
+Wire Wire Line
+	6700 4700 6450 4700
+Text Label 6450 4700 0    50   ~ 0
+CELL_POS
+Wire Wire Line
+	7000 4700 7300 4700
+Text Label 7100 4700 0    50   ~ 0
+AIN0_F
+$Comp
+L Device:R R8
+U 1 1 5F000023
+P 6850 5900
+F 0 "R8" V 6643 5900 50 0000 C CNN
+F 1 "100R" V 6734 5900 50 0000 C CNN
+F 2 "Resistor_SMD:R_0603_1608Metric" V 6780 5900 50 0001 C CNN
+F 3 "" H 6850 5900 50 0001 C CNN
+F 4 "C22775" V 6850 5900 50 0001 C CNN "LCSC"
+	1    6850 5900
+	0    1    1    0
+$EndComp
+Wire Wire Line
+	6700 5900 6450 5900
+Text Label 6450 5900 0    50   ~ 0
+GND
+Wire Wire Line
+	7000 5900 7300 5900
+Text Label 7100 5900 0    50   ~ 0
+AIN1_F
+$Comp
+L Device:C C9
+U 1 1 5F000024
+P 7500 5300
+F 0 "C9" H 7615 5346 50 0000 L CNN
+F 1 "100nF" H 7615 5255 50 0000 L CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric" H 7538 5150 50 0001 C CNN
+F 3 "" H 7500 5300 50 0001 C CNN
+F 4 "C14663" H 7500 5300 50 0001 C CNN "LCSC"
+	1    7500 5300
+	1    0    0    -1
+$EndComp
+Wire Wire Line
+	7500 5150 7500 4700
+Wire Wire Line
+	7500 4700 7300 4700
+Wire Wire Line
+	7500 5450 7500 5900
+Wire Wire Line
+	7500 5900 7300 5900
+Wire Wire Line
+	6150 2600 5900 2600
+Text Label 5900 2600 0    50   ~ 0
+AIN0_F
+Wire Wire Line
+	6150 2750 5900 2750
+Text Label 5900 2750 0    50   ~ 0
+AIN1_F
+Text Notes 5600 6200 0    50   ~ 0
+PCB: RSH1 current loop separate from Kelvin sense. R7/R8 start at the shunt terminals.
+$Comp
+L Device:R R1
+U 1 1 5F000030
+P 1800 4800
+F 0 "R1" H 1870 4846 50 0000 L CNN
+F 1 "10k" H 1870 4755 50 0000 L CNN
+F 2 "Resistor_SMD:R_0603_1608Metric" V 1730 4800 50 0001 C CNN
+F 3 "" H 1800 4800 50 0001 C CNN
+F 4 "C25804" H 1800 4800 50 0001 C CNN "LCSC"
+	1    1800 4800
+	1    0    0    -1
+$EndComp
+Wire Wire Line
+	1800 4650 1800 4500
+Text Label 1800 4500 0    50   ~ 0
+SENS_PWR
+Wire Wire Line
+	1800 4950 1800 5150
+Text Label 1800 5050 0    50   ~ 0
+NTC_CELL
+$Comp
+L Device:R NTC1
+U 1 1 5F000031
+P 1800 5500
+F 0 "NTC1" H 1870 5546 50 0000 L CNN
+F 1 "NTCG163JF103FT1S" H 1870 5455 50 0000 L CNN
+F 2 "Resistor_SMD:R_0603_1608Metric" V 1730 5500 50 0001 C CNN
+F 3 "" H 1800 5500 50 0001 C CNN
+F 4 "C406719" H 1800 5500 50 0001 C CNN "LCSC"
+	1    1800 5500
+	1    0    0    -1
+$EndComp
+Wire Wire Line
+	1800 5150 1800 5350
+Wire Wire Line
+	1800 5650 1800 5800
+Text Label 1800 5800 0    50   ~ 0
+GND
+$Comp
+L Device:C C10
+U 1 1 5F000032
+P 2700 5500
+F 0 "C10" H 2815 5546 50 0000 L CNN
+F 1 "100nF" H 2815 5455 50 0000 L CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric" H 2738 5350 50 0001 C CNN
+F 3 "" H 2700 5500 50 0001 C CNN
+F 4 "C14663" H 2700 5500 50 0001 C CNN "LCSC"
+	1    2700 5500
+	1    0    0    -1
+$EndComp
+Wire Wire Line
+	2700 5350 2700 5150
+Wire Wire Line
+	2700 5150 1800 5150
+Wire Wire Line
+	2700 5650 2700 5800
+Text Label 2700 5800 0    50   ~ 0
+GND
+Wire Wire Line
+	6150 2950 5800 2950
+Text Label 5800 2950 0    50   ~ 0
+NTC_CELL
+$Comp
+L Device:R R2
+U 1 1 5F000033
+P 3800 4800
+F 0 "R2" H 3870 4846 50 0000 L CNN
+F 1 "10k" H 3870 4755 50 0000 L CNN
+F 2 "Resistor_SMD:R_0603_1608Metric" V 3730 4800 50 0001 C CNN
+F 3 "" H 3800 4800 50 0001 C CNN
+F 4 "C25804" H 3800 4800 50 0001 C CNN "LCSC"
+	1    3800 4800
+	1    0    0    -1
+$EndComp
+Wire Wire Line
+	3800 4650 3800 4500
+Text Label 3800 4500 0    50   ~ 0
+SENS_PWR
+Wire Wire Line
+	3800 4950 3800 5150
+Text Label 3800 5050 0    50   ~ 0
+NTC_MODULE
+$Comp
+L Connector_Generic:Conn_01x02 J2
+U 1 1 5F000034
+P 4450 5250
+F 0 "J2" H 4530 5242 50 0000 L CNN
+F 1 "MODULE NTC" H 4530 5151 50 0000 L CNN
+F 2 "POA:SolderWirePad_2x1" H 4450 5250 50 0001 C CNN
+F 3 "" H 4450 5250 50 0001 C CNN
+	1    4450 5250
+	1    0    0    -1
+$EndComp
+Wire Wire Line
+	4250 5250 3800 5250
+Wire Wire Line
+	3800 5150 3800 5250
+Wire Wire Line
+	4250 5350 4100 5350
+Text Label 4100 5350 0    50   ~ 0
+GND
+$Comp
+L Device:R NTC2
+U 1 1 5F000035
+P 4500 5850
+F 0 "NTC2" H 4570 5896 50 0000 L CNN
+F 1 "10k external probe" H 4570 5805 50 0000 L CNN
+F 2 "" V 4430 5850 50 0001 C CNN
+F 3 "" H 4500 5850 50 0001 C CNN
+	1    4500 5850
+	1    0    0    -1
+$EndComp
+Wire Wire Line
+	4500 5700 4500 5550
+Text Label 4500 5550 0    50   ~ 0
+NTC_MODULE
+Wire Wire Line
+	4500 6000 4500 6150
+Text Label 4500 6150 0    50   ~ 0
+GND
+Text Notes 4300 6450 0    45   ~ 0
+NTC2 is off-board, connected through J2 and UV-resistant cable.
+$Comp
+L Device:C C11
+U 1 1 5F000036
+P 3350 5500
+F 0 "C11" H 3465 5546 50 0000 L CNN
+F 1 "100nF" H 3465 5455 50 0000 L CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric" H 3388 5350 50 0001 C CNN
+F 3 "" H 3350 5500 50 0001 C CNN
+F 4 "C14663" H 3350 5500 50 0001 C CNN "LCSC"
+	1    3350 5500
+	1    0    0    -1
+$EndComp
+Wire Wire Line
+	3350 5350 3350 5150
+Wire Wire Line
+	3350 5150 3800 5150
+Wire Wire Line
+	3350 5650 3350 5800
+Text Label 3350 5800 0    50   ~ 0
+GND
+Wire Wire Line
+	6150 3100 5800 3100
+Text Label 5800 3100 0    50   ~ 0
+NTC_MODULE
+Text Notes 900 6700 0    50   ~ 0
+Temperature topology: SENS_PWR -> 10k -> ADC node -> 10k NTC -> GND. Drive SENS_PWR only during measurement.
+Text Notes 900 6850 0    50   ~ 0
+ADS1115: irradiance PGA ±0.256V; temperature channels use range covering full 0..2.4V node voltage.
+Text Notes 900 7150 0    50   ~ 0
+PCB constraints: E73 antenna at board edge with full keep-out; analog/shunt island away from RF/clock currents.
+$EndSCHEMATC
