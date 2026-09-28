@@ -10,20 +10,21 @@ Native KiCad 8 project files now exist:
 - `poa-sensor.kicad_sch`
 - `poa-sensor.kicad_pcb`
 
-The PCB currently contains the **mechanical baseline only**: board outline, optical window guide and the RF antenna keepout. Electrical footprints are intentionally imported from the schematic in KiCad using F8 so KiCad creates the correct symbol/footprint UUID and net relationships.
+The PCB contains the mechanical baseline plus the schematic footprints imported so far. The ADS1115 U2 may be absent in boards synchronized before the footprint-library correction below.
 
 The legacy bootstrap files (`poa-sensor.sch` and `poa-sensor-cache.lib`) are retained temporarily until the native project passes the first complete ERC/PCB parity review. They can then be removed.
 
-## Normalize the converted schematic before first PCB sync
+## Normalize the converted schematic before PCB sync
 
-The legacy conversion retained a few obsolete metadata values (old NTC1 package and pre-library custom footprint names). Normalize them once with:
+The legacy conversion retained a few obsolete metadata values. Run:
 
 ```bash
 python3 tools/normalize_schematic.py
 python3 tools/normalize_geometry.py
+python3 tools/fix_u2_footprint.py
 ```
 
-The normalization changes only known/audited items, including:
+The normalization/fix steps change only known/audited items, including:
 
 - NTC1 -> TDK `NTCG063JF103FTBA`, 0201, LCSC `C29553871`
 - NTC2 -> off-board (`on_board no`)
@@ -32,8 +33,11 @@ The normalization changes only known/audited items, including:
 - BT1 -> `POA:WirePads_1x02_P2.54mm`
 - native custom symbol IDs/pins for U1, U2 and CELL1
 - known harmless geometry artifacts from the legacy conversion
+- U2 ADS1115 footprint -> `Package_SO:VSSOP-10_3x3mm_P0.5mm`
 
-After running both scripts, open/save `poa-sensor.kicad_sch` once in KiCad and commit it.
+The last correction is important: the earlier path `Package_TSSOP:VSSOP-10_3x3mm_P0.5mm` is invalid, so KiCad F8 silently/explicitly leaves U2 out of the PCB when that old value is present.
+
+After running the scripts, open/save `poa-sensor.kicad_sch` once in KiCad and commit it.
 
 ## Schematic scope v0.1
 
@@ -71,7 +75,7 @@ The project library alias is `POA` via `fp-lib-table`.
 
 ## PCB baseline
 
-`poa-sensor.kicad_pcb` is now the real board file and contains:
+`poa-sensor.kicad_pcb` is the real board file and contains:
 
 - 52 x 52 mm board outline
 - optical/reference-cell zone
@@ -82,21 +86,22 @@ The project library alias is `POA` via `fp-lib-table`.
 
 `poa-sensor-layout-template.kicad_pcb` remains only as the historical/mechanical template and may later be removed.
 
-### First electrical PCB synchronization
+### Electrical PCB synchronization
 
-1. Run both schematic normalization scripts above.
+1. Run all three normalization/fix scripts above.
 2. Open/save the schematic in KiCad.
 3. Open `poa-sensor.kicad_pcb` in PCB Editor.
 4. Run **Tools -> Update PCB from Schematic (F8)**.
-5. Save the board. Do not manually route yet.
-6. Run:
+5. Verify that **U2 is present** and uses `Package_SO:VSSOP-10_3x3mm_P0.5mm`.
+6. Save the board. Do not manually route yet.
+7. Run:
 
 ```bash
 python3 tools/place_pcb.py
 ```
 
-7. Re-open/save the PCB in KiCad and visually review the placement.
-8. Commit the resulting `.kicad_sch` and `.kicad_pcb`.
+8. Re-open/save the PCB in KiCad and visually review the placement.
+9. Commit the resulting `.kicad_sch` and `.kicad_pcb`.
 
 `place_pcb.py` only changes the top-level position/rotation of known footprints. It deliberately does not alter nets, pads, footprints, zones or routing.
 
