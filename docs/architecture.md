@@ -79,11 +79,14 @@ Firmware baseline for irradiance: ADS1115 PGA ±0.256 V, single-shot conversion,
 
 ## Temperature channels
 
-Both temperature sensors use TDK NTCG163JF103FT1S, nominal 10 kohm at 25 °C.
+The two temperature sensors intentionally use different package sizes but the same nominal electrical curve:
+
+- NTC1: TDK NTCG063JF103FTBA, 0201, 10 kohm ±1 %, B25/50 = 3380 K, approximately 0.3 mm high
+- NTC2: TDK NTCG163JF103FT1S, 0603, 10 kohm ±1 %, B25/50 = 3380 K
 
 Each divider uses a 10 kohm 1 % reference resistor. The two reference resistors are fed from GPIO `SENS_PWR`, not directly from VDD_2V4. During sleep SENS_PWR is driven low. Before temperature conversion firmware drives SENS_PWR high, waits for RC/ADC settling, performs both ADC readings and then drives it low again.
 
-This removes essentially all divider standby current and keeps NTC self-heating negligible.
+This removes essentially all divider standby current and keeps NTC self-heating negligible. A 1 % reference resistor is sufficient: its contribution to temperature error is small compared with the sensor/mechanical thermal uncertainty, and calibration remains available.
 
 Topology for each channel:
 
@@ -91,7 +94,11 @@ Topology for each channel:
 
 C10/C11 = 100 nF from each ADC node to GND provide local filtering. Because the NTC node can approach the 2.4 V rail at the extremes, firmware uses an ADS1115 range large enough for the full node voltage (normally ±4.096 V for the temperature channels).
 
-NTC1 is thermally bonded to the rear surface of the reference cell.
+### Reference-cell NTC mechanics
+
+NTC1 is placed on the top side of the PCB directly beneath the center region of CELL1. The 0201 package is only about 0.3 mm high. CELL1 is manually assembled after JLCPCB PCBA, with a small controlled stand-off/solder height at its two rear terminal pads. A very small thermally conductive, electrically insulating silicone/epoxy dot may be used between the NTC body and the SolarBIT rear surface.
+
+This arrangement preserves a single main PCB while measuring temperature close to the rear of the actual reference cell. It intentionally creates a known mechanical overlap between the KXOB and NTC1 footprints; this overlap is a documented DRC/mechanical exception.
 
 NTC2 is connected through J2 over a two-wire UV-resistant cable and bonded to the rear of the monitored PV module beneath a cell region, not to the frame or junction box.
 
@@ -109,7 +116,7 @@ C7/C8 start at 22 pF C0G each. This is a practical initial value for a 12.5 pF c
 
 ## Programming
 
-J1 is a connectorless five-pad pogo/SWD pattern:
+J1 is a connectorless five-pad pogo/SWD pattern, 2.00 mm pitch:
 
 1. VDD_2V4 / VTref
 2. SWDIO
@@ -121,8 +128,24 @@ The first programming/provisioning flow must set UICR REGOUT0 to 2.4 V and reset
 
 ## RF placement
 
-U1 is placed at a PCB edge with the ceramic antenna facing outwards. No copper, traces, battery, metal mounting hardware or tall components are allowed in the antenna keep-out/near-field region. The analog measurement island is placed at the opposite side of the board where practical.
+U1 is placed at a PCB edge with the ceramic antenna facing outwards. No copper, traces, battery, metal mounting hardware or tall components are allowed in the antenna keep-out/near-field region. The custom footprint marks a conservative antenna area on `Dwgs.User`; the PCB itself must additionally contain an enforced copper keep-out/rule area on both copper layers before routing is frozen.
+
+The analog measurement island is placed at the opposite side of the board where practical.
+
+## PCB baseline
+
+- 2-layer FR-4, 1.6 mm
+- all JLCPCB-assembled components on the top side to avoid double-sided assembly cost
+- provisional outline: 52 x 52 mm with rounded corners, to fit inside Hammond 1554B2GYCL while retaining margin against the published maximum PCB envelope
+- CELL1 on top side below the optical window
+- NTC1 underneath CELL1 on the same PCB side
+- U1 at an outer PCB edge, antenna directed toward the enclosure wall and away from CELL1/analog section
+- battery below the raised PCB, connected by factory-tabbed leads
+- J2 near the cable-gland edge
+- J1 accessible with the lid removed
+
+Mechanical details are tracked in `../mechanical/pcb-layout.md`.
 
 ## Schematic revision
 
-This document describes electrical schematic baseline **v0.1**. PCB placement/routing has not yet been frozen.
+This document describes electrical schematic baseline **v0.1** plus the initial PCB/mechanical baseline. Placement/routing has not yet been frozen.
