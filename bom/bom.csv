@@ -7,13 +7,14 @@ NTC1,1,Reference-cell temperature,10k 1%,TDK,NTCG163JF103FT1S,C406719,0603,JLCPC
 NTC2,1,PV module temperature,10k 1%,TDK,NTCG163JF103FT1S,C406719,0603,Manual/external probe,Same characteristic as NTC1; mounted on cable at module backsheet
 R1 R2,2,NTC divider reference,47k 0.1% 10ppm/K,RESI,PTFR0603B47K0N9,C394548,0603,JLCPCB Extended,One per NTC channel; can be relaxed after error-budget review
 C1 C2 C3 C4,4,Local decoupling,100nF X7R 50V,Yageo,CC0603KRX7R9BB104,C14663,0603,JLCPCB Basic,Place at U1/U2 and measurement supply nodes
-C5,1,ADC local bulk,1uF X7R,TBD,TBD,TBD,0603/0805,JLCPCB Basic preferred,Finalize to stocked Basic part
-C6 C7,2,Radio/battery pulse buffer,47uF low-leakage ceramic or equivalent,TBD,TBD,TBD,0805/1206,JLCPCB preferred,Value/package to be finalized against DC bias and battery ESR
-C8 C9,2,LF crystal load,TBD pF C0G,TBD,TBD,TBD,0603,JLCPCB Basic preferred,Finalize after choosing crystal CL/parasitics
-R3 R4,2,I2C pull-ups,4.7k 1%,TBD,TBD,TBD,0603,JLCPCB Basic preferred,Pull up to regulated logic rail
-R5 R6,2,Battery sense divider,1M / 330k 1%,TBD,TBD,TBD,0603,JLCPCB Basic preferred,High-value divider; optionally switched to remove standby current
-R7 R8,2,ADC input filter,100R 1%,TBD,TBD,TBD,0603,JLCPCB Basic preferred,Symmetric in irradiance differential path if used
-C10,1,ADC differential filter,100nF C0G/X7R,TBD,TBD,TBD,0603,JLCPCB Basic preferred,Across ADS1115 differential inputs; value subject to settling-time review
+C5,1,ADC local bulk,1uF X7R 16V,Samsung Electro-Mechanics,CL10B105KO8NNNC,TBD,0603,JLCPCB Basic preferred,Confirm current JLCPCB code before ordering
+C6 C7,2,Radio/battery pulse buffer,47uF X5R 10V,Samsung Electro-Mechanics,CL31A476MPHNNNE,C96123,1206,JLCPCB Basic,Check effective capacitance at operating bias; two fitted by default
+C8 C9,2,LF crystal load,TBD pF C0G,TBD,TBD,TBD,0603,JLCPCB Basic preferred,Finalize only after calculating load for selected crystal and parasitics
+R3 R4,2,I2C pull-ups,4.7k 1%,UNI-ROYAL,0603WAF4701T5E,C23162,0603,JLCPCB Basic,Pull up to regulated logic rail
+R5,1,Battery sense upper,1M 1%,UNI-ROYAL,0603WAF1004T5E,C22935,0603,JLCPCB Basic,High-value divider to reduce standby current
+R6,1,Battery sense lower,330k 1%,UNI-ROYAL,0603WAF3303T5E,C23137,0603,JLCPCB Basic,With R5 gives approximately 0.248 divider ratio
+R7 R8,2,ADC input filter,100R 1%,UNI-ROYAL,0603WAF1000T5E,C22775,0603,JLCPCB Basic,Symmetric in irradiance differential path if used
+C10,1,ADC differential filter,100nF X7R 50V,Yageo,CC0603KRX7R9BB104,C14663,0603,JLCPCB Basic,Across ADS1115 differential inputs; verify settling time in firmware
 J1,1,SWD programming pads,Tag-Connect/pogo pad pattern,Custom,Custom,None,PCB pads,Manual,No connector BOM cost
 J2,1,External module NTC cable,2-wire solder pads,Custom,Custom,None,PCB pads,Manual,Direct-solder UV-resistant cable preferred
 CELL1,1,POA reference cell,KXOB25-14X1F,ANYSOLAR,KXOB25-14X1F-TR,Not planned for JLCPCB,23x8mm approx,Manual assembly,Install under optical window and calibrate as complete assembly
