@@ -12,6 +12,11 @@ Workflow:
 This script only changes the top-level `(at ...)` field of known electrical
 footprints. Mechanical outline and mounting-hole synchronization is handled by
 `sync_pcb_mechanics.py`.
+
+`--allow-missing` is intended only for mechanical bring-up of a partially
+synchronized PCB. It applies canonical placement to all footprints that are
+present while still reporting the missing references. Normal release checks
+must run without this option.
 """
 from __future__ import annotations
 
@@ -151,6 +156,11 @@ def place(text: str) -> tuple[str, list[str], list[str]]:
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--check", action="store_true")
+    ap.add_argument(
+        "--allow-missing",
+        action="store_true",
+        help="apply placement to present footprints but do not fail on missing refs",
+    )
     ap.add_argument("--file", type=Path, default=BOARD)
     args = ap.parse_args()
 
@@ -161,7 +171,9 @@ def main() -> int:
         print("Board is missing expected footprints (run KiCad F8 first):")
         for ref in missing:
             print(f"  - {ref}")
-        return 2
+        if not args.allow_missing:
+            return 2
+        print("Continuing because --allow-missing was requested; release check remains open.")
 
     if args.check:
         if changes:
@@ -169,7 +181,7 @@ def main() -> int:
             for change in changes:
                 print(f"  - {change}")
             return 1
-        print("PCB placement matches canonical 1554BPL placement.")
+        print("PCB placement matches canonical 1554BPL placement for all present footprints.")
         return 0
 
     if changes:
