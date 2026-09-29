@@ -6058,127 +6058,6 @@
 			)
 		)
 	)
-	(gr_rect
-		(start 101.5 101.5)
-		(end 130.5 126.5)
-		(stroke
-			(width 0.25)
-			(type dash)
-		)
-		(fill none)
-		(layer "Dwgs.User")
-		(uuid "0a225cb4-54e7-4877-94ef-982612546352")
-	)
-	(gr_rect
-		(start 103.5 110)
-		(end 126.5 118)
-		(stroke
-			(width 0.15)
-			(type dash)
-		)
-		(fill none)
-		(layer "User.1")
-		(uuid "2a90a70a-b40e-4069-b2f8-c7c8805190ad")
-	)
-	(gr_rect
-		(start 102 143)
-		(end 111 149)
-		(stroke
-			(width 0.15)
-			(type dash)
-		)
-		(fill none)
-		(layer "User.1")
-		(uuid "a197c6d3-9d17-43a8-8208-be5e8b4d601c")
-	)
-	(gr_rect
-		(start 136 143)
-		(end 148 149)
-		(stroke
-			(width 0.15)
-			(type dash)
-		)
-		(fill none)
-		(layer "User.1")
-		(uuid "a478853f-7633-4554-8fc9-15f81a02b488")
-	)
-	(gr_rect
-		(start 112 139)
-		(end 132 150)
-		(stroke
-			(width 0.15)
-			(type dash)
-		)
-		(fill none)
-		(layer "User.1")
-		(uuid "b747f5e8-4707-44db-aa68-7ea65193e075")
-	)
-	(gr_rect
-		(start 124 116)
-		(end 137 133)
-		(stroke
-			(width 0.15)
-			(type dash)
-		)
-		(fill none)
-		(layer "User.1")
-		(uuid "d770d0ab-dfe6-4162-aa69-813340e27c1f")
-	)
-	(gr_rect
-		(start 133.5 105.5)
-		(end 151.5 118.5)
-		(stroke
-			(width 0.15)
-			(type dash)
-		)
-		(fill none)
-		(layer "User.1")
-		(uuid "f0df077f-bc0c-4e19-bbbd-7506dd57b0a1")
-	)
-	(gr_text "52 x 52 mm / run Update PCB from Schematic (F8), then place to guides"
-		(at 126 154 0)
-		(layer "Dwgs.User")
-		(uuid "7e944d37-f1f2-4f54-b6a3-d5606be8243a")
-		(effects
-			(font
-				(size 0.8 0.8)
-				(thickness 0.12)
-			)
-		)
-	)
-	(gr_text "OPTICAL CLEAR AREA / lid window"
-		(at 116 103 0)
-		(layer "Dwgs.User")
-		(uuid "cb454324-bcda-4c37-b21a-6408fd38a2b5")
-		(effects
-			(font
-				(size 0.9 0.9)
-				(thickness 0.15)
-			)
-		)
-	)
-	(gr_text "CELL1 KXOB 23x8 / NTC1 underneath"
-		(at 115 109.2 0)
-		(layer "User.1")
-		(uuid "0fbe4585-a5d2-4a7d-ad2b-a92fce6973ca")
-		(effects
-			(font
-				(size 0.8 0.8)
-				(thickness 0.12)
-			)
-		)
-	)
-	(gr_text "J2 module NTC cable"
-		(at 106.5 142.2 0)
-		(layer "User.1")
-		(uuid "134da89b-78af-4926-ab1b-ae684fb586bc")
-		(effects
-			(font
-				(size 0.8 0.8)
-				(thickness 0.12)
-			)
-		)
-	)
 	(gr_text "RF KEEPOUT"
 		(at 149.75 112 90)
 		(layer "User.1")
@@ -6187,50 +6066,6 @@
 			(font
 				(size 1 1)
 				(thickness 0.18)
-			)
-		)
-	)
-	(gr_text "BT1 wire pads / battery below PCB"
-		(at 122 138.2 0)
-		(layer "User.1")
-		(uuid "ad57220d-38a2-462f-a9e6-c5312e73fc8b")
-		(effects
-			(font
-				(size 0.8 0.8)
-				(thickness 0.12)
-			)
-		)
-	)
-	(gr_text "U1 E73 / antenna -> right"
-		(at 142.5 104.7 0)
-		(layer "User.1")
-		(uuid "b6dcc158-666d-4932-9a6c-a1ffde0b1472")
-		(effects
-			(font
-				(size 0.8 0.8)
-				(thickness 0.12)
-			)
-		)
-	)
-	(gr_text "analog island U2 / RSH1 / RC filter"
-		(at 130.5 115.2 0)
-		(layer "User.1")
-		(uuid "eca07e67-6809-485d-9043-4db2d6a890fe")
-		(effects
-			(font
-				(size 0.8 0.8)
-				(thickness 0.12)
-			)
-		)
-	)
-	(gr_text "J1 SWD pogo"
-		(at 142 142.2 0)
-		(layer "User.1")
-		(uuid "f6697070-e247-4cd3-b754-ffe072c1d1ee")
-		(effects
-			(font
-				(size 0.8 0.8)
-				(thickness 0.12)
 			)
 		)
 	)
@@ -6383,6 +6218,111 @@
 			(uuid "c3bd0988-a4cf-4c1d-9f43-ce03032fe705")
 		)
 
+	(gr_rect
+			(start 135 111) (end 153 124)
+			(stroke (width 0.15) (type dash))
+			(fill none)
+			(layer "User.1")
+			(uuid "f0df077f-bc0c-4e19-bbbd-7506dd57b0a1")
+		)
+
+	(gr_text "U1 E73 18x13 / antenna -> right"
+			(at 144 110.2 0)
+			(layer "User.1")
+			(uuid "b6dcc158-666d-4932-9a6c-a1ffde0b1472")
+			(effects (font (size 0.8 0.8) (thickness 0.12)))
+		)
+
+	(gr_rect
+			(start 111 103) (end 119 126)
+			(stroke (width 0.15) (type dash))
+			(fill none)
+			(layer "User.1")
+			(uuid "2a90a70a-b40e-4069-b2f8-c7c8805190ad")
+		)
+
+	(gr_text "CELL1 KXOB 8x23 / rotate 90 deg"
+			(at 120 102.2 0)
+			(layer "User.1")
+			(uuid "0fbe4585-a5d2-4a7d-ad2b-a92fce6973ca")
+			(effects (font (size 0.8 0.8) (thickness 0.12)))
+		)
+
+	(gr_rect
+			(start 132 124.5) (end 144 135)
+			(stroke (width 0.15) (type dash))
+			(fill none)
+			(layer "User.1")
+			(uuid "d770d0ab-dfe6-4162-aa69-813340e27c1f")
+		)
+
+	(gr_text "analog island U2/RSH/filter"
+			(at 138 123.7 0)
+			(layer "User.1")
+			(uuid "eca07e67-6809-485d-9043-4db2d6a890fe")
+			(effects (font (size 0.8 0.8) (thickness 0.12)))
+		)
+
+	(gr_rect
+			(start 132 147) (end 143 153)
+			(stroke (width 0.15) (type dash))
+			(fill none)
+			(layer "User.1")
+			(uuid "a478853f-7633-4554-8fc9-15f81a02b488")
+		)
+
+	(gr_text "J1 SWD pogo"
+			(at 137.5 146.2 0)
+			(layer "User.1")
+			(uuid "f6697070-e247-4cd3-b754-ffe072c1d1ee")
+			(effects (font (size 0.8 0.8) (thickness 0.12)))
+		)
+
+	(gr_rect
+			(start 111 147) (end 121 153)
+			(stroke (width 0.15) (type dash))
+			(fill none)
+			(layer "User.1")
+			(uuid "a197c6d3-9d17-43a8-8208-be5e8b4d601c")
+		)
+
+	(gr_text "J2 module NTC cable"
+			(at 116 146.2 0)
+			(layer "User.1")
+			(uuid "134da89b-78af-4926-ab1b-ae684fb586bc")
+			(effects (font (size 0.8 0.8) (thickness 0.12)))
+		)
+
+	(gr_rect
+			(start 118 140.5) (end 141 154)
+			(stroke (width 0.15) (type dash))
+			(fill none)
+			(layer "User.1")
+			(uuid "b747f5e8-4707-44db-aa68-7ea65193e075")
+		)
+
+	(gr_text "BT1 wire pads / battery below PCB"
+			(at 129.5 139.7 0)
+			(layer "User.1")
+			(uuid "ad57220d-38a2-462f-a9e6-c5312e73fc8b")
+			(effects (font (size 0.8 0.8) (thickness 0.12)))
+		)
+
+	(gr_rect
+			(start 101.5 100.8) (end 128 141.5)
+			(stroke (width 0.25) (type dash))
+			(fill none)
+			(layer "Dwgs.User")
+			(uuid "0a225cb4-54e7-4877-94ef-982612546352")
+		)
+
+	(gr_text "OPTICAL CLEAR AREA / lid window"
+			(at 114.75 101.6 0)
+			(layer "Dwgs.User")
+			(uuid "cb454324-bcda-4c37-b21a-6408fd38a2b5")
+			(effects (font (size 0.9 0.9) (thickness 0.15)))
+		)
+
 	(zone
 			(layers "F.Cu" "B.Cu" "B.Adhes" "F.Adhes" "B.Paste" "F.Paste" "B.SilkS" "F.SilkS" "B.Mask" "F.Mask" "Edge.Cuts" "B.CrtYd" "F.CrtYd" "B.Fab" "F.Fab")
 			(uuid "6aafd6ad-0ff3-497c-a79a-80362eda2745")
@@ -6410,5 +6350,19 @@
 					(xy 149 125)
 				)
 			)
+		)
+
+	(gr_text "H1/H2 = Hammond 1554BPL screw-centre geometry"
+			(at 128 158.2 0)
+			(layer "Dwgs.User")
+			(uuid "33079fba-4ab9-48ce-bd47-b45bda0803fc")
+			(effects (font (size 0.8 0.8) (thickness 0.12)))
+		)
+
+	(gr_text "Edge.Cuts follows Hammond 1554BPL steel-panel profile; do not simplify"
+			(at 128 159.5 0)
+			(layer "Dwgs.User")
+			(uuid "7e944d37-f1f2-4f54-b6a3-d5606be8243a")
+			(effects (font (size 0.8 0.8) (thickness 0.12)))
 		)
 )
