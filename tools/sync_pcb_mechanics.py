@@ -96,9 +96,8 @@ def uuid_of(block: str) -> str | None:
 
 def is_edge_block(block: str) -> bool:
     return (
-        (block.startswith("(gr_line") or block.startswith("(gr_arc"))
-        and '(layer "Edge.Cuts")' in block
-    )
+        block.startswith("(gr_line") or block.startswith("(gr_arc")
+    ) and '(layer "Edge.Cuts")' in block
 
 
 def is_mount_block(block: str) -> bool:
