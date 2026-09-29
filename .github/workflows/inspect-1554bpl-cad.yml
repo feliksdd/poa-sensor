@@ -23,21 +23,27 @@ jobs:
             'https://ftp.automationdirect.com/support/drawings/2d/1554BPL.zip'
           mkdir -p /tmp/1554BPL
           unzip -o /tmp/1554BPL.zip -d /tmp/1554BPL
-          echo '--- files ---'
-          find /tmp/1554BPL -maxdepth 2 -type f -printf '%p\n'
 
           sudo apt-get update -qq
-          sudo apt-get install -y -qq libredwg-tools
-          echo '--- LibreDWG tools ---'
-          command -v dwg2dxf || true
-          command -v dwgread || true
-          dwg2dxf /tmp/1554BPL/1554BPL.dwg -o /tmp/1554BPL/1554BPL.dxf || \
-            dwg2dxf -o /tmp/1554BPL/1554BPL.dxf /tmp/1554BPL/1554BPL.dwg
+          sudo apt-get install -y -qq \
+            build-essential autoconf automake libtool pkg-config \
+            gettext texinfo libxml2-dev libpcre2-dev
+          git clone --depth 1 https://github.com/LibreDWG/libredwg.git /tmp/libredwg
+          cd /tmp/libredwg
+          ./autogen.sh
+          ./configure --disable-bindings
+          make -j2
+          DWG2DXF="$(find /tmp/libredwg -type f -name dwg2dxf -perm -111 | head -n1)"
+          test -n "$DWG2DXF"
+          echo "DWG2DXF=$DWG2DXF"
+          "$DWG2DXF" -o /tmp/1554BPL/1554BPL.dxf /tmp/1554BPL/1554BPL.dwg || \
+            "$DWG2DXF" /tmp/1554BPL/1554BPL.dwg -o /tmp/1554BPL/1554BPL.dxf
           file /tmp/1554BPL/1554BPL.dxf
 
           echo '--- DXF geometry ---'
           python3 - <<'PY'
           from pathlib import Path
+          from collections import Counter
 
           path = Path('/tmp/1554BPL/1554BPL.dxf')
           def pairs(text):
@@ -77,10 +83,7 @@ jobs:
                       except:out.append(v)
               return out
 
-          print('ENTITY_TYPES')
-          from collections import Counter
-          print(Counter(t for t,_ in entities))
-          print('GEOMETRY')
+          print('ENTITY_TYPES', Counter(t for t,_ in entities))
           for typ,ds in entities:
               layer=next((v for c,v in ds if c==8),'')
               if typ=='LINE':
