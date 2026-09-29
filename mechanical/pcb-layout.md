@@ -1,48 +1,80 @@
 # PCB and enclosure layout baseline
 
-This document defines the initial mechanical layout for the first POA-sensor PCB. It is a placement baseline, not a frozen production drawing.
+This document defines the mechanical baseline for the first POA-sensor PCB.
 
 ## Enclosure
 
 Baseline enclosure: **Hammond 1554B2GYCL**.
 
-Nominal enclosure size is approximately 66 x 66 x 41 mm. Hammond publishes a maximum PCB envelope of roughly 55.45 x 55.96 mm for this enclosure family/size.
+The PCB outline is no longer a generic square. It now follows the **Hammond 1554BPL steel-panel profile**, which is the mechanical reference part intended for this enclosure size. This gives the PCB the same corner/boss clearance geometry as the manufacturer's panel instead of relying on an approximate rectangular envelope.
 
-To preserve assembly tolerance, cable-gland clearance and wall clearance, the first PCB uses a conservative **52.0 x 52.0 mm** outline.
+### 1554BPL reference geometry
 
-Recommended board:
+The KiCad mechanical template uses these manufacturer dimensions:
 
-- 52.0 x 52.0 mm
+- overall width: **55.45 mm**
+- overall height: **55.96 mm**
+- corner relief radius: **R9.525 mm** (3/8 in)
+- stepped straight section: **10.16 mm**
+- two mounting holes: **Ø3.73 mm**
+- mounting-hole centre line: **27.98 mm** from the left datum
+- upper mounting-hole centre: **16.46 mm** from the top datum
+- lower mounting-hole centre: **37.98 mm** from the top datum
+- mounting-hole pitch: **21.52 mm**
+
+The exact steel-panel contour is treated as the source of truth. Do **not** replace it with a 52 x 52 mm rectangle or simplified corner cut-outs.
+
+Reference: Hammond 1554BPL manufacturer drawing.
+
+Recommended board stack:
+
 - 2 layers
 - 1.6 mm FR-4
 - 1 oz copper
 - all JLCPCB-assembled parts on the top side
 - battery below the PCB
 
-Do not add mounting holes until the exact enclosure boss locations are verified against the physical enclosure or Hammond mechanical drawing. Corner radii are also deferred until that check.
-
 ## Coordinate convention
 
-The native placement template uses absolute KiCad coordinates:
+The native mechanical template is anchored with the steel-panel bounding box at:
 
-- board: X = 100...152 mm, Y = 100...152 mm
-- right edge = RF/antenna edge
-- bottom edge = cable-gland / module-NTC edge
+- left datum: X = 100.00 mm
+- top datum: Y = 100.00 mm
+- maximum right extent: X = 155.45 mm
+- maximum bottom extent: Y = 155.96 mm
 
-For relative reasoning the board centre is (0,0), with X positive toward the RF/right edge and Y positive toward the bottom/cable edge.
+The panel is intentionally asymmetric because of the Hammond corner/boss clearance profile.
+
+Mounting-hole centres in template coordinates:
+
+- H1 = (127.98, 116.46) mm
+- H2 = (127.98, 137.98) mm
+
+## Mounting holes
+
+The PCB uses the same two-hole geometry as the 1554BPL panel:
+
+- H1/H2 are NPTH
+- nominal drill/finished hole diameter: **3.73 mm**
+- keep copper, vias and components clear around the screw/washer volume
+- final screw/washer stack must be checked against the real enclosure and chosen spacers before release
+
+The two holes sit relatively close to the centre of the usable PCB area and therefore constrain component placement. The precision analog section and battery retention must not overlap the screw volumes.
 
 ## Functional placement zones
 
+The old 52 x 52 mm placement map is obsolete. The following zones are the new mechanical starting point and may still be optimized during routing.
+
 ### 1. RF zone — right edge
 
-Place U1 (E73-2G4M08S1C) at the **upper-right edge**, unrotated, with the ceramic-antenna end of the custom footprint facing the right enclosure wall.
+Place U1 (E73-2G4M08S1C) along the **right-hand enclosure wall**, shifted down from the former upper-right corner so the module does not collide with the steel-panel corner relief.
 
 Template target:
 
-- U1 body guide: X = 133.5...151.5 mm
-- Y = 105.5...118.5 mm
-- antenna/right-side keepout: X = 147.5...152.0 mm
-- Y = 104.5...119.5 mm
+- U1 body guide: approximately X = 135...153 mm
+- Y = 111...124 mm
+- antenna/right-side keepout: approximately X = 149...155.45 mm
+- Y = 110...125 mm
 
 Rules:
 
@@ -51,21 +83,23 @@ Rules:
 - keep the ceramic antenna close to the board/enclosure edge
 - the clear polycarbonate enclosure does not create a metal RF shield
 
-The placement template contains a **real KiCad rule-area keepout**, not only a drawing marker. The custom E73 footprint also contains a visible reference marker for review.
+The placement template contains a real KiCad rule-area keepout, not only a drawing marker.
 
-### 2. Optical / reference-cell zone — upper-left
+### 2. Optical / reference-cell zone
 
-Place CELL1 (KXOB25-14X1F) at approximately:
+The KXOB25-14X1F remains under the clear lid window, but the long axis is rotated approximately 90 degrees relative to the former square-board placement so it fits cleanly in the large unobstructed left-hand area of the steel-panel outline.
 
-- centre X = 115 mm
-- centre Y = 114 mm
-- long axis horizontal
+Template target:
 
-The cell body is approximately 23 x 8 mm. The placement template also marks a larger optical-clear region. The lid mask/window should remain larger than the cell to avoid artificial shading at oblique incidence; final lid target remains roughly 40 x 25 mm to 45 x 30 mm.
+- CELL1 body guide: approximately X = 111...119 mm
+- Y = 103...126 mm
+- cell body: approximately 23 x 8 mm
+
+The lid mask/window remains larger than the cell to avoid artificial shading at oblique incidence; final lid target remains roughly **40 x 25 mm to 45 x 30 mm**.
 
 ### 3. Reference-cell NTC
 
-NTC1 is intentionally placed **directly underneath the centre of CELL1** on the same PCB side.
+NTC1 remains intentionally placed **directly underneath the centre of CELL1** on the same PCB side.
 
 Target:
 
@@ -86,7 +120,7 @@ Prototype checks:
 
 ### 4. Precision analog island
 
-Place RSH1 and U2 close to CELL1 but outside the SolarBIT body. The template reserves roughly X = 124...137 mm and Y = 116...133 mm for this block.
+Place RSH1 and U2 close to CELL1 but outside the SolarBIT body and outside the H1/H2 mounting keepouts. The new template reserves approximately X = 132...144 mm and Y = 124.5...135 mm for this block.
 
 Current path:
 
@@ -111,12 +145,12 @@ R1, R2, C10 and C11 sit close to U2/associated sensor node. Keep the cell-NTC co
 
 ### 6. Module-temperature cable connection
 
-Place J2 at the **bottom-left edge**, near the planned M8 cable gland.
+Place J2 near the lower-left portion of the PCB, close to the planned M8 cable gland but clear of the lower-left corner relief.
 
 Template area:
 
-- X = 102...111 mm
-- Y = 143...149 mm
+- approximately X = 111...121 mm
+- Y = 147...153 mm
 
 The two-wire cable is soldered directly to the board. Mechanical strain relief is provided by the gland/enclosure, not the solder pads.
 
@@ -138,17 +172,18 @@ Baseline:
 - wires connect to BT1 solder pads (VBAT/GND)
 - insulating foam/adhesive or enclosure retention prevents motion
 - battery kept outside the E73 antenna projection
+- battery must also clear both enclosure mounting bosses/screws
 
-The placement template reserves the lower-centre region for the battery wire exit/under-board volume.
+The final below-PCB battery position is dependent on spacer height and the real screw stack and therefore remains a prototype fit check.
 
 ### 8. SWD programming pads
 
-J1 is at the bottom-right, accessible with the lid removed and outside optical/RF zones.
+J1 remains accessible with the lid removed and outside optical/RF zones.
 
 Template area:
 
-- X = 136...148 mm
-- Y = 143...149 mm
+- approximately X = 132...143 mm
+- Y = 147...153 mm
 
 Pin order:
 
@@ -165,25 +200,26 @@ The footprint uses exposed circular pogo pads on 2.00 mm pitch and no paste aper
 Approximate top view, not to scale:
 
 ```text
-   +--------------------------------------+
-   | optical clear area         [ E73 ]>>|  -> RF/right wall
-   |                                      |
-   | [      KXOB CELL1      ]              |
-   | [      NTC1 below      ] RSH1/U2      |
-   |                           analog      |
-   |                                      |
-   | J2 / cable       battery       J1 SWD|
-   +--------------------------------------+
-                      bottom / gland side
+        ┌────────────────────────────╮
+        │ optical             E73 >> │
+   ┌────┘                            │
+   │  KXOB                           │
+   │                 H1 ○            │
+   │                         analog  │
+   │                 H2 ○            │
+   │                                 │
+   │ J2          battery       SWD   │
+   ╰────────────────────────────┐    │
+                                └────┘
 ```
 
-Battery: below PCB and outside antenna projection.
+The actual `Edge.Cuts` profile in KiCad is authoritative; the ASCII drawing is only explanatory.
 
 ## Optical height
 
-The design goal remains to place the active reference cell as close to the clear lid as practical, preferably around 1–2 mm below the inner lid surface.
+The design goal remains to place the active reference cell as close to the clear lid as practical, preferably around **1–2 mm below the inner lid surface**.
 
-Do not determine PCB spacer height from nominal enclosure depth alone. Measure the actual enclosure and lid after receipt because gasket compression, lid geometry, SolarBIT thickness and solder stand-off all contribute.
+Do not determine PCB spacer height from nominal enclosure depth alone. Measure the actual enclosure and lid after receipt because gasket compression, lid geometry, SolarBIT thickness, screw stack and solder stand-off all contribute.
 
 ## Lid mask
 
@@ -193,26 +229,29 @@ The KXOB, clear lid and mask are treated as one optical measurement assembly and
 
 ## Native PCB template
 
-`hardware/poa-sensor-layout-template.kicad_pcb` is the current mechanical source for the first board. It contains:
+`hardware/poa-sensor-layout-template.kicad_pcb` is the current mechanical source for the board. It contains:
 
-- 52 x 52 mm Edge.Cuts
-- placement guides on User.1
+- exact Hammond 1554BPL-derived `Edge.Cuts`
+- H1/H2 mounting holes at the manufacturer positions
+- revised placement guides on User.1
 - optical-clear-area drawing on Dwgs.User
 - all-layer E73 antenna rule-area keepout
 
-After schematic normalization, copy it to `poa-sensor.kicad_pcb`, run **Update PCB from Schematic (F8)** and place imported footprints into the marked zones.
+Do not independently redraw the outline in the production board. Copy/synchronize the template geometry so there is a single dimensional source.
 
 ## Release gates before routing/fabrication
 
 Do not release the PCB until these are checked:
 
+- compare the KiCad Edge.Cuts against the latest Hammond 1554BPL drawing/DXF
+- physical fit check with a real 1554B2GYCL enclosure
+- mounting-hole/screw/washer/spacer stack
 - E73 footprint and antenna orientation against the actual module
 - KXOB contact geometry against a physical sample/manufacturer drawing
 - NTC1-under-cell mechanical clearance
-- Hammond internal bosses and actual lid geometry
 - PCB-to-lid reference-cell clearance
 - M8 gland drill/nut clearance
-- battery clearance under PCB
+- battery clearance under PCB and around both mounting bosses
 - JLCPCB availability for selected LCSC parts
 - ERC clean except intentional documented exclusions
 - DRC and schematic-parity clean
