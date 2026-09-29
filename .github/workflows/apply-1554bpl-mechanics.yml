@@ -24,10 +24,12 @@ jobs:
           ref: feature/1554bpl-mechanics
           fetch-depth: 0
 
-      - name: Apply canonical enclosure mechanics and placement
+      - name: Apply canonical enclosure mechanics and current placement
         run: |
           python3 tools/sync_pcb_mechanics.py
-          python3 tools/place_pcb.py
+          # U2 is not yet present in the stored PCB until the next KiCad F8 sync.
+          # Mechanical bring-up must not be blocked by that known electrical state.
+          python3 tools/place_pcb.py --allow-missing
 
       - name: Commit generated production board if changed
         shell: bash
