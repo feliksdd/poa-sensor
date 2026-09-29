@@ -10,7 +10,9 @@ Native KiCad 8 project files now exist:
 - `poa-sensor.kicad_sch`
 - `poa-sensor.kicad_pcb`
 
-The PCB contains the mechanical baseline plus the schematic footprints imported so far. The ADS1115 U2 may be absent in boards synchronized before the footprint-library correction below.
+The PCB contains the electrical footprints imported so far. Mechanical geometry is synchronized from the dedicated Hammond 1554BPL template so the enclosure outline is not maintained independently in two places.
+
+The ADS1115 U2 may be absent in boards synchronized before the footprint-library correction below.
 
 The legacy bootstrap files (`poa-sensor.sch` and `poa-sensor-cache.lib`) are retained temporarily until the native project passes the first complete ERC/PCB parity review. They can then be removed.
 
@@ -73,18 +75,25 @@ Current custom parts:
 
 The project library alias is `POA` via `fp-lib-table`.
 
-## PCB baseline
+## PCB mechanical baseline
 
-`poa-sensor.kicad_pcb` is the real board file and contains:
+The former 52 x 52 mm rectangular outline is obsolete.
 
-- 52 x 52 mm board outline
-- optical/reference-cell zone
-- E73 placement guide at the right board edge
-- real all-layer E73 antenna rule-area keepout
-- analog-island placement guide
-- J1/J2/battery placement guides
+`poa-sensor-layout-template.kicad_pcb` is now the **mechanical source of truth** and contains:
 
-`poa-sensor-layout-template.kicad_pcb` remains only as the historical/mechanical template and may later be removed.
+- `Edge.Cuts` matching the Hammond **1554BPL steel-panel profile**
+- H1/H2 mounting holes matching the Hammond panel drawing
+- revised optical/reference-cell placement guides
+- revised E73 placement zone and all-layer antenna keepout
+- revised analog/J1/J2/battery placement guides
+
+`tools/sync_pcb_mechanics.py` copies only the mechanical source-of-truth items into the production board:
+
+- Edge.Cuts
+- H1/H2
+- E73 antenna keepout
+
+This prevents the Hammond contour from diverging between template and production PCB.
 
 ### Electrical PCB synchronization
 
@@ -94,36 +103,55 @@ The project library alias is `POA` via `fp-lib-table`.
 4. Run **Tools -> Update PCB from Schematic (F8)**.
 5. Verify that **U2 is present** and uses `Package_SO:VSSOP-10_3x3mm_P0.5mm`.
 6. Save the board. Do not manually route yet.
-7. Run:
+7. Synchronize the enclosure mechanics:
+
+```bash
+python3 tools/sync_pcb_mechanics.py
+```
+
+8. Apply the canonical component placement:
 
 ```bash
 python3 tools/place_pcb.py
 ```
 
-8. Re-open/save the PCB in KiCad and visually review the placement.
-9. Commit the resulting `.kicad_sch` and `.kicad_pcb`.
+9. Re-open/save the PCB in KiCad and visually review:
+   - steel-panel outline
+   - H1/H2 screw clearance
+   - E73 antenna clearance
+   - CELL1/window alignment
+   - analog island clearance
+   - J1/J2 edge clearance
+   - battery volume below PCB
+10. Commit the resulting `.kicad_sch` and `.kicad_pcb`.
 
-`place_pcb.py` only changes the top-level position/rotation of known footprints. It deliberately does not alter nets, pads, footprints, zones or routing.
+Checks can be run without modifying files:
+
+```bash
+python3 tools/sync_pcb_mechanics.py --check
+python3 tools/place_pcb.py --check
+```
 
 ## Placement baseline
 
-The canonical placement currently targets:
+The canonical placement now targets the Hammond 1554BPL geometry:
 
-- U1 E73 at the upper-right edge, antenna facing +X/right
-- CELL1 KXOB in the optical area at upper-left/center
+- U1 E73 shifted down along the right edge, antenna facing +X/right, clear of the top-right radius
+- CELL1 KXOB rotated 90 degrees in the large unobstructed left-hand optical area
 - NTC1 directly underneath CELL1 (intentional courtyard overlap)
-- RSH1, R7/R8, C9 and U2 as a tight analog island immediately beside CELL1
+- RSH1, R7/R8, C9 and U2 in a compact analog island clear of H1/H2
 - LF crystal and its capacitors close to U1 XL1/XL2
 - REG0 inductor/decoupling close to U1 power pins
-- J2 at the lower-left cable-entry edge
-- J1 SWD pogo pads at lower-right
-- battery wire pads near the lower center; the 1/2-AA battery sits below the PCB
+- J2 in the lower-left usable panel area, clear of the lower-left relief
+- J1 SWD pogo pads in the lower-right usable area
+- battery wire pads near the lower centre; the 1/2-AA battery sits below the PCB and must clear both enclosure mounting bosses/screws
 
-The exact coordinates are version-controlled in `../tools/place_pcb.py`.
+The exact electrical-footprint coordinates are version-controlled in `../tools/place_pcb.py`.
+The exact board mechanics are version-controlled in `poa-sensor-layout-template.kicad_pcb`.
 
 ## Routing constraints
 
-Do not route before the F8 import/placement review is complete.
+Do not route before the F8 import/mechanical-sync/placement review is complete.
 
 Important constraints:
 
@@ -133,8 +161,9 @@ Important constraints:
 - use a mostly continuous GND plane on B.Cu
 - no copper, traces, vias or parts inside the E73 antenna keepout on either copper layer
 - avoid battery, cable and metal mounting hardware in front of the antenna
+- maintain copper/component clearance around H1/H2 and the eventual screw/washer/spacer stack
 - NTC1 is intentionally mounted below CELL1; verify physical clearance on the first assembled prototype
 
 ## CI / ERC / DRC
 
-GitHub Actions runs KiCad ERC on the native schematic. PCB DRC with schematic parity activates automatically once the board actually contains imported schematic footprints. The mechanical-only PCB baseline intentionally skips parity DRC.
+GitHub Actions runs KiCad ERC on the native schematic. PCB DRC with schematic parity activates automatically once the board actually contains imported schematic footprints. Mechanical fit still requires a physical first-prototype check in a real Hammond 1554B2GYCL enclosure before fabrication is treated as production-ready.
