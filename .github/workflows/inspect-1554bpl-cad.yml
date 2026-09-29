@@ -1,4 +1,4 @@
-name: Inspect Hammond 1554BPL CAD
+name: Apply exact Hammond 1554BPL mechanics
 
 on:
   push:
@@ -6,29 +6,195 @@ on:
     paths:
       - '.github/workflows/inspect-1554bpl-cad.yml'
 
+permissions:
+  contents: write
+
 jobs:
-  inspect:
+  apply:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Extract exact vector profile from vendor PDF
+        with:
+          fetch-depth: 0
+      - name: Replace reconstructed outline with exact manufacturer profile
         shell: bash
         run: |
-          set -euxo pipefail
-          curl -fL --retry 3 -A 'Mozilla/5.0' -H 'Accept: application/zip,application/octet-stream,*/*' -H 'Referer: https://www.automationdirect.com/adc/shopping/catalog/enclosures_-a-_racks/subpanels/1554bpl' -o /tmp/1554BPL.zip 'https://ftp.automationdirect.com/support/drawings/2d/1554BPL.zip'
-          mkdir -p /tmp/1554BPL
-          unzip -o /tmp/1554BPL.zip -d /tmp/1554BPL
-          python3 -m pip install --quiet pymupdf
+          set -euo pipefail
           python3 - <<'PY'
-          import pymupdf
-          doc=pymupdf.open('/tmp/1554BPL/1554BPL.pdf')
-          drawings=doc[0].get_drawings()
-          for i in range(15,25):
-              d=drawings[i]; r=d['rect']
-              print(f'PATH {i} RECT {r.x0:.3f} {r.y0:.3f} {r.x1:.3f} {r.y1:.3f} WIDTH {d.get("width")} CLOSE {d.get("closePath")}')
-              for it in d['items']:
-                  if it[0]=='l':
-                      _,p1,p2=it; print(f'  L {p1.x:.3f} {p1.y:.3f} {p2.x:.3f} {p2.y:.3f}')
-                  elif it[0]=='c':
-                      _,p1,p2,p3,p4=it; print(f'  C {p1.x:.3f} {p1.y:.3f} {p2.x:.3f} {p2.y:.3f} {p3.x:.3f} {p3.y:.3f} {p4.x:.3f} {p4.y:.3f}')
+          from pathlib import Path
+          import re
+          import uuid
+
+          path = Path('hardware/poa-sensor-layout-template.kicad_pcb')
+          text = path.read_text(encoding='utf-8')
+
+          def balanced(text, start):
+              depth = 0
+              in_string = False
+              escaped = False
+              for i in range(start, len(text)):
+                  ch = text[i]
+                  if in_string:
+                      if escaped:
+                          escaped = False
+                      elif ch == '\\':
+                          escaped = True
+                      elif ch == '"':
+                          in_string = False
+                      continue
+                  if ch == '"':
+                      in_string = True
+                  elif ch == '(':
+                      depth += 1
+                  elif ch == ')':
+                      depth -= 1
+                      if depth == 0:
+                          return start, i + 1
+              raise RuntimeError('unterminated s-expression')
+
+          def top_blocks(text):
+              for m in re.finditer(r'(?m)^\t\(', text):
+                  start = m.start() + 1
+                  try:
+                      yield (*balanced(text, start),)
+                  except RuntimeError:
+                      pass
+
+          def ref(block):
+              m = re.search(r'\(property\s+"Reference"\s+"([^"]+)"', block)
+              return m.group(1) if m else None
+
+          def replace_footprint_at(block, x, y):
+              pat = re.compile(r'(?m)^\t\t\(at\s+[-+0-9.eE]+\s+[-+0-9.eE]+(?:\s+[-+0-9.eE]+)?\)\s*$')
+              new, n = pat.subn(f'\t\t(at {x:.3f} {y:.3f})', block, count=1)
+              if n != 1:
+                  raise RuntimeError(f'cannot replace mounting-hole position for {ref(block)}')
+              return new
+
+          edits = []
+          for start, end in top_blocks(text):
+              block = text[start:end]
+              is_edge = (block.startswith('(gr_line') or block.startswith('(gr_arc')) and '(layer "Edge.Cuts")' in block
+              if is_edge:
+                  edits.append((start, end, ''))
+              elif block.startswith('(footprint') and ref(block) == 'H1':
+                  edits.append((start, end, replace_footprint_at(block, 127.980, 116.470)))
+              elif block.startswith('(footprint') and ref(block) == 'H2':
+                  edits.append((start, end, replace_footprint_at(block, 127.980, 137.990)))
+              elif block.startswith('(zone') and '(name "E73 antenna keepout")' in block:
+                  # The old reconstruction stopped at the 55.45-mm tangent datum.
+                  # The actual panel envelope extends to 55.96 mm on this side.
+                  new = block.replace('(xy 155.45 110)', '(xy 155.96 110)').replace('(xy 155.45 125)', '(xy 155.96 125)')
+                  edits.append((start, end, new))
+
+          for start, end, replacement in sorted(edits, reverse=True):
+              left = start
+              if replacement == '':
+                  if left >= 1 and text[left - 1] == '\t':
+                      left -= 1
+                  if left >= 1 and text[left - 1] == '\n':
+                      left -= 1
+              text = text[:left] + replacement + text[end:]
+
+          # Exact manufacturer profile. The drawing is based on these exact
+          # dimensions: overall 55.96 mm, R=9.525 mm, 10.16-mm stems and
+          # 0.508-mm ledges. They reproduce the displayed rounded dimensions
+          # 55.45, 36.40, 26.75, 19.69 and R9.53.
+          edges = [
+              ('line', (109.525,100.000), (145.927,100.000), None),
+              ('arc',  (145.927,100.000), (155.452,109.525), (152.662192,102.789808)),
+              ('line', (155.452,109.525), (155.960,109.525), None),
+              ('line', (155.960,109.525), (155.960,136.275), None),
+              ('arc',  (155.960,136.275), (146.435,145.800), (153.170192,143.010192)),
+              ('line', (146.435,145.800), (146.435,155.960), None),
+              ('line', (146.435,155.960), (110.033,155.960), None),
+              ('arc',  (110.033,155.960), (100.508,146.435), (103.297808,153.170192)),
+              ('line', (100.508,146.435), (100.000,146.435), None),
+              ('line', (100.000,146.435), (100.000,119.685), None),
+              ('arc',  (100.000,119.685), (109.525,110.160), (102.789808,112.949808)),
+              ('line', (109.525,110.160), (109.525,100.000), None),
+          ]
+
+          blocks = []
+          ns = uuid.UUID('cbcab168-a39a-41cb-904c-04a934775b76')
+          for i, (kind, p1, p2, mid) in enumerate(edges):
+              uid = uuid.uuid5(ns, f'1554BPL-edge-{i}')
+              if kind == 'line':
+                  blocks.append(
+                      f'\t(gr_line\n'
+                      f'\t\t(start {p1[0]:.6f} {p1[1]:.6f})\n'
+                      f'\t\t(end {p2[0]:.6f} {p2[1]:.6f})\n'
+                      f'\t\t(stroke (width 0.1) (type solid))\n'
+                      f'\t\t(layer "Edge.Cuts")\n'
+                      f'\t\t(uuid "{uid}")\n'
+                      f'\t)')
+              else:
+                  blocks.append(
+                      f'\t(gr_arc\n'
+                      f'\t\t(start {p1[0]:.6f} {p1[1]:.6f})\n'
+                      f'\t\t(mid {mid[0]:.6f} {mid[1]:.6f})\n'
+                      f'\t\t(end {p2[0]:.6f} {p2[1]:.6f})\n'
+                      f'\t\t(stroke (width 0.1) (type solid))\n'
+                      f'\t\t(layer "Edge.Cuts")\n'
+                      f'\t\t(uuid "{uid}")\n'
+                      f'\t)')
+
+          text = text.rstrip()
+          if not text.endswith(')'):
+              raise RuntimeError('template root is malformed')
+          text = text[:-1].rstrip() + '\n\n' + '\n'.join(blocks) + '\n)\n'
+          path.write_text(text, encoding='utf-8', newline='\n')
           PY
+
+          python3 tools/sync_pcb_mechanics.py
+
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          expected_tokens = [
+              '(start 109.525000 100.000000)',
+              '(end 145.927000 100.000000)',
+              '(end 155.452000 109.525000)',
+              '(end 155.960000 109.525000)',
+              '(end 155.960000 136.275000)',
+              '(end 146.435000 145.800000)',
+              '(end 146.435000 155.960000)',
+              '(end 110.033000 155.960000)',
+              '(end 100.508000 146.435000)',
+              '(end 100.000000 146.435000)',
+              '(end 100.000000 119.685000)',
+              '(end 109.525000 110.160000)',
+              '(end 109.525000 100.000000)',
+          ]
+          for name in ['hardware/poa-sensor-layout-template.kicad_pcb', 'hardware/poa-sensor.kicad_pcb']:
+              text = Path(name).read_text(encoding='utf-8')
+              n = len(re.findall(r'\(layer "Edge\.Cuts"\)', text))
+              if n != 12:
+                  raise SystemExit(f'{name}: expected 12 Edge.Cuts primitives, got {n}')
+              for token in expected_tokens:
+                  if token not in text:
+                      raise SystemExit(f'{name}: missing {token}')
+              if '(at 127.980 116.470)' not in text or '(at 127.980 137.990)' not in text:
+                  raise SystemExit(f'{name}: H1/H2 positions incorrect')
+              if '(xy 155.96 110)' not in text or '(xy 155.96 125)' not in text:
+                  raise SystemExit(f'{name}: RF keepout does not reach actual panel envelope')
+              if '(start 109.525 100) (end 145.925 100)' in text:
+                  raise SystemExit(f'{name}: obsolete reconstructed outline still present')
+              print(f'{name}: exact 1554BPL mechanics validated')
+          PY
+
+          python3 tools/sync_pcb_mechanics.py --check
+
+      - name: Commit corrected mechanics
+        shell: bash
+        run: |
+          if git diff --quiet -- hardware/poa-sensor-layout-template.kicad_pcb hardware/poa-sensor.kicad_pcb; then
+            echo 'No mechanical changes to commit.'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add hardware/poa-sensor-layout-template.kicad_pcb hardware/poa-sensor.kicad_pcb
+          git commit -m 'mechanical: correct 1554BPL panel outline'
+          git push origin HEAD:main
