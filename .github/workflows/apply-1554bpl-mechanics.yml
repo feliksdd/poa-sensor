@@ -1,0 +1,43 @@
+name: Apply 1554BPL mechanics
+
+on:
+  push:
+    branches:
+      - feature/1554bpl-mechanics
+    paths:
+      - 'hardware/poa-sensor-layout-template.kicad_pcb'
+      - 'hardware/poa-sensor.kicad_pcb'
+      - 'tools/sync_pcb_mechanics.py'
+      - 'tools/place_pcb.py'
+      - '.github/workflows/apply-1554bpl-mechanics.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+        with:
+          ref: feature/1554bpl-mechanics
+          fetch-depth: 0
+
+      - name: Apply canonical enclosure mechanics and placement
+        run: |
+          python3 tools/sync_pcb_mechanics.py
+          python3 tools/place_pcb.py
+
+      - name: Commit generated production board if changed
+        shell: bash
+        run: |
+          if git diff --quiet -- hardware/poa-sensor.kicad_pcb; then
+            echo "Production PCB already matches the canonical mechanics/placement."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add hardware/poa-sensor.kicad_pcb
+          git commit -m "pcb: apply Hammond 1554BPL mechanics"
+          git push origin HEAD:feature/1554bpl-mechanics
