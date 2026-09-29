@@ -29,10 +29,10 @@ BOARD = ROOT / "hardware" / "poa-sensor.kicad_pcb"
 
 # KiCad board coordinates in mm.
 # Mechanical datum/bounding box follows the Hammond 1554BPL steel panel:
-#   X = 100.00 ... 155.45 mm
+#   X = 100.00 ... 155.96 mm
 #   Y = 100.00 ... 155.96 mm
 # The profile is asymmetric because of the enclosure corner/boss clearances.
-# H1 = (127.98, 116.46), H2 = (127.98, 137.98).
+# H1 = (127.98, 116.47), H2 = (127.98, 137.99).
 # U1 footprint antenna is on +X, therefore rotation 0 points it at the right wall.
 PLACEMENT: dict[str, tuple[float, float, float]] = {
     # RF / MCU — shifted down from the former upper-right corner so the E73

@@ -12,17 +12,20 @@ The PCB outline is no longer a generic square. It now follows the **Hammond 1554
 
 The KiCad mechanical template uses these manufacturer dimensions:
 
-- overall width: **55.45 mm**
+- overall envelope width: **55.96 mm**
 - overall height: **55.96 mm**
-- corner relief radius: **R9.525 mm** (3/8 in)
-- stepped straight section: **10.16 mm**
+- corner transition radius: **R9.525 mm** (3/8 in)
+- corner stem length: **10.16 mm** (0.4 in)
+- short corner ledge/offset: **0.508 mm** (0.02 in)
+- top/bottom central straight: **36.402 mm** (shown as 36.40 mm)
+- right tangent/reference extent: **55.452 mm** (shown as 55.45 mm)
 - two mounting holes: **Ø3.73 mm**
 - mounting-hole centre line: **27.98 mm** from the left datum
-- upper mounting-hole centre: **16.46 mm** from the top datum
-- lower mounting-hole centre: **37.98 mm** from the top datum
+- upper mounting-hole centre: **16.47 mm** from the top datum
+- lower mounting-hole centre: **37.99 mm** from the top datum
 - mounting-hole pitch: **21.52 mm**
 
-The exact steel-panel contour is treated as the source of truth. Do **not** replace it with a 52 x 52 mm rectangle or simplified corner cut-outs.
+The exact steel-panel contour is treated as the source of truth. Its 55.45 mm drawing dimension is a tangent/reference extent, **not the full PCB envelope width**; the short 0.508 mm ledge brings the maximum extent to 55.96 mm. Do **not** replace the profile with a rectangle, a simple rounded rectangle, or symmetric corner cut-outs.
 
 Reference: Hammond 1554BPL manufacturer drawing.
 
@@ -40,15 +43,15 @@ The native mechanical template is anchored with the steel-panel bounding box at:
 
 - left datum: X = 100.00 mm
 - top datum: Y = 100.00 mm
-- maximum right extent: X = 155.45 mm
+- maximum right extent: X = 155.96 mm
 - maximum bottom extent: Y = 155.96 mm
 
 The panel is intentionally asymmetric because of the Hammond corner/boss clearance profile.
 
 Mounting-hole centres in template coordinates:
 
-- H1 = (127.98, 116.46) mm
-- H2 = (127.98, 137.98) mm
+- H1 = (127.98, 116.47) mm
+- H2 = (127.98, 137.99) mm
 
 ## Mounting holes
 
@@ -73,7 +76,7 @@ Template target:
 
 - U1 body guide: approximately X = 135...153 mm
 - Y = 111...124 mm
-- antenna/right-side keepout: approximately X = 149...155.45 mm
+- antenna/right-side keepout: approximately X = 149...155.96 mm
 - Y = 110...125 mm
 
 Rules:
