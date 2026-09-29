@@ -2,10 +2,14 @@
 """Synchronize production-board mechanics from the Hammond 1554BPL template.
 
 The mechanical template is the single dimensional source for:
-- Edge.Cuts profile
+- exact 1554BPL Edge.Cuts profile
 - H1/H2 enclosure mounting holes
 - E73 antenna keepout
 - mechanical placement/optical guides
+
+The 1554BPL profile is intentionally not simplified to a rounded rectangle.
+The manufacturer geometry has 12 outline primitives: 8 straight segments and
+4 R9.525 quarter-circle transitions, including the 0.508 mm corner ledges.
 
 This lets KiCad F8 update electrical footprints without creating a second,
 independently maintained copy of the enclosure geometry.
@@ -157,8 +161,8 @@ def synchronize(board_text: str, template_text: str) -> str:
         uuid_of(block) for block in mechanics if is_mechanical_guide(block)
     }
 
-    if edge_count != 10:
-        raise ValueError(f"expected 10 1554BPL Edge.Cuts primitives, found {edge_count}")
+    if edge_count != 12:
+        raise ValueError(f"expected 12 exact 1554BPL Edge.Cuts primitives, found {edge_count}")
     if mount_refs != {"H1", "H2"}:
         raise ValueError(f"expected H1/H2 mounting holes, found {sorted(mount_refs)}")
     if rf_count != 1:
