@@ -15,7 +15,13 @@ jobs:
         shell: bash
         run: |
           set -euxo pipefail
-          curl -fL --retry 3 -o /tmp/1554BPL.zip 'https://ftp.automationdirect.com/support/drawings/2d/1554BPL.zip'
+          curl -fL --retry 3 \
+            -A 'Mozilla/5.0' \
+            -H 'Accept: application/zip,application/octet-stream,*/*' \
+            -H 'Referer: https://www.automationdirect.com/adc/shopping/catalog/enclosures_-a-_racks/subpanels/1554bpl' \
+            -o /tmp/1554BPL.zip \
+            'https://ftp.automationdirect.com/support/drawings/2d/1554BPL.zip'
+          file /tmp/1554BPL.zip
           mkdir -p /tmp/1554BPL
           unzip -o /tmp/1554BPL.zip -d /tmp/1554BPL
           echo '--- files ---'
@@ -23,7 +29,6 @@ jobs:
           echo '--- DXF geometry ---'
           python3 - <<'PY'
           from pathlib import Path
-          import math
 
           def pairs(text):
               lines = text.splitlines()
