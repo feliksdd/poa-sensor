@@ -15,27 +15,20 @@ jobs:
         shell: bash
         run: |
           set -euxo pipefail
-          curl -fL --retry 3 \
-            -A 'Mozilla/5.0' \
-            -H 'Accept: application/zip,application/octet-stream,*/*' \
-            -H 'Referer: https://www.automationdirect.com/adc/shopping/catalog/enclosures_-a-_racks/subpanels/1554bpl' \
-            -o /tmp/1554BPL.zip \
-            'https://ftp.automationdirect.com/support/drawings/2d/1554BPL.zip'
+          curl -fL --retry 3 -A 'Mozilla/5.0' -H 'Accept: application/zip,application/octet-stream,*/*' -H 'Referer: https://www.automationdirect.com/adc/shopping/catalog/enclosures_-a-_racks/subpanels/1554bpl' -o /tmp/1554BPL.zip 'https://ftp.automationdirect.com/support/drawings/2d/1554BPL.zip'
           mkdir -p /tmp/1554BPL
           unzip -o /tmp/1554BPL.zip -d /tmp/1554BPL
           python3 -m pip install --quiet pymupdf
           python3 - <<'PY'
           import pymupdf
-          from collections import Counter
           doc=pymupdf.open('/tmp/1554BPL/1554BPL.pdf')
           drawings=doc[0].get_drawings()
-          for i,d in enumerate(drawings[:15]):
-              r=d['rect']; items=d['items']; kinds=Counter(x[0] for x in items)
-              print(f'PATH {i} RECT {r.x0:.3f} {r.y0:.3f} {r.x1:.3f} {r.y1:.3f} WIDTH {d.get("width")} CLOSE {d.get("closePath")} KINDS {dict(kinds)}')
-              for it in items:
+          for i in range(15,25):
+              d=drawings[i]; r=d['rect']
+              print(f'PATH {i} RECT {r.x0:.3f} {r.y0:.3f} {r.x1:.3f} {r.y1:.3f} WIDTH {d.get("width")} CLOSE {d.get("closePath")}')
+              for it in d['items']:
                   if it[0]=='l':
                       _,p1,p2=it; print(f'  L {p1.x:.3f} {p1.y:.3f} {p2.x:.3f} {p2.y:.3f}')
                   elif it[0]=='c':
                       _,p1,p2,p3,p4=it; print(f'  C {p1.x:.3f} {p1.y:.3f} {p2.x:.3f} {p2.y:.3f} {p3.x:.3f} {p3.y:.3f} {p4.x:.3f} {p4.y:.3f}')
-                  elif it[0]=='re': print('  RE',it[1])
           PY
