@@ -25,32 +25,32 @@ jobs:
           unzip -o /tmp/1554BPL.zip -d /tmp/1554BPL
           python3 -m pip install --quiet pymupdf
           python3 - <<'PY'
-          import fitz
+          import pymupdf
           from collections import Counter
 
-          doc = fitz.open('/tmp/1554BPL/1554BPL.pdf')
+          doc = pymupdf.open('/tmp/1554BPL/1554BPL.pdf')
           page = doc[0]
           drawings = page.get_drawings()
-          print('PAGE', page.rect)
-          print('DRAWING_COUNT', len(drawings))
 
-          # Print closed/vector paths in the central front-view drawing region.
-          # Items are native PDF vector primitives: l=line, c=cubic Bezier, re=rect, qu=quad.
+          # Front-view panel outline is about 55.45 x 55.96 mm. In this PDF the
+          # 3.73-mm holes render as ~22.62 pt, giving ~6.064 pt/mm, so the
+          # profile bounding box is ~336 x 339 pt. Print only candidates in
+          # that range plus the two hole circles.
           for i,d in enumerate(drawings):
-              r=d['rect']
-              items=d['items']
-              kinds=Counter(x[0] for x in items)
-              if len(items) >= 4:
-                  print(f'PATH {i} RECT {r.x0:.6f} {r.y0:.6f} {r.x1:.6f} {r.y1:.6f} CLOSE {d.get("closePath")} KINDS {dict(kinds)}')
-                  for it in items:
-                      if it[0] == 'l':
-                          _,p1,p2=it
-                          print(f'  L {p1.x:.6f} {p1.y:.6f} {p2.x:.6f} {p2.y:.6f}')
-                      elif it[0] == 'c':
-                          _,p1,p2,p3,p4=it
-                          print(f'  C {p1.x:.6f} {p1.y:.6f} {p2.x:.6f} {p2.y:.6f} {p3.x:.6f} {p3.y:.6f} {p4.x:.6f} {p4.y:.6f}')
-                      elif it[0] == 're':
-                          print('  RE', it[1])
-                      elif it[0] == 'qu':
-                          print('  QU', *it[1:])
+              r=d['rect']; w=r.width; h=r.height
+              candidate = 300 < w < 380 and 300 < h < 380
+              hole = 20 < w < 25 and 20 < h < 25 and len(d['items']) == 4
+              if not (candidate or hole):
+                  continue
+              items=d['items']; kinds=Counter(x[0] for x in items)
+              print(f'PATH {i} RECT {r.x0:.6f} {r.y0:.6f} {r.x1:.6f} {r.y1:.6f} W {w:.6f} H {h:.6f} CLOSE {d.get("closePath")} KINDS {dict(kinds)}')
+              for it in items:
+                  if it[0] == 'l':
+                      _,p1,p2=it
+                      print(f'  L {p1.x:.6f} {p1.y:.6f} {p2.x:.6f} {p2.y:.6f}')
+                  elif it[0] == 'c':
+                      _,p1,p2,p3,p4=it
+                      print(f'  C {p1.x:.6f} {p1.y:.6f} {p2.x:.6f} {p2.y:.6f} {p3.x:.6f} {p3.y:.6f} {p4.x:.6f} {p4.y:.6f}')
+                  elif it[0] == 're':
+                      print('  RE', it[1])
           PY
