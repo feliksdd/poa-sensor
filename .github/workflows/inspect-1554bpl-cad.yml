@@ -21,74 +21,78 @@ jobs:
             -H 'Referer: https://www.automationdirect.com/adc/shopping/catalog/enclosures_-a-_racks/subpanels/1554bpl' \
             -o /tmp/1554BPL.zip \
             'https://ftp.automationdirect.com/support/drawings/2d/1554BPL.zip'
-          file /tmp/1554BPL.zip
           mkdir -p /tmp/1554BPL
           unzip -o /tmp/1554BPL.zip -d /tmp/1554BPL
           echo '--- files ---'
           find /tmp/1554BPL -maxdepth 2 -type f -printf '%p\n'
+
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libredwg-tools
+          echo '--- LibreDWG tools ---'
+          command -v dwg2dxf || true
+          command -v dwgread || true
+          dwg2dxf /tmp/1554BPL/1554BPL.dwg -o /tmp/1554BPL/1554BPL.dxf || \
+            dwg2dxf -o /tmp/1554BPL/1554BPL.dxf /tmp/1554BPL/1554BPL.dwg
+          file /tmp/1554BPL/1554BPL.dxf
+
           echo '--- DXF geometry ---'
           python3 - <<'PY'
           from pathlib import Path
 
+          path = Path('/tmp/1554BPL/1554BPL.dxf')
           def pairs(text):
               lines = text.splitlines()
               for i in range(0, len(lines)-1, 2):
-                  try:
-                      code = int(lines[i].strip())
-                  except ValueError:
-                      continue
+                  try: code = int(lines[i].strip())
+                  except ValueError: continue
                   yield code, lines[i+1].strip()
 
-          for path in Path('/tmp/1554BPL').rglob('*'):
-              if path.suffix.lower() != '.dxf':
-                  continue
-              print(f'FILE {path.name}')
-              ps = list(pairs(path.read_text(errors='ignore')))
-              in_entities = False
-              current = None
-              data = []
-              entities = []
-              i = 0
-              while i < len(ps):
-                  code, value = ps[i]
-                  if code == 0 and value == 'SECTION' and i+1 < len(ps) and ps[i+1] == (2, 'ENTITIES'):
-                      in_entities = True; i += 2; continue
-                  if in_entities and code == 0 and value == 'ENDSEC':
-                      if current: entities.append((current, data))
-                      break
-                  if in_entities and code == 0:
-                      if current: entities.append((current, data))
-                      current, data = value, []
-                  elif in_entities and current:
-                      data.append((code, value))
-                  i += 1
+          ps = list(pairs(path.read_text(errors='ignore')))
+          in_entities=False; current=None; data=[]; entities=[]; i=0
+          while i < len(ps):
+              code,value=ps[i]
+              if code==0 and value=='SECTION' and i+1<len(ps) and ps[i+1]==(2,'ENTITIES'):
+                  in_entities=True; i+=2; continue
+              if in_entities and code==0 and value=='ENDSEC':
+                  if current: entities.append((current,data))
+                  break
+              if in_entities and code==0:
+                  if current: entities.append((current,data))
+                  current,data=value,[]
+              elif in_entities and current:
+                  data.append((code,value))
+              i+=1
 
-              def first(ds, code, default=None):
-                  for c,v in ds:
-                      if c == code:
-                          try: return float(v)
-                          except: return v
-                  return default
-              def vals(ds, code):
-                  out=[]
-                  for c,v in ds:
-                      if c==code:
-                          try: out.append(float(v))
-                          except: out.append(v)
-                  return out
+          def first(ds,code,default=None):
+              for c,v in ds:
+                  if c==code:
+                      try:return float(v)
+                      except:return v
+              return default
+          def vals(ds,code):
+              out=[]
+              for c,v in ds:
+                  if c==code:
+                      try:out.append(float(v))
+                      except:out.append(v)
+              return out
 
-              geom=[]
-              for typ, ds in entities:
-                  layer = next((v for c,v in ds if c==8), '')
-                  if typ == 'LINE':
-                      geom.append((typ,layer,first(ds,10),first(ds,20),first(ds,11),first(ds,21)))
-                  elif typ == 'ARC':
-                      geom.append((typ,layer,first(ds,10),first(ds,20),first(ds,40),first(ds,50),first(ds,51)))
-                  elif typ == 'CIRCLE':
-                      geom.append((typ,layer,first(ds,10),first(ds,20),first(ds,40)))
-                  elif typ == 'LWPOLYLINE':
-                      geom.append((typ,layer,'x',vals(ds,10),'y',vals(ds,20),'bulge',vals(ds,42),'closed',first(ds,70)))
-              for g in geom:
-                  print(g)
-              print('GEOM_COUNT', len(geom))
+          print('ENTITY_TYPES')
+          from collections import Counter
+          print(Counter(t for t,_ in entities))
+          print('GEOMETRY')
+          for typ,ds in entities:
+              layer=next((v for c,v in ds if c==8),'')
+              if typ=='LINE':
+                  print('LINE',layer,first(ds,10),first(ds,20),first(ds,11),first(ds,21))
+              elif typ=='ARC':
+                  print('ARC',layer,first(ds,10),first(ds,20),first(ds,40),first(ds,50),first(ds,51))
+              elif typ=='CIRCLE':
+                  print('CIRCLE',layer,first(ds,10),first(ds,20),first(ds,40))
+              elif typ=='LWPOLYLINE':
+                  print('LWPOLYLINE',layer,'X',vals(ds,10),'Y',vals(ds,20),'B',vals(ds,42),'FLAGS',first(ds,70))
+              elif typ=='POLYLINE':
+                  print('POLYLINE',layer,'FLAGS',first(ds,70))
+              elif typ=='VERTEX':
+                  print('VERTEX',layer,first(ds,10),first(ds,20),first(ds,42))
           PY
