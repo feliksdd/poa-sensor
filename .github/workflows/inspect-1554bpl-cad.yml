@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Download and inspect vendor 2D CAD
+      - name: Extract exact vector profile from vendor PDF
         shell: bash
         run: |
           set -euxo pipefail
@@ -23,79 +23,34 @@ jobs:
             'https://ftp.automationdirect.com/support/drawings/2d/1554BPL.zip'
           mkdir -p /tmp/1554BPL
           unzip -o /tmp/1554BPL.zip -d /tmp/1554BPL
-
-          sudo apt-get update -qq
-          sudo apt-get install -y -qq \
-            build-essential autoconf automake libtool pkg-config \
-            gettext texinfo libxml2-dev libpcre2-dev
-          git clone --depth 1 https://github.com/LibreDWG/libredwg.git /tmp/libredwg
-          cd /tmp/libredwg
-          ./autogen.sh
-          ./configure --disable-bindings
-          make -j2
-          DWG2DXF="$(find /tmp/libredwg -type f -name dwg2dxf -perm -111 | head -n1)"
-          test -n "$DWG2DXF"
-          echo "DWG2DXF=$DWG2DXF"
-          "$DWG2DXF" -o /tmp/1554BPL/1554BPL.dxf /tmp/1554BPL/1554BPL.dwg || \
-            "$DWG2DXF" /tmp/1554BPL/1554BPL.dwg -o /tmp/1554BPL/1554BPL.dxf
-          file /tmp/1554BPL/1554BPL.dxf
-
-          echo '--- DXF geometry ---'
+          python3 -m pip install --quiet pymupdf
           python3 - <<'PY'
-          from pathlib import Path
+          import fitz
           from collections import Counter
 
-          path = Path('/tmp/1554BPL/1554BPL.dxf')
-          def pairs(text):
-              lines = text.splitlines()
-              for i in range(0, len(lines)-1, 2):
-                  try: code = int(lines[i].strip())
-                  except ValueError: continue
-                  yield code, lines[i+1].strip()
+          doc = fitz.open('/tmp/1554BPL/1554BPL.pdf')
+          page = doc[0]
+          drawings = page.get_drawings()
+          print('PAGE', page.rect)
+          print('DRAWING_COUNT', len(drawings))
 
-          ps = list(pairs(path.read_text(errors='ignore')))
-          in_entities=False; current=None; data=[]; entities=[]; i=0
-          while i < len(ps):
-              code,value=ps[i]
-              if code==0 and value=='SECTION' and i+1<len(ps) and ps[i+1]==(2,'ENTITIES'):
-                  in_entities=True; i+=2; continue
-              if in_entities and code==0 and value=='ENDSEC':
-                  if current: entities.append((current,data))
-                  break
-              if in_entities and code==0:
-                  if current: entities.append((current,data))
-                  current,data=value,[]
-              elif in_entities and current:
-                  data.append((code,value))
-              i+=1
-
-          def first(ds,code,default=None):
-              for c,v in ds:
-                  if c==code:
-                      try:return float(v)
-                      except:return v
-              return default
-          def vals(ds,code):
-              out=[]
-              for c,v in ds:
-                  if c==code:
-                      try:out.append(float(v))
-                      except:out.append(v)
-              return out
-
-          print('ENTITY_TYPES', Counter(t for t,_ in entities))
-          for typ,ds in entities:
-              layer=next((v for c,v in ds if c==8),'')
-              if typ=='LINE':
-                  print('LINE',layer,first(ds,10),first(ds,20),first(ds,11),first(ds,21))
-              elif typ=='ARC':
-                  print('ARC',layer,first(ds,10),first(ds,20),first(ds,40),first(ds,50),first(ds,51))
-              elif typ=='CIRCLE':
-                  print('CIRCLE',layer,first(ds,10),first(ds,20),first(ds,40))
-              elif typ=='LWPOLYLINE':
-                  print('LWPOLYLINE',layer,'X',vals(ds,10),'Y',vals(ds,20),'B',vals(ds,42),'FLAGS',first(ds,70))
-              elif typ=='POLYLINE':
-                  print('POLYLINE',layer,'FLAGS',first(ds,70))
-              elif typ=='VERTEX':
-                  print('VERTEX',layer,first(ds,10),first(ds,20),first(ds,42))
+          # Print closed/vector paths in the central front-view drawing region.
+          # Items are native PDF vector primitives: l=line, c=cubic Bezier, re=rect, qu=quad.
+          for i,d in enumerate(drawings):
+              r=d['rect']
+              items=d['items']
+              kinds=Counter(x[0] for x in items)
+              if len(items) >= 4:
+                  print(f'PATH {i} RECT {r.x0:.6f} {r.y0:.6f} {r.x1:.6f} {r.y1:.6f} CLOSE {d.get("closePath")} KINDS {dict(kinds)}')
+                  for it in items:
+                      if it[0] == 'l':
+                          _,p1,p2=it
+                          print(f'  L {p1.x:.6f} {p1.y:.6f} {p2.x:.6f} {p2.y:.6f}')
+                      elif it[0] == 'c':
+                          _,p1,p2,p3,p4=it
+                          print(f'  C {p1.x:.6f} {p1.y:.6f} {p2.x:.6f} {p2.y:.6f} {p3.x:.6f} {p3.y:.6f} {p4.x:.6f} {p4.y:.6f}')
+                      elif it[0] == 're':
+                          print('  RE', it[1])
+                      elif it[0] == 'qu':
+                          print('  QU', *it[1:])
           PY
