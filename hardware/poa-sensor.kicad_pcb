@@ -1157,7 +1157,12 @@
 			(pintype "passive")
 			(uuid "a9bb729c-e2d5-4a55-8ae7-3c7410bac126")
 		)
+	(model "${KIPRJMOD}/3dmodels/KXOB25-14X1F.step"
+		(offset (xyz 0 0 0))
+		(scale (xyz 1 1 1))
+		(rotate (xyz 0 0 0))
 	)
+)
 	(footprint "Resistor_SMD:R_0201_0603Metric"
 		(layer "F.Cu")
 		(uuid "2ce4483d-348d-47c5-b32a-10c14ed003fd")
@@ -3201,7 +3206,12 @@
 			(layers "F.Cu" "F.Paste" "F.Mask")
 			(uuid "9f173c5d-b360-497b-a2f2-a06365f217b7")
 		)
+	(model "${KIPRJMOD}/3dmodels/E73-2G4M08S1C.step"
+		(offset (xyz 0 0 0))
+		(scale (xyz 1 1 1))
+		(rotate (xyz 0 0 0))
 	)
+)
 	(footprint "Resistor_SMD:R_0603_1608Metric"
 		(layer "F.Cu")
 		(uuid "6e10394b-fb1f-4ef7-936a-0c3eba77f5e1")

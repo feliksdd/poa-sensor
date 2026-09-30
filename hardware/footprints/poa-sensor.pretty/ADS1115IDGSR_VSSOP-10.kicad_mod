@@ -34,4 +34,9 @@
   (pad "8" smd roundrect (at 2.2 0.0) (size 1.45 0.3) (layers "F.Cu" "F.Paste" "F.Mask") (roundrect_rratio 0.25))
   (pad "9" smd roundrect (at 2.2 -0.5) (size 1.45 0.3) (layers "F.Cu" "F.Paste" "F.Mask") (roundrect_rratio 0.25))
   (pad "10" smd roundrect (at 2.2 -1.0) (size 1.45 0.3) (layers "F.Cu" "F.Paste" "F.Mask") (roundrect_rratio 0.25))
+  (model "${KICAD8_3DMODEL_DIR}/Package_SO.3dshapes/VSSOP-10_3x3mm_P0.5mm.step"
+    (offset (xyz 0 0 0))
+    (scale (xyz 1 1 1))
+    (rotate (xyz 0 0 0))
+  )
 )
