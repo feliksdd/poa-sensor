@@ -20,15 +20,13 @@ The design is optimized for JLCPCB assembly with LCSC/JLCPCB parts wherever that
 - keep for irradiance measurement; its cost is small compared with the gain in reproducibility versus relying only on the nRF SAADC
 - irradiance channel should be measured differentially across the shunt
 
-### NTC1 / NTC2 — temperature sensors
-- **TDK NTCG163JF103FT1S**
-- JLCPCB/LCSC: **C406719**
-- 0603, 10 kohm @ 25 C, R tolerance ±1 %, B tolerance ±1 %
-- B25/85 = 3435 K
-- NTC1 is bonded to the back of the reference cell
-- NTC2 is the same component used in the remote PV-module-temperature probe
+### NTC1 — reference-cell temperature sensor
 
-Using the same NTC for both channels simplifies firmware, calibration and spares.
+The post-split POA sensor keeps only NTC1, thermally coupled to the KXOB reference cell. The current native schematic uses **TDK NTCG063JF103FTBA** (0201). The exact production sourcing entry should follow the native KiCad metadata at schematic freeze.
+
+### NTC2 — legacy v0.1
+
+The former external PV-module-temperature NTC and J2 cable interface are no longer part of the POA architecture. They remain in schematic v0.1 only and must be removed in the next electrical revision. Module backsheet temperature belongs to [PanelLog](https://github.com/feliksdd/panellog).
 
 ### R1 / R2 — NTC reference resistors
 - **RESI PTFR0603B47K0N9**
