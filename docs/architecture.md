@@ -1,5 +1,11 @@
 # Electrical architecture
 
+## Scope after the PanelLog split
+
+This repository is now restricted to the battery-powered optical POA reference. PV-module voltage/current/power/energy, module backsheet temperature and per-module curtailment belong to [PanelLog](https://github.com/feliksdd/panellog).
+
+The existing schematic **v0.1** still contains NTC2/J2 from the former combined concept. Those items are legacy and must be removed in the next electrical revision. The descriptions below distinguish the physical v0.1 state from the target post-split architecture.
+
 ## Functional blocks
 
 1. 3.6 V Li-SOCl2 battery on nRF52840 VDDH
@@ -10,7 +16,7 @@
 6. ADS1115 precision ADC on the regulated 2.4 V rail
 7. silicon reference cell and Kelvin-connected precision shunt
 8. switched reference-cell NTC divider
-9. switched external PV-module NTC divider
+9. **legacy v0.1 only:** switched external PV-module NTC divider
 10. internal VDDH/5 battery-voltage measurement with nRF52840 SAADC
 11. SWD programming/test pads
 
@@ -56,7 +62,7 @@ ADS1115 address pin is tied to GND, giving address 0x48.
 
 - AIN0/AIN1 differential: reference-cell shunt voltage
 - AIN2 single-ended: reference-cell NTC divider
-- AIN3 single-ended: module-temperature NTC divider
+- AIN3 single-ended: **legacy v0.1** module-temperature NTC divider; unused after NTC2/J2 removal
 - ALERT/RDY: not connected in v0.1; conversions are polled in single-shot mode
 
 The nRF52840 SAADC uses its internal `VDDH/5` input for battery voltage. The former external 1 Mohm / 330 kohm battery divider has therefore been removed, eliminating both parts and continuous divider leakage.
@@ -79,7 +85,9 @@ Firmware baseline for irradiance: ADS1115 PGA ±0.256 V, single-shot conversion,
 
 ## Temperature channels
 
-The two temperature sensors intentionally use different package sizes but the same nominal electrical curve:
+The target POA architecture has **one temperature sensor only: NTC1 on the reference cell**. Schematic v0.1 still contains the former remote module sensor NTC2; that channel is legacy and moves functionally to PanelLog.
+
+v0.1 parts:
 
 - NTC1: TDK NTCG063JF103FTBA, 0201, 10 kohm ±1 %, B25/50 = 3380 K, approximately 0.3 mm high
 - NTC2: TDK NTCG163JF103FT1S, 0603, 10 kohm ±1 %, B25/50 = 3380 K
@@ -100,7 +108,7 @@ NTC1 is placed on the top side of the PCB directly beneath the center region of 
 
 This arrangement preserves a single main PCB while measuring temperature close to the rear of the actual reference cell. It intentionally creates a known mechanical overlap between the KXOB and NTC1 footprints; this overlap is a documented DRC/mechanical exception.
 
-NTC2 is connected through J2 over a two-wire UV-resistant cable and bonded to the rear of the monitored PV module beneath a cell region, not to the frame or junction box.
+NTC2/J2 describe the former combined concept only. They are not part of the post-split POA sensor and must be removed in the next schematic/PCB revision. Module backsheet temperature is measured by the corresponding PanelLog node.
 
 ## Battery measurement
 
@@ -141,11 +149,11 @@ The analog measurement island is placed at the opposite side of the board where 
 - NTC1 underneath CELL1 on the same PCB side
 - U1 at an outer PCB edge, antenna directed toward the enclosure wall and away from CELL1/analog section
 - battery below the raised PCB, connected by factory-tabbed leads
-- J2 near the cable-gland edge
+- **legacy v0.1:** J2 near the former cable-gland edge; remove with NTC2
 - J1 accessible with the lid removed
 
 Mechanical details are tracked in `../mechanical/pcb-layout.md`.
 
 ## Schematic revision
 
-This document describes electrical schematic baseline **v0.1** plus the initial PCB/mechanical baseline. Placement/routing has not yet been frozen.
+This document describes electrical schematic baseline **v0.1** plus the initial PCB/mechanical baseline. v0.1 still contains the legacy NTC2/J2 channel. The next electrical revision removes it so the POA sensor is optically independent of any particular PV module. Placement/routing has not yet been frozen.
