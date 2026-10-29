@@ -2,6 +2,12 @@
 
 KiCad is the single source of truth for the electrical and PCB design.
 
+## Repository split
+
+The target POA sensor is now **irradiance + reference-cell temperature only**. Module voltage/current/power/energy, module backsheet temperature and PV curtailment are implemented in [PanelLog](https://github.com/feliksdd/panellog).
+
+The current v0.1 KiCad files predate this split and still contain NTC2/J2. They remain documented here so source and documentation agree, but NTC2/J2 are scheduled for removal in the next electrical revision.
+
 ## Current project state
 
 Native KiCad 8 project files now exist:
@@ -54,7 +60,7 @@ Revision 0.1 contains:
 - 1.000 ohm Kelvin-sensed shunt
 - differential ADC input filter
 - switched reference-cell NTC divider
-- switched external module-temperature NTC divider
+- **legacy v0.1:** switched external module-temperature NTC divider (remove next revision)
 - connectorless SWD/pogo interface
 - battery measurement via internal nRF52840 VDDH/5 SAADC source
 
@@ -85,7 +91,7 @@ The former 52 x 52 mm rectangular outline is obsolete.
 - H1/H2 mounting holes matching the Hammond panel drawing
 - revised optical/reference-cell placement guides
 - revised E73 placement zone and all-layer antenna keepout
-- revised analog/J1/J2/battery placement guides
+- revised analog/J1/J2/battery placement guides (J2 is legacy after the PanelLog split)
 
 `tools/sync_pcb_mechanics.py` copies only the mechanical source-of-truth items into the production board:
 
@@ -142,7 +148,7 @@ The canonical placement now targets the Hammond 1554BPL geometry:
 - RSH1, R7/R8, C9 and U2 in a compact analog island clear of H1/H2
 - LF crystal and its capacitors close to U1 XL1/XL2
 - REG0 inductor/decoupling close to U1 power pins
-- J2 in the lower-left usable panel area, clear of the lower-left relief
+- **legacy v0.1:** J2 in the lower-left usable panel area; remove with NTC2 in the next electrical revision
 - J1 SWD pogo pads in the lower-right usable area
 - battery wire pads near the lower centre; the 1/2-AA battery sits below the PCB and must clear both enclosure mounting bosses/screws
 
