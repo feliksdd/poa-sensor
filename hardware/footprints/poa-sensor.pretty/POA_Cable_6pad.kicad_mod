@@ -1,0 +1,13 @@
+(footprint "POA_Cable_6pad"
+(version 20240108) (generator "pcbnew") (layer "F.Cu")
+(descr "Six direct-solder cable pads, 2.54 mm pitch; shield is cable only, not tied to panel frame")
+(attr exclude_from_pos_files)
+(fp_text reference "REF**" (at 2.54 -9 0) (layer "F.SilkS") (effects (font (size 1 1) (thickness 0.15))))
+(fp_text value "POA_Cable_6pad" (at 4 9 0) (layer "F.Fab") (effects (font (size 1 1) (thickness 0.15))))
+(pad "1" thru_hole circle (at 0 -6.35) (size 2 2) (drill 0.9) (layers "*.Cu" "*.Mask"))
+(pad "2" thru_hole circle (at 0 -3.81) (size 2 2) (drill 0.9) (layers "*.Cu" "*.Mask"))
+(pad "3" thru_hole circle (at 0 -1.27) (size 2 2) (drill 0.9) (layers "*.Cu" "*.Mask"))
+(pad "4" thru_hole circle (at 0 1.27) (size 2 2) (drill 0.9) (layers "*.Cu" "*.Mask"))
+(pad "5" thru_hole circle (at 0 3.81) (size 2 2) (drill 0.9) (layers "*.Cu" "*.Mask"))
+(pad "6" thru_hole circle (at 0 6.35) (size 2 2) (drill 0.9) (layers "*.Cu" "*.Mask"))
+)
