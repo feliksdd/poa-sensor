@@ -2,7 +2,7 @@
 
 Current baseline: `main` source at `0970a7abca613ca047073c4c38a08328d09aa023`. The existing `hardware/poa-sensor.kicad_sch` and `hardware/poa-sensor.kicad_pcb` remain the historical battery/Zigbee revision, **not** the intended new wired board.
 
-A new native KiCad draft schematic has been created in `hardware/poa-sensor-wired.kicad_sch`. It contains the reference cell KXOB25-14X1F, ADS1115IDGSR C37593, true Kelvin shunt 1.000R C865286, 0201 TDK NTC C29553871, 47k NTC divider and 1:2 supply monitor, 6 cable pads, optional P82B715DR C2649394 **DNP**, and direct 0R bypasses. P82B715 pin function is verified against the TI datasheet (Sx pin3, Sy pin6, Lx pin2, Ly pin7). Independent matched cable footprints are under `hardware/footprints/poa-sensor.pretty/POA_Cable_6pad.kicad_mod`.
+A new native KiCad draft schematic has been created in `hardware/poa-sensor-wired.kicad_sch`. It contains the reference cell KXOB25-14X1F, ADS1115IDGSR C37593, true Kelvin shunt 1.000R C865286, 0201 TDK NTC C29553871, 47k NTC divider and 1:2 supply monitor, 6 cable pads, optional P82B715DR C2649394 **DNP**, matching optional R10/R11 local pull-ups, low-capacitance TI TPD2E2U06DRLR C1972959 cable-side ESD, and direct 0R bypasses. P82B715 pin function is verified against the TI datasheet (Sx pin3, Sy pin6, Lx pin2, Ly pin7). Independent matched cable footprints are under `hardware/footprints/poa-sensor.pretty/POA_Cable_6pad.kicad_mod`.
 
 The intended mating cable pinout is:
 1 +3V3, 2 GND, 3 SDA, 4 GND, 5 SCL, 6 GND. Twist each logic or supply wire with its own adjacent return. Use at most 3m outdoor cable.
@@ -13,7 +13,7 @@ R6 and R7 = zero-ohm **fitted**; P82B715 U2 and R8/R9 cable pull-ups **DNP**. Th
 
 ### Buffered option (not ready to populate)
 
-Remove POA R6/R7 and PanelLog R32/R33; fit POA U2 and PanelLog U4, plus properly dimensioned L-side pullups. Both S sides need local pullups. **POA S-side pullups not yet added** to this draft: P82B715 remains an intentionally unqualified DNP option. Buffer does not improve common-mode isolation, and its digital traces should not run under the cell.
+Remove POA R6/R7 and PanelLog R32/R33; fit POA U2 and PanelLog U4, plus properly dimensioned L-side pullups. Both S sides need local pullups. **POA S-side pullups R10/R11 (2.2k DNP)** are now included. P82B715 remains an intentionally unqualified DNP option until both PCBs are routed and qualified. Buffer does not improve common-mode isolation, and its digital traces should not run under the cell.
 
 ### Blockers
 
