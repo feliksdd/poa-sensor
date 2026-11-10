@@ -11,7 +11,7 @@ Kabelgebundener Einstrahlungssensor mit KXOB25-14X1F-Referenzzelle, Präzisionss
 | [Mechanischer Aufbau](docs/aufbau.md) | Gehäusekontur, Zellkontakt und Montage |
 | [Fertigung](docs/fertigung.md) | Bestückung und Fertigungsstand |
 
-Das Schaltbild verwendet direkt gezeichnete Signalverbindungen, Spannungssymbole und zusammenhängende Funktionsgruppen. Es ist mit KiCad 9 und 10 nutzbar. Die vorhandene PanelLog-Schnittstelle bleibt unverändert; eine eigene MCU oder Firmware ist nicht erforderlich.
+Das Schaltbild verwendet direkt gezeichnete Signalverbindungen, Spannungssymbole und zusammenhängende Funktionsgruppen. Das KiCad-Projekt verwendet KiCad 10. Die vorhandene PanelLog-Schnittstelle bleibt unverändert; eine eigene MCU oder Firmware ist nicht erforderlich.
 
 **Für den kabelgebundenen Sensor ist noch kein geroutetes PCB vorhanden.** Die [Gehäusekontur](mechanical/poa-outline.kicad_pcb) enthält nur die mechanische Grundlage.
 

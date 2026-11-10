@@ -1,5 +1,11 @@
 # Arbeitsregeln
 
+## GitHub
+
+- Ausschließlich direkt auf `main` arbeiten und Änderungen dort zusammenführen.
+- Keine eigenen Branches oder Pull Requests erstellen.
+- Autorisierte Änderungen ohne erneute Rückfrage committen und nach GitHub übertragen.
+
 ## Schaltpläne
 
 - Signale direkt mit Leitungen verbinden. Netzlabels benennen Netze und ersetzen keine übersichtlich darstellbare Verbindung.

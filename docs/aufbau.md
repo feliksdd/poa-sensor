@@ -6,10 +6,10 @@ Vorgesehen ist das Hammond-Gehäuse **1554B2GYCL** mit transparentem Deckel. [me
 
 | Größe | Wert |
 |---|---|
-| Maximale Konturabmessungen | 55,96 × 55,96 mm |
+| Maximale Konturabmessungen | 55,45 × 55,96 mm |
 | Eckradius | 9,525 mm |
 | Befestigungsbohrungen | 2 × Ø 3,73 mm, NPTH |
-| Lochmitten ab linkem/oberem Konturdatum | (27,98; 16,47) mm und (27,98; 37,99) mm |
+| Lochmitten ab linkem/oberem Konturdatum | (27,98; 16,46) mm und (27,98; 37,98) mm |
 | Lochabstand | 21,52 mm |
 | Konturdatum in der KiCad-Datei | X=100,00 mm; Y=100,00 mm |
 
