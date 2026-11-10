@@ -3,7 +3,7 @@
 
 Workflow:
   1. Normalize/save the schematic.
-  2. Open hardware/poa-sensor.kicad_pcb and run Update PCB from Schematic (F8).
+  2. Open hardware/poa-sensor-wireless-legacy.kicad_pcb and run Update PCB from Schematic (F8).
   3. Save the board.
   4. Run: python3 tools/sync_pcb_mechanics.py
   5. Run: python3 tools/place_pcb.py
@@ -25,7 +25,7 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-BOARD = ROOT / "hardware" / "poa-sensor.kicad_pcb"
+BOARD = ROOT / "hardware" / "poa-sensor-wireless-legacy.kicad_pcb"
 
 # KiCad board coordinates in mm.
 # Mechanical datum/bounding box follows the Hammond 1554BPL steel panel:

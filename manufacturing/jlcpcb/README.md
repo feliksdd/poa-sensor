@@ -1,3 +1,5 @@
+> Historischer Stand: Die aktuelle kabelgebundene Schaltplanrevision 0.3 ist in [README](../../README.md) und `docs/architecture.md` beschrieben. Alte Funk-PCB-/BOM-Angaben gelten nicht für die aktuelle Schaltung.
+
 # JLCPCB manufacturing notes
 
 ## Source of truth

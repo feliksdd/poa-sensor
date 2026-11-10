@@ -18,7 +18,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 HARDWARE = ROOT / "hardware"
-SCHEMATIC = HARDWARE / "poa-sensor.kicad_sch"
+SCHEMATIC = HARDWARE / "poa-sensor-wireless-legacy.kicad_sch"
 SYMBOL_LIBRARY = HARDWARE / "symbols" / "poa-sensor.kicad_sym"
 
 EXPECTED = {

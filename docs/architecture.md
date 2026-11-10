@@ -1,159 +1,75 @@
-# Electrical architecture
+# Elektrische Architektur — POA Revision 0.3
 
-## Scope after the PanelLog split
+Festgelegt am 2026-11-10: maximal ein POA pro PanelLog, maximal 3 m Kabel, drei verdrillte Aderpaare, Lötanschlüsse. Das optische Konzept bleibt eine zur PV-Ebene parallele, unverschattete Silizium-Referenzzelle; kein meteorologisches Referenzpyranometer.
 
-This repository is now restricted to the battery-powered optical POA reference. PV-module voltage/current/power/energy, module backsheet temperature and per-module curtailment belong to [PanelLog](https://github.com/feliksdd/panellog).
+Der Schaltplan verbindet die Signale direkt mit Leitungen. Netzlabels benennen nur die durchgehend gezeichneten Signale. +3V3, +3V3_A und GND verwenden Spannungssymbole; +3V3_A bleibt durch R12 von der Kabelversorgung getrennt.
 
-The existing schematic **v0.1** still contains NTC2/J2 from the former combined concept. Those items are legacy and must be removed in the next electrical revision. The descriptions below distinguish the physical v0.1 state from the target post-split architecture.
+## Funktion und Messkanäle
 
-## Functional blocks
+| Element | Funktion |
+|---|---|
+| CELL1 KXOB25-14X1F | Lokale Referenzzelle, nahe Kurzschluss betrieben |
+| RSH1 RT0805BRD071RL, C865286 | 1 Ω, 0,1 %, 25 ppm/K, 0805; getrennte Force-/Kelvin-Anschlüsse |
+| U1 ADS1115IDGSR, C37593 | I²C-ADC; ADDR an GND, Adresse 0x48 |
+| AIN0–AIN1 | Differenziell über R4/R5 (100 Ω) und C3 (100 nF) am Shunt |
+| AIN2 | NTC1 NTCG063JF103FTBA, 0201, thermisch an der Referenzzelle |
+| AIN3 | Lokale analoge Versorgung / 2 über R2/R3, je 47 kΩ / 0,1 %; C7=100 nF |
 
-1. 3.6 V Li-SOCl2 battery on nRF52840 VDDH
-2. nRF52840 high-voltage REG0 configured to 2.4 V
-3. optional/high-efficiency REG0 DC/DC path using 10 uH from DCCH to VDD
-4. E73-2G4M08S1C Zigbee sleepy-end-device module
-5. 32.768 kHz low-frequency crystal
-6. ADS1115 precision ADC on the regulated 2.4 V rail
-7. silicon reference cell and Kelvin-connected precision shunt
-8. switched reference-cell NTC divider
-9. **legacy v0.1 only:** switched external PV-module NTC divider
-10. internal VDDH/5 battery-voltage measurement with nRF52840 SAADC
-11. SWD programming/test pads
+ALERT/RDY bleibt unbeschaltet; PanelLog pollt die Wandlungen. Kein MCU und keine Firmware auf dem POA-Board. Kein zweiter Temperaturfühler für das PV-Modul.
 
-## Power strategy
+58,6 mA bei 1000 W/m² ergeben ideal 58,6 mV und 3,43 mW am Shunt. Bei PGA ±0,256 V beträgt die Quantisierung 7,8125 µV bzw. rechnerisch 0,133 W/m² je LSB. Das ist Auflösung, keine Messgenauigkeit. Zellkennlinie, Fenstertransmission, Winkel und Temperatur erfordern Kalibrierung. 100 Ω + 100 Ω / 100 nF ergeben ungefähr 7,96 kHz analoge Grenzfrequenz.
 
-Battery nominal voltage is 3.6 V and is connected to U1 VDDH, not VDD. This avoids relying on the 3.6 V maximum normal-voltage-mode supply limit and uses the nRF52840 high-voltage supply path.
+## Kabel und Host-Pins
 
-U1 VDD is used as the REG0 output and is the system logic/analog rail `VDD_2V4`. Firmware/provisioning must program UICR REGOUT0 to 2.4 V. A fully erased nRF52840 defaults REGOUT0 to 1.8 V, so the provisioning sequence must set REGOUT0 before normal sensor operation. The ADS1115 is specified from 2.0 V and therefore is intentionally not expected to operate before that first REGOUT0 configuration/reset.
+| PanelLog J8 | POA J1 | Signal | Paar |
+|---|---|---|---|
+| 1 | 1 | +3V3, 3,3 V nominal über PanelLog R36 | mit 2 |
+| 2 | 2 | GND | Versorgung |
+| 3 | 3 | SDA | mit 4 |
+| 4 | 4 | GND | SDA-Rückleiter |
+| 5 | 5 | SCL | mit 6 |
+| 6 | 6 | GND | SCL-Rückleiter |
 
-L1 = 10 uH connects U1 DCCH to U1 VDD so REG0 can operate in DC/DC mode. Firmware enables DCDCEN0. The circuit remains conceptually usable in REG0 LDO mode during early bring-up, but the production configuration is DC/DC for battery efficiency.
+Aktueller PanelLog-C6-WROOM-Schaltplan: SDA = **GPIO22 / Modulpad 20**, SCL = **GPIO23 / Modulpad 21**. Die früheren MINI-Angaben GPIO21/22 sind überholt. Der vorhandene INA237-Bus bleibt auf GPIO6/GPIO7. Adresse 0x48 kann daher unabhängig verwendet werden. Spätere Host-Firmware muss GPIO22/23 verwenden; diese Revision entwickelt oder ändert keine Firmware.
 
-Decoupling baseline:
+UV-/außentaugliches Kabel verwenden; Paarung bei der Montage erhalten. Kein Verbinden des Schirms mit PV-Rahmen oder PE. Schirm am Sensor isolieren; eine optionale einseitige Verbindung zu PanelLog-GND erst nach EMV-/Massekonzeptprüfung. Die drei GND-Adern sind Rückleiter und werden an beiden Boards verbunden. Zugentlastung und abgedichtete Kabeleinführung vorsehen. Es ist ein fest verdrahteter, nicht galvanisch isolierter Anschluss; nur spannungsfrei montieren.
 
-- C1 47 uF from VBAT/VDDH to GND for battery/radio pulse buffering
-- C2 4.7 uF from VDD_2V4 to GND at U1
-- 100 nF local bypass at VDDH, VDD and ADS1115 VDD
-- 1 uF additional bulk at ADS1115 VDD
+## Versorgung
 
-## MCU pin allocation
+Die Versorgung erfolgt aus der vorhandenen PanelLog-3V3-Schiene über R36=0 Ω und J8.1. Maßgeblich ist PanelLog-Commit `26c2335`; PanelLog wird für diesen POA-Entwurf nicht geändert.
 
-E73-2G4M08S1C module pins used by schematic v0.1:
+Am POA-Kabeleingang C6=1 µF. R12=10 Ω plus C1=100 nF/C2=1 µF filtern die analoge Versorgung von ADC und Temperaturteilern. Der optionale P82B715 bleibt am ungefilterten Kabel-VDD und erhält C5=100 nF (DNP zusammen mit U2). Kein zusätzlicher Spannungsregler nötig. Die lokale Versorgung wird über AIN3 mitgemessen. Ein Betrieb bei ausgefallener PanelLog-3V3-Versorgung ist nicht vorgesehen; insbesondere ist keine unabhängige Nachtversorgung enthalten.
 
-| Function | nRF pin | E73 pad | Net |
-| --- | --- | ---: | --- |
-| LFCLK XL1 | P0.00/XL1 | 11 | XL1 |
-| I2C SDA | P0.26 | 12 | I2C_SDA |
-| LFCLK XL2 | P0.01/XL2 | 13 | XL2 |
-| I2C SCL | P0.06 | 14 | I2C_SCL |
-| VDD / REG0 output | VDD | 19 | VDD_2V4 |
-| NTC excitation | P0.07 | 22 | SENS_PWR |
-| battery input | VDDH | 23 | VBAT |
-| REG0 DC/DC | DCCH | 25 | DCCH |
-| reset | P0.18/RESET | 26 | RESET_N |
-| SWDIO | SWDIO | 37 | SWDIO |
-| SWDCLK | SWDCLK | 39 | SWDCLK |
-| ground | GND | 5,21,24 | GND |
+## DIRECT — Standardbestückung
 
-All unused GPIOs remain uncommitted in v0.1.
+| Ort | Bestückt | Unbestückt |
+|---|---|---|
+| POA | R6/R7=0 Ω; D1; ADC/Analogteil | U2, R8–R11, C5 |
+| PanelLog | R30/R31=2,2 kΩ; R32/R33=0 Ω; R36=0 Ω; D3 | U4, R34/R35, C26 |
 
-## ADC allocation
+Die beiden 2,2-kΩ-Pull-ups R30/R31 liegen nur bei PanelLog an dessen bestehender +3V3-Schiene. MCU-Pins ausschließlich Open-Drain/hochohmig betreiben; interne Pull-ups aus. Kein aktiv getriebener High-Pegel. Die getrennten Netznamen vor und hinter den 0-Ω-Widerständen sind absichtlich erhalten.
 
-ADS1115 address pin is tied to GND, giving address 0x48.
+Startwert 25 kHz; Gesamtlast je Leitung einschließlich Kabel, Schutz und Platinen ≤400 pF anstreben. Bei 2,2 kΩ/400 pF beträgt die rechnerische 30–70-%-Anstiegszeit 0,746 µs. Die zulässige Anstiegszeit wird durch niedrigeren Takt nicht automatisch aufgehoben. Am realen Kabel Anstiegszeit ≤1 µs, VOL und Störfestigkeit prüfen.
 
-- AIN0/AIN1 differential: reference-cell shunt voltage
-- AIN2 single-ended: reference-cell NTC divider
-- AIN3 single-ended: **legacy v0.1** module-temperature NTC divider; unused after NTC2/J2 removal
-- ALERT/RDY: not connected in v0.1; conversions are polled in single-shot mode
+D1/D3 = TPD2E2U06DRLR (C1972959), SOT-553: Pin 3 SDA, Pin 4 GND, Pin 5 SCL; Pin 1/2 NC. Schutz nahe Kabeleinführung mit kurzem Massepfad. ESD-Bauteile ersetzen keine Messung der Restspannung und keine vollständige Prüfung von Störungen auf der Versorgung.
 
-The nRF52840 SAADC uses its internal `VDDH/5` input for battery voltage. The former external 1 Mohm / 330 kohm battery divider has therefore been removed, eliminating both parts and continuous divider leakage.
+## BUFFERED — vorbereitete DNP-Option
 
-## Irradiance channel
+An **beiden** Enden die direkten Bypässe entfernen: POA R6/R7 und PanelLog R32/R33. POA U2/C5 und PanelLog U4/C26 bestücken. Lokale S-seitige Pull-ups: POA R10/R11=2,2 kΩ und PanelLog R30/R31=2,2 kΩ. L-seitige Pull-ups: POA R8/R9=1 kΩ; PanelLog R34/R35=1 kΩ bestücken. R30/R31 bleiben bestückt. Zusammen etwa 500 Ω / 6,6 mA pro Low-Leitung bei 3,3 V. Das ist ein Ausgangspunkt für Messungen, keine qualifizierte Bestückungsfreigabe.
 
-KXOB25-14X1F is operated close to short circuit through RSH1 = 1.000 ohm, 0.1 %, 25 ppm/K. The reference-cell negative terminal is connected to GND. The positive terminal connects to the high side of RSH1; the low side of RSH1 returns to GND.
+P82B715: 2=Lx, 3=Sx, 4=GND, 6=Sy, 7=Ly, 8=VCC, 1/5 NC. Betriebsspannung an beiden Enden mindestens 3,0 V und Temperaturbereich bis 85 °C beachten. Spannungsabfall, VOL, Parallel-Pull-ups und Versorgungsausfallverhalten prüfen. Die Defaultbestückung ist ausdrücklich DIRECT.
 
-At approximately 58.6 mA at 1000 W/m², expected shunt voltage is approximately 58.6 mV and shunt dissipation is only about 3.4 mW.
+## Temperaturauswertung und Grenzen
 
-ADS1115 measures this voltage differentially using true Kelvin sense traces from the two shunt terminals:
+NTC1 liegt unter/an der Referenzzelle und wird über R1=47 kΩ an +3V3_A gespeist. Bei 25 °C / 10 kΩ: ungefähr 0,579 V, 57,9 µA, 33,5 µW im NTC. Keine GPIO-Erregung und kein zusätzlicher Schalter erforderlich.
 
-- R7 = 100 ohm in the AIN0 sense path
-- R8 = 100 ohm in the AIN1 sense path
-- C9 = 100 nF directly across AIN0 and AIN1 after R7/R8
+Bei nominell gleichen R2/R3 gilt: VDD_local = 2 × U_AIN3; R_NTC = 47 kΩ × U_AIN2 / (VDD_local − U_AIN2). Für AIN2 und AIN3 die gleiche PGA-Spanne verwenden, z.B. ±4,096 V, und nach MUX-/PGA-Wechsel eine vollständige frische Wandlung abwarten. R/T-Kennlinie des exakten TDK-Teils statt einer über den ganzen Bereich vereinfachten Beta-Kurve verwenden.
 
-The high-current cell/shunt loop must not share trace segments with the Kelvin sense pair.
+Die Versorgungskorrektur ist keine vollständige Fehlerkompensation: ADC-Eingangsimpedanz ist endlich und PGA-/kanalabhängig; der 47k/47k-Teiler hat 23,5 kΩ Quellimpedanz. ADC-Loading, Widerstandstoleranz, NTC-Toleranz und thermische Kopplung müssen im Fehlerbudget berücksichtigt bzw. am montierten Sensor kalibriert werden. C4/C7 filtern die Messknoten; beim Kaltstart mindestens 100 ms Einschwingzeit vorsehen und anschließend gültige ADC-Wandlungen abwarten. Das ist ein Integrationshinweis, keine Firmwareimplementierung.
 
-Firmware baseline for irradiance: ADS1115 PGA ±0.256 V, single-shot conversion, several samples per measurement event.
+## Quellen
 
-## Temperature channels
-
-The target POA architecture has **one temperature sensor only: NTC1 on the reference cell**. Schematic v0.1 still contains the former remote module sensor NTC2; that channel is legacy and moves functionally to PanelLog.
-
-v0.1 parts:
-
-- NTC1: TDK NTCG063JF103FTBA, 0201, 10 kohm ±1 %, B25/50 = 3380 K, approximately 0.3 mm high
-- NTC2: TDK NTCG163JF103FT1S, 0603, 10 kohm ±1 %, B25/50 = 3380 K
-
-Each divider uses a 10 kohm 1 % reference resistor. The two reference resistors are fed from GPIO `SENS_PWR`, not directly from VDD_2V4. During sleep SENS_PWR is driven low. Before temperature conversion firmware drives SENS_PWR high, waits for RC/ADC settling, performs both ADC readings and then drives it low again.
-
-This removes essentially all divider standby current and keeps NTC self-heating negligible. A 1 % reference resistor is sufficient: its contribution to temperature error is small compared with the sensor/mechanical thermal uncertainty, and calibration remains available.
-
-Topology for each channel:
-
-`SENS_PWR -> 10k reference resistor -> ADC node -> 10k NTC -> GND`
-
-C10/C11 = 100 nF from each ADC node to GND provide local filtering. Because the NTC node can approach the 2.4 V rail at the extremes, firmware uses an ADS1115 range large enough for the full node voltage (normally ±4.096 V for the temperature channels).
-
-### Reference-cell NTC mechanics
-
-NTC1 is placed on the top side of the PCB directly beneath the center region of CELL1. The 0201 package is only about 0.3 mm high. CELL1 is manually assembled after JLCPCB PCBA, with a small controlled stand-off/solder height at its two rear terminal pads. A very small thermally conductive, electrically insulating silicone/epoxy dot may be used between the NTC body and the SolarBIT rear surface.
-
-This arrangement preserves a single main PCB while measuring temperature close to the rear of the actual reference cell. It intentionally creates a known mechanical overlap between the KXOB and NTC1 footprints; this overlap is a documented DRC/mechanical exception.
-
-NTC2/J2 describe the former combined concept only. They are not part of the post-split POA sensor and must be removed in the next schematic/PCB revision. Module backsheet temperature is measured by the corresponding PanelLog node.
-
-## Battery measurement
-
-No external resistor divider is fitted. nRF52840 SAADC selects the internal VDDH/5 source. This is only valid because the battery is connected directly to VDDH.
-
-Battery measurement should preferably be sampled during or directly after a representative radio load if firmware later wants to estimate battery internal resistance/sag in addition to open-circuit state.
-
-## Low-power clock
-
-Y1 baseline is Epson Q13FC13500004, 32.768 kHz, ±20 ppm, CL = 12.5 pF, SMD3215.
-
-C7/C8 start at 22 pF C0G each. This is a practical initial value for a 12.5 pF crystal with PCB/pin parasitics; the final value can be tuned after PCB layout or prototype frequency measurement if necessary.
-
-## Programming
-
-J1 is a connectorless five-pad pogo/SWD pattern, 2.00 mm pitch:
-
-1. VDD_2V4 / VTref
-2. SWDIO
-3. SWDCLK
-4. RESET_N
-5. GND
-
-The first programming/provisioning flow must set UICR REGOUT0 to 2.4 V and reset the device before normal application operation.
-
-## RF placement
-
-U1 is placed at a PCB edge with the ceramic antenna facing outwards. No copper, traces, battery, metal mounting hardware or tall components are allowed in the antenna keep-out/near-field region. The custom footprint marks a conservative antenna area on `Dwgs.User`; the PCB itself must additionally contain an enforced copper keep-out/rule area on both copper layers before routing is frozen.
-
-The analog measurement island is placed at the opposite side of the board where practical.
-
-## PCB baseline
-
-- 2-layer FR-4, 1.6 mm
-- all JLCPCB-assembled components on the top side to avoid double-sided assembly cost
-- provisional outline: 52 x 52 mm with rounded corners, to fit inside Hammond 1554B2GYCL while retaining margin against the published maximum PCB envelope
-- CELL1 on top side below the optical window
-- NTC1 underneath CELL1 on the same PCB side
-- U1 at an outer PCB edge, antenna directed toward the enclosure wall and away from CELL1/analog section
-- battery below the raised PCB, connected by factory-tabbed leads
-- **legacy v0.1:** J2 near the former cable-gland edge; remove with NTC2
-- J1 accessible with the lid removed
-
-Mechanical details are tracked in `../mechanical/pcb-layout.md`.
-
-## Schematic revision
-
-This document describes electrical schematic baseline **v0.1** plus the initial PCB/mechanical baseline. v0.1 still contains the legacy NTC2/J2 channel. The next electrical revision removes it so the POA sensor is optically independent of any particular PV module. Placement/routing has not yet been frozen.
+- TI ADS1115: https://www.ti.com/lit/ds/symlink/ads1115.pdf
+- TI P82B715: https://www.ti.com/lit/ds/symlink/p82b715.pdf
+- TI TPD2E2U06: https://www.ti.com/lit/ds/symlink/tpd2e2u06.pdf
+- ESP32-C6-WROOM-1: https://www.espressif.com/sites/default/files/documentation/esp32-c6-wroom-1_wroom-1u_datasheet_en.pdf

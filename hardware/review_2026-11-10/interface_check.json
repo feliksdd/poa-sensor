@@ -1,0 +1,6 @@
+{
+  "kind": "POA",
+  "components": 26,
+  "checked": "connector, ADC, supply, ESD, default assembly and optional BOM",
+  "result": "PASS"
+}

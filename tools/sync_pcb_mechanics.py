@@ -21,7 +21,7 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-BOARD = ROOT / "hardware" / "poa-sensor.kicad_pcb"
+BOARD = ROOT / "hardware" / "poa-sensor-wireless-legacy.kicad_pcb"
 TEMPLATE = ROOT / "hardware" / "poa-sensor-layout-template.kicad_pcb"
 
 # Stable UUIDs of the User.1/Dwgs.User placement and optical guides owned by the

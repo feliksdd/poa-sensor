@@ -1,0 +1,25 @@
+Designator,Qty,Function,Value,Manufacturer,MPN,LCSC/JLCPCB,Package,Assembly,Notes
+U1,1,Zigbee MCU module,nRF52840,Chengdu Ebyte,E73-2G4M08S1C,C356849,SMD 18x13mm,JLCPCB Extended,Supply VBAT to VDDH; VDD is regulated 2.4V output; configure UICR REGOUT0=2.4V
+U2,1,Precision ADC,ADS1115,Texas Instruments,ADS1115IDGSR,C37593,VSSOP-10,JLCPCB Extended,AIN0/AIN1 irradiance differential; AIN2 cell NTC; AIN3 module NTC; ADDR=GND
+Y1,1,Low-frequency crystal,32.768kHz 12.5pF ±20ppm,Epson,Q13FC13500004,C32346,SMD3215-2P,JLCPCB/LCSC,LFCLK for low-power sleep
+L1,1,REG0 DC/DC inductor,10uH 80mA,Taiyo Yuden,LBMF1608T100K,C87216,0603,JLCPCB/LCSC,Connect DCCH to VDD; enable DCDCEN0 in firmware
+RSH1,1,Reference-cell shunt,1.000R 0.1% 25ppm/K,Yageo,RT0805BRD071RL,C865286,0805,JLCPCB Extended,Kelvin sense routing required
+NTC1,1,Reference-cell temperature,10k 1% B25/50=3380K,TDK,NTCG063JF103FTBA,C29553871,0201,JLCPCB/LCSC,0.3mm-high NTC placed under KXOB cell center; same nominal curve as NTC2
+NTC2,1,PV module temperature,10k 1% B25/50=3380K,TDK,NTCG163JF103FT1S,C406719,0603,Manual/external probe,Mounted on PV module backsheet; same nominal R/B curve as NTC1
+R1 R2,2,NTC divider reference,10k 1%,UNI-ROYAL,0603WAF1002T5E,C25804,0603,JLCPCB Basic,Excited from SENS_PWR GPIO only during measurement; 1% is sufficient because temperature error is small and calibration is available
+R3 R4,2,I2C pull-ups,4.7k 1%,UNI-ROYAL,0603WAF4701T5E,C23162,0603,JLCPCB Basic,Pull up SDA/SCL to VDD_2V4
+R7 R8,2,ADC irradiance input filter,100R 1%,UNI-ROYAL,0603WAF1000T5E,C22775,0603,JLCPCB Basic,Symmetric series resistors in Kelvin sense lines
+C1,1,Battery/radio pulse buffer,47uF X5R 10V,Samsung Electro-Mechanics,CL31A476MPHNNNE,C96123,1206,JLCPCB Basic,Place close to U1 VDDH/battery input
+C2,1,REG0 output decoupling,4.7uF X5R 16V,Samsung Electro-Mechanics,CL10A475KO8NNNC,C19666,0603,JLCPCB Basic,Place at U1 VDD; effective capacitance should satisfy Nordic VDD requirement
+C3 C4 C5,3,Local decoupling,100nF X7R 50V,Yageo,CC0603KRX7R9BB104,C14663,0603,JLCPCB Basic,U1 VDDH/U1 VDD/U2 VDD local bypass
+C6,1,ADC local bulk,1uF X7R 16V,Samsung Electro-Mechanics,CL10B105KO8NNNC,C59782,0603,JLCPCB/LCSC,Place close to U2 VDD
+C7 C8,2,LF crystal load,22pF C0G 50V,Samsung Electro-Mechanics,CL10C220JB8NNNC,C1653,0603,JLCPCB/LCSC,Starting value for 12.5pF crystal; verify/tune from actual PCB parasitics if needed
+C9,1,ADC differential filter,100nF X7R 50V,Yageo,CC0603KRX7R9BB104,C14663,0603,JLCPCB Basic,Across AIN0/AIN1 after R7/R8
+C10 C11,2,NTC input filter,100nF X7R 50V,Yageo,CC0603KRX7R9BB104,C14663,0603,JLCPCB Basic,From AIN2/AIN3 nodes to GND; allow settling after SENS_PWR enable
+J1,1,SWD programming pads,5-pad pogo 2.00mm pitch,Custom,Custom,None,PCB pads,Manual,POA:SWD_Pogo_1x05_P2.00mm; VTref SWDIO SWCLK RESET GND
+J2,1,External module NTC cable,2-wire solder pads,Custom,Custom,None,PCB pads,Manual,POA:WirePads_1x02_P2.54mm; direct-solder UV-resistant cable; pin 2 GND
+CELL1,1,POA reference cell,KXOB25-14X1F,ANYSOLAR,KXOB25-14X1F-TR,Not planned for JLCPCB,23x8x1.8mm,Manual assembly,POA:KXOB25-14X1F; hand solder after JLC assembly over NTC1; negative to GND and positive through RSH1
+BT1,1,Battery,Li-SOCl2 1/2-AA 3.6V,EVE/SAFT,ER14250 or LS14250,Not JLCPCB,1/2-AA,Manual assembly,Factory tabs/leads preferred; battery sits below PCB and wires solder directly; VBAT to U1 VDDH
+ENC1,1,Outdoor enclosure,clear-lid IP67/68 polycarbonate,Hammond,1554B2GYCL,Not JLCPCB,66x66x41mm,Mechanical,Max published PCB dimensions about 55.45x55.96mm; provisional board outline 52x52mm
+CG1,1,Cable gland,IP68 M8 cable gland,TBD,TBD,Not JLCPCB,M8,Mechanical,For module-temperature probe cable
+FILM1,1,Reflective lid mask,white outdoor cast vinyl,ORAFOL,ORACAL 751C white,Not JLCPCB,cut part,Mechanical,Leave only optical aperture over reference cell
