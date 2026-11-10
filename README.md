@@ -1,15 +1,22 @@
-# POA Sensor — kabelgebundene Referenzzelle
+# POA-Sensor
 
-Aktuelle elektrische Revision: **0.3, 2026-11-10**. Ein POA-Sensor wird über maximal 3 m Kabel von genau einem [PanelLog](https://github.com/feliksdd/panellog) versorgt und per I²C ausgelesen. Das Kabel wird an beiden Enden direkt angelötet und mechanisch zugentlastet.
+Kabelgebundener Einstrahlungssensor mit KXOB25-14X1F-Referenzzelle, Präzisionsshunt, Zelltemperaturmessung und ADS1115. Ein Sensor wird über maximal 3 m Kabel von einem [PanelLog](https://github.com/feliksdd/panellog) versorgt und per I²C ausgelesen. Der Sensor wird parallel zur PV-Modulebene und möglichst unverschattet montiert.
 
-Der Sensor enthält eine KXOB25-14X1F-Referenzzelle, einen Präzisionsshunt, einen NTC an der Referenzzelle und einen ADS1115. Eigene Batterie, Mikrocontroller und Funk entfallen. PV-Modulspannung, Strom, Abschaltung und Modulrückseitentemperatur bleiben bei PanelLog.
+| Datei | Inhalt |
+|---|---|
+| [KiCad-Projekt](hardware/poa-sensor.kicad_pro) · [Schaltplan](hardware/poa-sensor.kicad_sch) | Elektrische Quelle |
+| [PDF](hardware/poa-sensor.pdf) · [SVG](hardware/poa-sensor.svg) | Aktuelle Schaltplanansichten |
+| [Stückliste](bom/bom.csv) | Bauteile, Bestellnummern und DNP-Bestückung |
+| [Schaltung und Auslegung](docs/schaltung.md) | Messkanäle, Versorgung und I²C-Schnittstelle |
+| [Mechanischer Aufbau](docs/aufbau.md) | Gehäusekontur, Zellkontakt und Montage |
+| [Fertigung](docs/fertigung.md) | Bestückung und Fertigungsstand |
 
-- **Aktueller Schaltplan:** [hardware/poa-sensor.kicad_sch](hardware/poa-sensor.kicad_sch)
-- **Ansicht:** [SVG](hardware/review_2026-11-10/poa-sensor.svg) · [PDF](hardware/review_2026-11-10/poa-sensor.pdf)
-- **Verbindliche Schnittstelle und Auslegung:** [docs/architecture.md](docs/architecture.md)
-- **Aktuelle elektrische Stückliste:** [bom/bom.csv](bom/bom.csv); DNP-Teile separat gekennzeichnet. Keine neue pauschale Lager-/Preiszusage.
-- **Prüfung und Grenzen:** [docs/wired_revision_2026-11-10.md](docs/wired_revision_2026-11-10.md)
+Das Schaltbild verwendet direkt gezeichnete Signalverbindungen, Spannungssymbole und zusammenhängende Funktionsgruppen. Es ist mit KiCad 9 und 10 nutzbar. Die vorhandene PanelLog-Schnittstelle bleibt unverändert; eine eigene MCU oder Firmware ist nicht erforderlich.
 
-Die bisherige Funkversion liegt unter `hardware/poa-sensor-wireless-legacy.*`; ihre Platine gehört ausschließlich zu dieser historischen Schaltung. **Für die kabelgebundene Revision gibt es noch keine passende Platine.** Diese Änderung ist eine Schaltplanrevision, keine Fertigungsfreigabe. PanelLog bleibt auf dem bestehenden Stand `26c2335`; dessen J8-Schnittstelle wird unverändert verwendet.
+**Für den kabelgebundenen Sensor ist noch kein geroutetes PCB vorhanden.** Die [Gehäusekontur](mechanical/poa-outline.kicad_pcb) enthält nur die mechanische Grundlage.
 
-`bash tools/review_hardware.sh` führt native ERC, Netlist-Abgleich und Zeichnungsexport aus. Die Schaltung ist im nativen KiCad-9-Dateiformat gespeichert und lässt sich auch mit KiCad 10 öffnen; die PanelLog-Datei bleibt unverändert im KiCad-10-Format. Historische Berichte und Beschaffungslisten mit Datum 2026-11-09 gelten nur für ihre damaligen Quellen.
+## Werkzeuge
+
+`bash tools/check_hardware.sh` prüft ERC, Netzliste und Stückliste. Die Ausgaben liegen in `build/kicad/` und werden nicht versioniert. `bash tools/export_schematic.sh` aktualisiert die PDF-/SVG-Ansichten unter `hardware/`.
+
+Die verbindlichen Regeln für weitere Arbeiten stehen in [AGENTS.md](AGENTS.md).

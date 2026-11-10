@@ -5,6 +5,8 @@
 *.kicad_pcb-bak
 *.kicad_sch-bak
 *.bak
+*.kicad_sch~
+*.kicad_pcb~
 
 # OS/editor
 .DS_Store
@@ -12,8 +14,8 @@ Thumbs.db
 .vscode/
 .idea/
 
-# Generated manufacturing outputs
-manufacturing/jlcpcb/gerber/*
-!manufacturing/jlcpcb/gerber/.gitkeep
-manufacturing/jlcpcb/assembly/*
-!manufacturing/jlcpcb/assembly/.gitkeep
+# Temporary checks, manufacturing exports and local Python state
+build/
+__pycache__/
+*.pyc
+**/review_*/

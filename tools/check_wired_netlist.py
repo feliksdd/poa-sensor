@@ -28,7 +28,7 @@ def populated(ref,yes):
     if dnp==yes:raise SystemExit(f'{ref}: incorrect DNP state')
 
 if args.host:
-    # Unchanged PanelLog baseline 26c2335: supply through R36; local pullups.
+    # PanelLog interface: supply through R36 and local pullups.
     for pin,name in {2:'GND',3:'POA_SDA_CABLE',4:'GND',5:'POA_SCL_CABLE',6:'GND'}.items():expect('J8',pin,name)
     expect('R36',1,'+3V3')
     if nets.get(('J8','1'))!=nets.get(('R36','2')):raise SystemExit('J8.1 must be fed through R36')
@@ -53,7 +53,7 @@ else:
     for ref in ['U2','R8','R9','R10','R11','C5']:populated(ref,False)
     for ref in ['R6','R7','U1','D1','NTC1','RSH1']:populated(ref,True)
     if '0805' not in components['RSH1'].findtext('footprint'):raise SystemExit('Shunt package must be 0805')
-    if any(r in components for r in ['BT1','Y1','NTC2']):raise SystemExit('Legacy battery/radio/remote temperature remains')
+    if any(r in components for r in ['BT1','Y1','NTC2']):raise SystemExit('Unexpected battery, clock or second temperature channel')
 if args.bom:
     with args.bom.open() as f:rows=list(csv.DictReader(f))
     by_ref={r['Ref']:r for r in rows}

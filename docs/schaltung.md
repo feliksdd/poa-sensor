@@ -1,6 +1,6 @@
 # Elektrische Architektur — POA Revision 0.3
 
-Festgelegt am 2026-11-10: maximal ein POA pro PanelLog, maximal 3 m Kabel, drei verdrillte Aderpaare, Lötanschlüsse. Das optische Konzept bleibt eine zur PV-Ebene parallele, unverschattete Silizium-Referenzzelle; kein meteorologisches Referenzpyranometer.
+Anschluss: maximal ein POA pro PanelLog, maximal 3 m Kabel, drei verdrillte Aderpaare, Lötanschlüsse. Das optische Konzept bleibt eine zur PV-Ebene parallele, unverschattete Silizium-Referenzzelle; kein meteorologisches Referenzpyranometer.
 
 Der Schaltplan verbindet die Signale direkt mit Leitungen. Netzlabels benennen nur die durchgehend gezeichneten Signale. +3V3, +3V3_A und GND verwenden Spannungssymbole; +3V3_A bleibt durch R12 von der Kabelversorgung getrennt.
 
@@ -30,13 +30,13 @@ ALERT/RDY bleibt unbeschaltet; PanelLog pollt die Wandlungen. Kein MCU und keine
 | 5 | 5 | SCL | mit 6 |
 | 6 | 6 | GND | SCL-Rückleiter |
 
-Aktueller PanelLog-C6-WROOM-Schaltplan: SDA = **GPIO22 / Modulpad 20**, SCL = **GPIO23 / Modulpad 21**. Die früheren MINI-Angaben GPIO21/22 sind überholt. Der vorhandene INA237-Bus bleibt auf GPIO6/GPIO7. Adresse 0x48 kann daher unabhängig verwendet werden. Spätere Host-Firmware muss GPIO22/23 verwenden; diese Revision entwickelt oder ändert keine Firmware.
+Aktueller PanelLog-C6-WROOM-Schaltplan: SDA = **GPIO22 / Modulpad 20**, SCL = **GPIO23 / Modulpad 21**. Der vorhandene INA237-Bus bleibt auf GPIO6/GPIO7. Adresse 0x48 kann daher unabhängig verwendet werden. Die Host-Firmware verwendet diese Pins mit Open-Drain ohne interne Pull-ups.
 
 UV-/außentaugliches Kabel verwenden; Paarung bei der Montage erhalten. Kein Verbinden des Schirms mit PV-Rahmen oder PE. Schirm am Sensor isolieren; eine optionale einseitige Verbindung zu PanelLog-GND erst nach EMV-/Massekonzeptprüfung. Die drei GND-Adern sind Rückleiter und werden an beiden Boards verbunden. Zugentlastung und abgedichtete Kabeleinführung vorsehen. Es ist ein fest verdrahteter, nicht galvanisch isolierter Anschluss; nur spannungsfrei montieren.
 
 ## Versorgung
 
-Die Versorgung erfolgt aus der vorhandenen PanelLog-3V3-Schiene über R36=0 Ω und J8.1. Maßgeblich ist PanelLog-Commit `26c2335`; PanelLog wird für diesen POA-Entwurf nicht geändert.
+Die Versorgung erfolgt aus der vorhandenen PanelLog-3V3-Schiene über R36=0 Ω und J8.1. Die vorhandene PanelLog-Schnittstelle wird unverändert genutzt.
 
 Am POA-Kabeleingang C6=1 µF. R12=10 Ω plus C1=100 nF/C2=1 µF filtern die analoge Versorgung von ADC und Temperaturteilern. Der optionale P82B715 bleibt am ungefilterten Kabel-VDD und erhält C5=100 nF (DNP zusammen mit U2). Kein zusätzlicher Spannungsregler nötig. Die lokale Versorgung wird über AIN3 mitgemessen. Ein Betrieb bei ausgefallener PanelLog-3V3-Versorgung ist nicht vorgesehen; insbesondere ist keine unabhängige Nachtversorgung enthalten.
 
@@ -65,7 +65,7 @@ NTC1 liegt unter/an der Referenzzelle und wird über R1=47 kΩ an +3V3_A gespeis
 
 Bei nominell gleichen R2/R3 gilt: VDD_local = 2 × U_AIN3; R_NTC = 47 kΩ × U_AIN2 / (VDD_local − U_AIN2). Für AIN2 und AIN3 die gleiche PGA-Spanne verwenden, z.B. ±4,096 V, und nach MUX-/PGA-Wechsel eine vollständige frische Wandlung abwarten. R/T-Kennlinie des exakten TDK-Teils statt einer über den ganzen Bereich vereinfachten Beta-Kurve verwenden.
 
-Die Versorgungskorrektur ist keine vollständige Fehlerkompensation: ADC-Eingangsimpedanz ist endlich und PGA-/kanalabhängig; der 47k/47k-Teiler hat 23,5 kΩ Quellimpedanz. ADC-Loading, Widerstandstoleranz, NTC-Toleranz und thermische Kopplung müssen im Fehlerbudget berücksichtigt bzw. am montierten Sensor kalibriert werden. C4/C7 filtern die Messknoten; beim Kaltstart mindestens 100 ms Einschwingzeit vorsehen und anschließend gültige ADC-Wandlungen abwarten. Das ist ein Integrationshinweis, keine Firmwareimplementierung.
+Die Versorgungskorrektur ist keine vollständige Fehlerkompensation: ADC-Eingangsimpedanz ist endlich und PGA-/kanalabhängig; der 47k/47k-Teiler hat 23,5 kΩ Quellimpedanz. ADC-Loading, Widerstandstoleranz, NTC-Toleranz und thermische Kopplung müssen im Fehlerbudget berücksichtigt bzw. am montierten Sensor kalibriert werden. C4/C7 filtern die Messknoten; beim Kaltstart mindestens 100 ms Einschwingzeit vorsehen und anschließend gültige ADC-Wandlungen abwarten.
 
 ## Quellen
 
