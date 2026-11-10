@@ -38,7 +38,7 @@ UV-/außentaugliches Kabel verwenden; Paarung bei der Montage erhalten. Kein Ver
 
 Die Versorgung erfolgt aus der vorhandenen PanelLog-3V3-Schiene über R36=0 Ω und J8.1. Die vorhandene PanelLog-Schnittstelle wird unverändert genutzt.
 
-Am POA-Kabeleingang C6=1 µF. R12=10 Ω plus C1=100 nF/C2=1 µF filtern die analoge Versorgung von ADC und Temperaturteilern. Der optionale P82B715 bleibt am ungefilterten Kabel-VDD und erhält C5=100 nF (DNP zusammen mit U2). Kein zusätzlicher Spannungsregler nötig. Die lokale Versorgung wird über AIN3 mitgemessen. Ein Betrieb bei ausgefallener PanelLog-3V3-Versorgung ist nicht vorgesehen; insbesondere ist keine unabhängige Nachtversorgung enthalten.
+Am POA-Kabeleingang C6=1 µF. C2/C6 sind Samsung CL10B105KA8NNNC (C29936), 25 V, X7R, ±10 %, 0603. R12=10 Ω plus C1=100 nF/C2=1 µF filtern die analoge Versorgung von ADC und Temperaturteilern. Der optionale P82B715 bleibt am ungefilterten Kabel-VDD und erhält C5=100 nF (DNP zusammen mit U2). Kein zusätzlicher Spannungsregler nötig. Die lokale Versorgung wird über AIN3 mitgemessen. Ein Betrieb bei ausgefallener PanelLog-3V3-Versorgung ist nicht vorgesehen; insbesondere ist keine unabhängige Nachtversorgung enthalten.
 
 ## DIRECT — Standardbestückung
 
@@ -60,6 +60,8 @@ An **beiden** Enden die direkten Bypässe entfernen: POA R6/R7 und PanelLog R32/
 P82B715: 2=Lx, 3=Sx, 4=GND, 6=Sy, 7=Ly, 8=VCC, 1/5 NC. Betriebsspannung an beiden Enden mindestens 3,0 V und Temperaturbereich bis 85 °C beachten. Spannungsabfall, VOL, Parallel-Pull-ups und Versorgungsausfallverhalten prüfen. Die Defaultbestückung ist ausdrücklich DIRECT.
 
 ## Temperaturauswertung und Grenzen
+
+R1–R3 sind Viking AR03BTCX4702 (C2828645), je 47 kΩ, 0,1 %, 25 ppm/K, 0603. Der Temperaturkoeffizient gilt für einzelne Widerstände; eine garantierte gemeinsame Drift oder ein Tracking der drei Widerstände wird nicht vorausgesetzt. Die Temperaturdrift gehört zusammen mit den Toleranzen ins Fehlerbudget.
 
 NTC1 liegt unter/an der Referenzzelle und wird über R1=47 kΩ an +3V3_A gespeist. Bei 25 °C / 10 kΩ: ungefähr 0,579 V, 57,9 µA, 33,5 µW im NTC. Keine GPIO-Erregung und kein zusätzlicher Schalter erforderlich.
 

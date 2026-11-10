@@ -154,7 +154,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C394548"
+		(property "LCSC" "C2828645"
 			(at 0 0 0)
 			(layer "F.SilkS")
 			(hide yes)
@@ -166,7 +166,7 @@
 				)
 			)
 		)
-		(property "MPN" "PTFR0603B47K0N9"
+		(property "MPN" "AR03BTCX4702"
 			(at 0 0 0)
 			(layer "F.SilkS")
 			(hide yes)
@@ -472,7 +472,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C394548"
+		(property "LCSC" "C2828645"
 			(at 0 0 90)
 			(layer "F.SilkS")
 			(hide yes)
@@ -484,7 +484,7 @@
 				)
 			)
 		)
-		(property "MPN" "PTFR0603B47K0N9"
+		(property "MPN" "AR03BTCX4702"
 			(at 0 0 90)
 			(layer "F.SilkS")
 			(hide yes)
@@ -938,7 +938,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C15849"
+		(property "LCSC" "C29936"
 			(at 0 0 0)
 			(layer "F.SilkS")
 			(hide yes)
@@ -950,7 +950,7 @@
 				)
 			)
 		)
-		(property "MPN" "CL10B105KP8NNNC"
+		(property "MPN" "CL10B105KA8NNNC"
 			(at 0 0 0)
 			(layer "F.SilkS")
 			(hide yes)
@@ -2268,7 +2268,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C21190"
+		(property "LCSC" "C22548"
 			(at 0 0 90)
 			(layer "F.SilkS")
 			(hide yes)
@@ -2280,7 +2280,7 @@
 				)
 			)
 		)
-		(property "MPN" "0603WAF1001T5E"
+		(property "MPN" "RC0603FR-071KL"
 			(at 0 0 90)
 			(layer "F.SilkS")
 			(hide yes)
@@ -3105,7 +3105,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C394548"
+		(property "LCSC" "C2828645"
 			(at 0 0 90)
 			(layer "F.SilkS")
 			(hide yes)
@@ -3117,7 +3117,7 @@
 				)
 			)
 		)
-		(property "MPN" "PTFR0603B47K0N9"
+		(property "MPN" "AR03BTCX4702"
 			(at 0 0 90)
 			(layer "F.SilkS")
 			(hide yes)
@@ -3338,7 +3338,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C21190"
+		(property "LCSC" "C22548"
 			(at 0 0 90)
 			(layer "F.SilkS")
 			(hide yes)
@@ -3350,7 +3350,7 @@
 				)
 			)
 		)
-		(property "MPN" "0603WAF1001T5E"
+		(property "MPN" "RC0603FR-071KL"
 			(at 0 0 90)
 			(layer "F.SilkS")
 			(hide yes)
@@ -6084,7 +6084,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C15849"
+		(property "LCSC" "C29936"
 			(at 0 0 0)
 			(layer "F.SilkS")
 			(hide yes)
@@ -6096,7 +6096,7 @@
 				)
 			)
 		)
-		(property "MPN" "CL10B105KP8NNNC"
+		(property "MPN" "CL10B105KA8NNNC"
 			(at 0 0 0)
 			(layer "F.SilkS")
 			(hide yes)

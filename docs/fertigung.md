@@ -6,6 +6,10 @@
 
 Standardbestückung ist **DIRECT**: R6/R7 sind 0-Ω-Brücken; U2, C5 und R8–R11 bleiben unbestückt. Die gepufferte Option und passende PanelLog-Bestückung stehen in [schaltung.md](schaltung.md).
 
+Die mit LCSC-Nummer versehenen SMD-Positionen sind für den LCSC-Einkauf spezifiziert. Bestellmengen und Staffelpreise pro Typ prüfen; mehrere Positionen mit gleicher MPN gemeinsam bestellen. R8/R9 verwenden Yageo RC0603FR-071KL (C22548), bleiben in DIRECT aber DNP und gehören nicht in die Standardbestellung.
+
+CELL1 wird separat als ANYSOLAR KXOB25-14X1F-TR beschafft, z. B. bei DigiKey als Gurtabschnitt KXOB25-14X1FCT-ND. Für diese Zelle ist kein passender LCSC-Ersatz freigegeben. Andere Solarzellen sind wegen Kennlinie, Abmessungen und thermischem Aufbau keine pauschalen Ersatztypen.
+
 CELL1, Verbindungskabel, Gehäuse, Kabeleinführung und optische Maske werden von Hand montiert. Der externe PV-Modultemperaturfühler gehört zu PanelLog.
 
 ## Platine
