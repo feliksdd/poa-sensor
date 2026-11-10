@@ -1,29 +1,29 @@
-name: Reviewed KiCad 10 hardware
+name: KiCad
 on:
   push:
-    paths: ['hardware/**', 'tools/**', 'bom/bom.csv', '.github/workflows/hardware-review.yml']
+    paths: ['hardware/**', 'mechanical/**', 'tools/**', 'bom/bom.csv', '.github/workflows/kicad.yml']
   pull_request:
   workflow_dispatch:
 permissions:
   contents: read
 jobs:
-  native-checks:
+  check:
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/kicad/kicad:10.0.8-full
       options: --user root
     steps:
       - uses: actions/checkout@v4
-      - name: Configure standard libraries
+      - name: Configure KiCad libraries
         run: |
           mkdir -p "$HOME/.config/kicad/10.0"
           cp /usr/share/kicad/template/sym-lib-table "$HOME/.config/kicad/10.0/sym-lib-table"
           cp /usr/share/kicad/template/fp-lib-table "$HOME/.config/kicad/10.0/fp-lib-table"
-      - name: Native ERC and DRC
-        run: bash tools/review_hardware.sh
-      - name: Preserve native reports
+      - name: Check current hardware
+        run: bash tools/check_hardware.sh
+      - name: Upload check outputs
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: kicad-10-review
-          path: hardware/review_2026-11-10/
+          name: kicad
+          path: build/kicad/
