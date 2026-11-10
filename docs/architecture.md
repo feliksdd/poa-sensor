@@ -2,6 +2,8 @@
 
 Festgelegt am 2026-11-10: maximal ein POA pro PanelLog, maximal 3 m Kabel, drei verdrillte Aderpaare, Lötanschlüsse. Das optische Konzept bleibt eine zur PV-Ebene parallele, unverschattete Silizium-Referenzzelle; kein meteorologisches Referenzpyranometer.
 
+Der Schaltplan verbindet die Signale direkt mit Leitungen. Netzlabels benennen nur die durchgehend gezeichneten Signale. +3V3, +3V3_A und GND verwenden Spannungssymbole; +3V3_A bleibt durch R12 von der Kabelversorgung getrennt.
+
 ## Funktion und Messkanäle
 
 | Element | Funktion |
@@ -21,7 +23,7 @@ ALERT/RDY bleibt unbeschaltet; PanelLog pollt die Wandlungen. Kein MCU und keine
 
 | PanelLog J8 | POA J1 | Signal | Paar |
 |---|---|---|---|
-| 1 | 1 | POA_VDD_CABLE, 3,3 V nominal über PanelLog R36 | mit 2 |
+| 1 | 1 | +3V3, 3,3 V nominal über PanelLog R36 | mit 2 |
 | 2 | 2 | GND | Versorgung |
 | 3 | 3 | SDA | mit 4 |
 | 4 | 4 | GND | SDA-Rückleiter |
@@ -59,7 +61,7 @@ P82B715: 2=Lx, 3=Sx, 4=GND, 6=Sy, 7=Ly, 8=VCC, 1/5 NC. Betriebsspannung an beide
 
 ## Temperaturauswertung und Grenzen
 
-NTC1 liegt unter/an der Referenzzelle und wird über R1=47 kΩ an POA_VDD_ANALOG gespeist. Bei 25 °C / 10 kΩ: ungefähr 0,579 V, 57,9 µA, 33,5 µW im NTC. Keine GPIO-Erregung und kein zusätzlicher Schalter erforderlich.
+NTC1 liegt unter/an der Referenzzelle und wird über R1=47 kΩ an +3V3_A gespeist. Bei 25 °C / 10 kΩ: ungefähr 0,579 V, 57,9 µA, 33,5 µW im NTC. Keine GPIO-Erregung und kein zusätzlicher Schalter erforderlich.
 
 Bei nominell gleichen R2/R3 gilt: VDD_local = 2 × U_AIN3; R_NTC = 47 kΩ × U_AIN2 / (VDD_local − U_AIN2). Für AIN2 und AIN3 die gleiche PGA-Spanne verwenden, z.B. ±4,096 V, und nach MUX-/PGA-Wechsel eine vollständige frische Wandlung abwarten. R/T-Kennlinie des exakten TDK-Teils statt einer über den ganzen Bereich vereinfachten Beta-Kurve verwenden.
 
