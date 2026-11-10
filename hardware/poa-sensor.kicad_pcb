@@ -2686,6 +2686,20 @@
 		(uuid "6b9428e2-48ed-4ad5-87be-3a38c29b8531")
 		(at 124.5 142.02 90)
 		(descr "Six direct-solder cable pads, 2.54 mm pitch; shield is cable only, not tied to panel frame")
+		(property "LCSC" ""
+			(at 124.5 142.02 0)
+			(layer "F.Fab")
+			(hide yes)
+			(effects (font (size 1 1) (thickness 0.15)))
+		)
+
+		(property "MPN" ""
+			(at 124.5 142.02 0)
+			(layer "F.Fab")
+			(hide yes)
+			(effects (font (size 1 1) (thickness 0.15)))
+		)
+
 		(property "Reference" "J1"
 			(at 0 9.42 0)
 			(layer "F.SilkS")
@@ -3743,6 +3757,13 @@
 		(at 124.5 124.5)
 		(descr "ANYSOLAR KXOB25-14X1F SolarBIT, 23x8x1.8 mm, rear end contacts")
 		(tags "solar cell reference cell irradiance")
+		(property "LCSC" ""
+			(at 124.5 124.5 0)
+			(layer "F.Fab")
+			(hide yes)
+			(effects (font (size 1 1) (thickness 0.15)))
+		)
+
 		(property "Reference" "CELL1"
 			(at 0 -5.4 0)
 			(layer "F.SilkS")

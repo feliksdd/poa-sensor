@@ -1,3 +1,7 @@
 (fp_lib_table
   (lib (name "POA")(type "KiCad")(uri "${KIPRJMOD}/footprints/poa-sensor.pretty")(options "")(descr "POA sensor project-local footprints"))
+  (lib (name "Capacitor_SMD")(type "KiCad")(uri "${KIPRJMOD}/footprints/Capacitor_SMD.pretty")(options "")(descr "Project-pinned KiCad footprints with local models"))
+  (lib (name "Package_SO")(type "KiCad")(uri "${KIPRJMOD}/footprints/Package_SO.pretty")(options "")(descr "Project-pinned KiCad footprints with local models"))
+  (lib (name "Package_TO_SOT_SMD")(type "KiCad")(uri "${KIPRJMOD}/footprints/Package_TO_SOT_SMD.pretty")(options "")(descr "Project-pinned KiCad footprints with local models"))
+  (lib (name "Resistor_SMD")(type "KiCad")(uri "${KIPRJMOD}/footprints/Resistor_SMD.pretty")(options "")(descr "Project-pinned KiCad footprints with local models"))
 )

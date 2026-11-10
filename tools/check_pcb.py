@@ -61,6 +61,8 @@ for ref, comp in components.items():
     fp, fields = footprints[ref]
     assert fp[1] == comp.findtext('footprint'), f'{ref}: footprint differs'
     assert fields['Value'] == comp.findtext('value'), f'{ref}: value differs'
+    for field in comp.findall('./fields/field'):
+        assert fields.get(field.get('name')) == (field.text or ''), f"{ref}: field {field.get('name')} differs"
     assert child(fp, 'path')[1].split('/')[-1] == comp.findtext('tstamps').strip(), f'{ref}: schematic link differs'
     dnp = any(p.get('name') == 'dnp' for p in comp.findall('property'))
     assert ('dnp' in child(fp, 'attr')) == dnp, f'{ref}: DNP state differs'
