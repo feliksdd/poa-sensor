@@ -12,7 +12,7 @@ import argparse
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-SCHEMATIC = ROOT / "hardware" / "poa-sensor.kicad_sch"
+SCHEMATIC = ROOT / "hardware" / "poa-sensor-wireless-legacy.kicad_sch"
 
 # Exact native-KiCad coordinate rewrites, old -> canonical.
 REPLACEMENTS = [

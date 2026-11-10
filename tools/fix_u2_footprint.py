@@ -9,7 +9,7 @@ from pathlib import Path
 import sys
 
 ROOT = Path(__file__).resolve().parents[1]
-SCH = ROOT / "hardware" / "poa-sensor.kicad_sch"
+SCH = ROOT / "hardware" / "poa-sensor-wireless-legacy.kicad_sch"
 
 OLD_VALUES = (
     "Package_TSSOP:VSSOP-10_3x3mm_P0.5mm",

@@ -1,7 +1,7 @@
 name: Reviewed KiCad 10 hardware
 on:
   push:
-    paths: ['hardware/**', 'tools/review_hardware.sh', '.github/workflows/hardware-review.yml']
+    paths: ['hardware/**', 'tools/**', 'bom/bom.csv', '.github/workflows/hardware-review.yml']
   pull_request:
   workflow_dispatch:
 permissions:
@@ -26,4 +26,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: kicad-10-review
-          path: hardware/review_2026-11-09/
+          path: hardware/review_2026-11-10/

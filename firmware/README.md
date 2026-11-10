@@ -1,14 +1,5 @@
 # Firmware
 
-Firmware is planned as a Zigbee sleepy end device for the nRF52840 module.
+Der kabelgebundene POA-Sensor besitzt keinen Mikrocontroller und benötigt keine eigene Firmware. PanelLog liest den ADS1115 auf einem separaten I²C-Bus aus. Aktuelle Host-Pins: GPIO22 SDA, GPIO23 SCL (C6-WROOM).
 
-Expected responsibilities:
-- ADS1115 sampling and filtering
-- reference-cell temperature compensation
-- module-temperature measurement
-- battery-voltage measurement
-- calibration storage/versioning
-- Zigbee measurement/reporting
-- low-power scheduling
-
-Firmware details will be defined after schematic pin assignment is frozen.
+Diese Schaltplanrevision entwickelt oder ändert keine Firmware. Der vorhandene PanelLog-Prototyp muss vor Betrieb auf diese Pins, Open-Drain ohne interne Pull-ups und die aktuelle Messkanalbelegung abgestimmt werden. Auslegung und Einschwinghinweise stehen in `../docs/architecture.md`.

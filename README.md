@@ -1,54 +1,15 @@
-# POA Sensor
+# POA Sensor — kabelgebundene Referenzzelle
 
-Low-cost wireless, battery-powered plane-of-array (POA) irradiance sensor.
+Aktuelle elektrische Revision: **0.3, 2026-11-10**. Ein POA-Sensor wird über maximal 3 m Kabel von genau einem [PanelLog](https://github.com/feliksdd/panellog) versorgt und per I²C ausgelesen. Das Kabel wird an beiden Enden direkt angelötet und mechanisch zugentlastet.
 
-The project measures reproducible, silicon-equivalent irradiance in W/m² using a small monocrystalline reference cell. It is intentionally independent of the PV-module electrical measurement so it can be mounted at the **optically best, unshaded location** while remaining parallel to the measured PV array plane. It is not intended to be a meteorological reference-class pyranometer.
+Der Sensor enthält eine KXOB25-14X1F-Referenzzelle, einen Präzisionsshunt, einen NTC an der Referenzzelle und einen ADS1115. Eigene Batterie, Mikrocontroller und Funk entfallen. PV-Modulspannung, Strom, Abschaltung und Modulrückseitentemperatur bleiben bei PanelLog.
 
-## Project split
+- **Aktueller Schaltplan:** [hardware/poa-sensor.kicad_sch](hardware/poa-sensor.kicad_sch)
+- **Ansicht:** [SVG](hardware/review_2026-11-10/poa-sensor.svg) · [PDF](hardware/review_2026-11-10/poa-sensor.pdf)
+- **Verbindliche Schnittstelle und Auslegung:** [docs/architecture.md](docs/architecture.md)
+- **Aktuelle elektrische Stückliste:** [bom/bom.csv](bom/bom.csv); DNP-Teile separat gekennzeichnet. Keine neue pauschale Lager-/Preiszusage.
+- **Prüfung und Grenzen:** [docs/wired_revision_2026-11-10.md](docs/wired_revision_2026-11-10.md)
 
-PV module voltage/current/power/energy, module backsheet temperature and per-module curtailment are handled by the separate [PanelLog](https://github.com/feliksdd/panellog) project.
+Die bisherige Funkversion liegt unter `hardware/poa-sensor-wireless-legacy.*`; ihre Platine gehört ausschließlich zu dieser historischen Schaltung. **Für die kabelgebundene Revision gibt es noch keine passende Platine.** Diese Änderung ist eine Schaltplanrevision, keine Fertigungsfreigabe. Die zugehörigen Änderungen im PanelLog-Schaltplan müssen ebenfalls erst ins Layout übernommen werden.
 
-The separation is intentional:
-
-- **POA Sensor:** optical reference; battery powered; placement optimized for representative unshaded irradiance.
-- **PanelLog:** one inline node per PV module; PV powered; placement optimized for short DC wiring and module-temperature measurement.
-
-For a system with two different array orientations, the intended deployment is one POA sensor per orientation plus one PanelLog node per PV module.
-
-## Design goals
-
-- POA irradiance measurement with silicon reference cell
-- reference-cell temperature compensation
-- battery-powered low-duty-cycle operation
-- Zigbee sleepy end device based on nRF52840
-- freedom to place the sensor at the best unshaded point in the module plane
-- outdoor enclosure, target IP67/IP68
-- PCB/PCBA optimized for JLCPCB and LCSC sourcing
-- target hardware cost: approximately EUR 20-30 per sensor at small quantity
-
-## Repository layout
-
-- `hardware/` - KiCad project and project-local libraries
-- `bom/` - design BOM and component-selection notes
-- `manufacturing/jlcpcb/` - JLCPCB assembly/export notes and release outputs
-- `mechanical/` - enclosure, optical window and mounting
-- `docs/` - electrical architecture, calibration and measurement principle
-- `firmware/` - firmware source (planned)
-
-## Current design baseline
-
-- Ebyte E73-2G4M08S1C / nRF52840 module
-- ADS1115 precision ADC
-- ANYSOLAR KXOB25-14X1F reference cell
-- 1.000 ohm precision shunt
-- one reference-cell 10 kohm NTC
-- Li-SOCl2 1/2-AA cell
-- 32.768 kHz crystal for low-power operation
-
-## Hardware-revision note
-
-The existing v0.1 KiCad design still contains the former external PV-module-temperature channel (NTC2/J2). That channel predates the repository split and is now **legacy**. It must be removed in the next electrical schematic/PCB revision; until that change is made, the KiCad files remain the source of truth for what is physically present in v0.1.
-
-No new POA design work should add module-voltage, module-current, module-temperature or PV-curtailment functions here; those belong in PanelLog.
-
-The KiCad project remains the source of truth for schematic, PCB, footprints and component metadata.
+`bash tools/review_hardware.sh` führt native ERC, Netlist-Abgleich und Zeichnungsexport aus. Die Schaltung ist im nativen KiCad-9-Dateiformat gespeichert und lässt sich auch mit KiCad 10 öffnen; die PanelLog-Datei bleibt unverändert im KiCad-10-Format. Historische Berichte und Beschaffungslisten mit Datum 2026-11-09 gelten nur für ihre damaligen Quellen.

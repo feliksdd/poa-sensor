@@ -1,3 +1,5 @@
+> Historischer Stand: Die aktuelle kabelgebundene Schaltplanrevision 0.3 ist in [README](../README.md) und `docs/architecture.md` beschrieben. Alte Funk-PCB-/BOM-Angaben gelten nicht für die aktuelle Schaltung.
+
 # Wired POA prototype option (2026-11-09)
 
 Current baseline: `main` source at `0970a7abca613ca047073c4c38a08328d09aa023`. The existing `hardware/poa-sensor.kicad_sch` and `hardware/poa-sensor.kicad_pcb` remain the historical battery/Zigbee revision, **not** the intended new wired board.

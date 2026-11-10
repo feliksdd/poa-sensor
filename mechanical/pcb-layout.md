@@ -1,3 +1,5 @@
+> Historischer Stand: Die aktuelle kabelgebundene Schaltplanrevision 0.3 ist in [README](../README.md) und `docs/architecture.md` beschrieben. Alte Funk-PCB-/BOM-Angaben gelten nicht für die aktuelle Schaltung.
+
 # PCB and enclosure layout baseline
 
 This document defines the mechanical baseline for the first POA-sensor PCB.
