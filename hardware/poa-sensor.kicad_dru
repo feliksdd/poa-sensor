@@ -1,0 +1,12 @@
+(version 1)
+
+# Standard library footprints have a 0.15 mm internal pad gap at 0.5 mm pitch.
+(rule "Fine pitch intrinsic pad clearance"
+  (condition "(A.memberOfFootprint('U1') && B.memberOfFootprint('U1')) || (A.memberOfFootprint('D1') && B.memberOfFootprint('D1')) || (A.memberOfFootprint('NTC1') && B.memberOfFootprint('NTC1'))")
+  (constraint clearance (min 0.15mm)))
+
+# NTC1 is deliberately below the raised reference cell, thermally coupled to its back.
+# This exception applies only to these two mechanical envelopes; copper rules still apply.
+(rule "NTC1 under raised CELL1"
+  (condition "(A.Reference == 'CELL1' && B.Reference == 'NTC1') || (A.Reference == 'NTC1' && B.Reference == 'CELL1')")
+  (constraint courtyard_clearance (min -5mm)))

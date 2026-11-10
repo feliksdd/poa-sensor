@@ -10,6 +10,10 @@ CELL1, Verbindungskabel, Gehäuse, Kabeleinführung und optische Maske werden vo
 
 ## Platine
 
-Ein geroutetes PCB und zugehörige Gerber-/CPL-Dateien liegen noch nicht vor. Grundlage sind der aktuelle Schaltplan und die [mechanische Kontur](../mechanical/poa-outline.kicad_pcb). Vorgesehen sind zwei Lagen, 1,6 mm FR-4 und einseitige SMD-Bestückung.
+Das [PCB](../hardware/poa-sensor.kicad_pcb) enthält die Gehäusekontur, vier NPTH-Befestigungen, Freistellungen für die Deckeldome und alle 26 elektrischen Positionen. Die Bestückung liegt auf der Oberseite; vorgesehen sind zwei Lagen und 1,6 mm FR-4. Die DNP-Positionen sind ebenfalls platziert.
+
+**Routing und Fertigungsdaten sind offen.** Die Luftlinien bleiben sichtbar; Gerber-/CPL-Dateien werden erst nach dem Routing erzeugt. Die Gehäusehöhe, Abstandshalter, Kabeleinführung und der Zellkontakt müssen am Muster abgeglichen werden.
+
+Die normalen Leiterbahnabstände betragen 0,20 mm. Innerhalb der Standard-Footprints von U1, D1 und NTC1 sind 0,15 mm erlaubt. Nur für NTC1 unter CELL1 ist die beabsichtigte Überlappung der mechanischen Courtyards zugelassen; elektrische Abstände bleiben geprüft.
 
 Vor Bestellung müssen Schaltplan und PCB übereinstimmen, ERC/DRC bestehen und Zell-/NTC-Aufbau, Gehäusepassung sowie Kabel-/ESD-Anordnung geprüft sein. Fertigungsdaten gemeinsam aus derselben aktuellen Konstruktion exportieren. Zwischenstände und Prüfberichte gehören nicht in das Repository.
