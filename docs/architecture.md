@@ -21,7 +21,7 @@ ALERT/RDY bleibt unbeschaltet; PanelLog pollt die Wandlungen. Kein MCU und keine
 
 | PanelLog J8 | POA J1 | Signal | Paar |
 |---|---|---|---|
-| 1 | 1 | POA_VDD_CABLE, 3,3 V nominal, strombegrenzt | mit 2 |
+| 1 | 1 | POA_VDD_CABLE, 3,3 V nominal über PanelLog R36 | mit 2 |
 | 2 | 2 | GND | Versorgung |
 | 3 | 3 | SDA | mit 4 |
 | 4 | 4 | GND | SDA-Rückleiter |
@@ -34,7 +34,7 @@ UV-/außentaugliches Kabel verwenden; Paarung bei der Montage erhalten. Kein Ver
 
 ## Versorgung
 
-PanelLog U5 = TPS2553DBVR (C55266), SOT-23-6: IN=1, GND=2, EN=3, FAULT=4, ILIM=5, OUT=6. IN, EN und ILIM an +3V3. ILIM direkt an IN wählt laut TI 50–100 mA, typisch 75 mA. Kein ILIM-Widerstand und kein ungeschützter 0-Ω-Bypass; R36 ist entfernt. C27=1 µF direkt an IN, C28=1 µF an OUT, FAULT NC. OUT versorgt J8.1 sowie die Kabel-Pull-ups und den optionalen Host-P82B715. Das Bauteil begrenzt Dauerstrom und startet nach einem beseitigten Fehler wieder; es ist nicht die latch-off-Variante. Bei 3,3 V / 100 mA Kurzschluss bis etwa 0,33 W im Schalter berücksichtigen. Ob die Hauptversorgung während Kurzschluss plus ESP32-Sendeburst stabil bleibt, ist am Gerät zu prüfen; keine garantierte Resetfestigkeit allein aus dem Schaltplan.
+Die Versorgung erfolgt aus der vorhandenen PanelLog-3V3-Schiene über R36=0 Ω und J8.1. Maßgeblich ist PanelLog-Commit `26c2335`; PanelLog wird für diesen POA-Entwurf nicht geändert.
 
 Am POA-Kabeleingang C6=1 µF. R12=10 Ω plus C1=100 nF/C2=1 µF filtern die analoge Versorgung von ADC und Temperaturteilern. Der optionale P82B715 bleibt am ungefilterten Kabel-VDD und erhält C5=100 nF (DNP zusammen mit U2). Kein zusätzlicher Spannungsregler nötig. Die lokale Versorgung wird über AIN3 mitgemessen. Ein Betrieb bei ausgefallener PanelLog-3V3-Versorgung ist nicht vorgesehen; insbesondere ist keine unabhängige Nachtversorgung enthalten.
 
@@ -43,9 +43,9 @@ Am POA-Kabeleingang C6=1 µF. R12=10 Ω plus C1=100 nF/C2=1 µF filtern die anal
 | Ort | Bestückt | Unbestückt |
 |---|---|---|
 | POA | R6/R7=0 Ω; D1; ADC/Analogteil | U2, R8–R11, C5 |
-| PanelLog | R32/R33=0 Ω; R34/R35=2,2 kΩ; U5/C27/C28; D3 | U4, R30/R31, C26 |
+| PanelLog | R30/R31=2,2 kΩ; R32/R33=0 Ω; R36=0 Ω; D3 | U4, R34/R35, C26 |
 
-Die beiden 2,2-kΩ-Pull-ups liegen **nur bei PanelLog und an POA_VDD_CABLE**. So speisen die Pull-ups bei einem Kurzschluss dieser Versorgung keine zusätzliche Energie aus dem ungeschützten 3V3-Netz in den Sensor. MCU-Pins ausschließlich Open-Drain/hochohmig betreiben; interne Pull-ups aus. Kein aktiv getriebener High-Pegel. Die getrennten Netznamen vor und hinter den 0-Ω-Widerständen sind absichtlich erhalten.
+Die beiden 2,2-kΩ-Pull-ups R30/R31 liegen nur bei PanelLog an dessen bestehender +3V3-Schiene. MCU-Pins ausschließlich Open-Drain/hochohmig betreiben; interne Pull-ups aus. Kein aktiv getriebener High-Pegel. Die getrennten Netznamen vor und hinter den 0-Ω-Widerständen sind absichtlich erhalten.
 
 Startwert 25 kHz; Gesamtlast je Leitung einschließlich Kabel, Schutz und Platinen ≤400 pF anstreben. Bei 2,2 kΩ/400 pF beträgt die rechnerische 30–70-%-Anstiegszeit 0,746 µs. Die zulässige Anstiegszeit wird durch niedrigeren Takt nicht automatisch aufgehoben. Am realen Kabel Anstiegszeit ≤1 µs, VOL und Störfestigkeit prüfen.
 
@@ -53,7 +53,7 @@ D1/D3 = TPD2E2U06DRLR (C1972959), SOT-553: Pin 3 SDA, Pin 4 GND, Pin 5 SCL; Pin 
 
 ## BUFFERED — vorbereitete DNP-Option
 
-An **beiden** Enden die direkten Bypässe entfernen: POA R6/R7 und PanelLog R32/R33. POA U2/C5 und PanelLog U4/C26 bestücken. Lokale S-seitige Pull-ups: POA R10/R11=2,2 kΩ und PanelLog R30/R31=2,2 kΩ. L-seitige Pull-ups: POA R8/R9=1 kΩ; PanelLog R34/R35 für diese Variante von 2,2 kΩ auf 1 kΩ ändern. Zusammen etwa 500 Ω / 6,6 mA pro Low-Leitung bei 3,3 V. Das ist ein Ausgangspunkt für Messungen, keine qualifizierte Bestückungsfreigabe.
+An **beiden** Enden die direkten Bypässe entfernen: POA R6/R7 und PanelLog R32/R33. POA U2/C5 und PanelLog U4/C26 bestücken. Lokale S-seitige Pull-ups: POA R10/R11=2,2 kΩ und PanelLog R30/R31=2,2 kΩ. L-seitige Pull-ups: POA R8/R9=1 kΩ; PanelLog R34/R35=1 kΩ bestücken. R30/R31 bleiben bestückt. Zusammen etwa 500 Ω / 6,6 mA pro Low-Leitung bei 3,3 V. Das ist ein Ausgangspunkt für Messungen, keine qualifizierte Bestückungsfreigabe.
 
 P82B715: 2=Lx, 3=Sx, 4=GND, 6=Sy, 7=Ly, 8=VCC, 1/5 NC. Betriebsspannung an beiden Enden mindestens 3,0 V und Temperaturbereich bis 85 °C beachten. Spannungsabfall, VOL, Parallel-Pull-ups und Versorgungsausfallverhalten prüfen. Die Defaultbestückung ist ausdrücklich DIRECT.
 
@@ -69,7 +69,5 @@ Die Versorgungskorrektur ist keine vollständige Fehlerkompensation: ADC-Eingang
 
 - TI ADS1115: https://www.ti.com/lit/ds/symlink/ads1115.pdf
 - TI P82B715: https://www.ti.com/lit/ds/symlink/p82b715.pdf
-- TI TPS2553, Rev. G: https://www.ti.com/lit/ds/symlink/tps2553.pdf
 - TI TPD2E2U06: https://www.ti.com/lit/ds/symlink/tpd2e2u06.pdf
 - ESP32-C6-WROOM-1: https://www.espressif.com/sites/default/files/documentation/esp32-c6-wroom-1_wroom-1u_datasheet_en.pdf
-- Bestellnummer U5: https://www.lcsc.com/product-detail/C55266.html

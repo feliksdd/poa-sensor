@@ -1383,7 +1383,7 @@
 				(path "/569e3d12-ac43-472d-aa6e-7cb849931185"
 					(reference "C2")
 					(unit 1)))))
-	(text "Paare: 1/2 = 3V3/GND; 3/4 = SDA/GND; 5/6 = SCL/GND\n1:1 zu PanelLog J8. Keine Schirmverbindung zu Rahmen/PE.\nStrombegrenzung am Kabelanfang in PanelLog erforderlich."
+	(text "Paare: 1/2 = 3V3/GND; 3/4 = SDA/GND; 5/6 = SCL/GND\n1:1 zu PanelLog J8. Keine Schirmverbindung zu Rahmen/PE.\nVersorgung ueber vorhandenes R36/J8 auf PanelLog."
 		(at 264.16 151.13 0)
 		(effects
 			(font

@@ -28,16 +28,17 @@ def populated(ref,yes):
     if dnp==yes:raise SystemExit(f'{ref}: incorrect DNP state')
 
 if args.host:
-    for pin,name in {1:'POA_VDD_CABLE',2:'GND',3:'POA_SDA_CABLE',4:'GND',5:'POA_SCL_CABLE',6:'GND'}.items():expect('J8',pin,name)
-    for pin,name in {1:'+3V3',2:'GND',3:'+3V3',5:'+3V3',6:'POA_VDD_CABLE'}.items():expect('U5',pin,name)
-    expect('C26',1,'POA_VDD_CABLE');expect('U4',8,'POA_VDD_CABLE')
+    # Unchanged PanelLog baseline 26c2335: supply through R36; local pullups.
+    for pin,name in {2:'GND',3:'POA_SDA_CABLE',4:'GND',5:'POA_SCL_CABLE',6:'GND'}.items():expect('J8',pin,name)
+    expect('R36',1,'+3V3')
+    if nets.get(('J8','1'))!=nets.get(('R36','2')):raise SystemExit('J8.1 must be fed through R36')
+    if components['R36'].findtext('value')!='0R':raise SystemExit('R36 must remain 0R')
     expect('U3',20,'POA_SDA_MCU');expect('U3',21,'POA_SCL_MCU')
-    for ref,name in [('R34','POA_SDA_CABLE'),('R35','POA_SCL_CABLE')]:
-        expect(ref,1,'POA_VDD_CABLE');expect(ref,2,name);populated(ref,True)
+    for ref,name in [('R30','POA_SDA_MCU'),('R31','POA_SCL_MCU')]:
+        expect(ref,1,'+3V3');expect(ref,2,name);populated(ref,True)
         if components[ref].findtext('value')!='2.2k':raise SystemExit(f'{ref}: expected 2.2k')
-    for ref in ['R30','R31','U4','C26']:populated(ref,False)
-    for ref in ['R32','R33','U5','C27','C28']:populated(ref,True)
-    if 'R36' in components:raise SystemExit('Unsafe supply bypass R36 still present')
+    for ref in ['R34','R35','U4','C26']:populated(ref,False)
+    for ref in ['R30','R31','R32','R33','R36']:populated(ref,True)
     expect('D3',3,'POA_SDA_CABLE');expect('D3',4,'GND');expect('D3',5,'POA_SCL_CABLE')
 else:
     for pin,name in {1:'POA_VDD_CABLE',2:'GND',3:'POA_SDA_CABLE',4:'GND',5:'POA_SCL_CABLE',6:'GND'}.items():expect('J1',pin,name)
