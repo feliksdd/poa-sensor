@@ -43,7 +43,7 @@ Am POA-Kabeleingang C6=1 µF. R12=10 Ω plus C1=100 nF/C2=1 µF filtern die anal
 | Ort | Bestückt | Unbestückt |
 |---|---|---|
 | POA | R6/R7=0 Ω; D1; ADC/Analogteil | U2, R8–R11, C5 |
-| PanelLog | R32/R33=0 Ω; R34/R35=2,2 kΩ; U5/C27/C28; D3 | U4, R30/R31, C29 |
+| PanelLog | R32/R33=0 Ω; R34/R35=2,2 kΩ; U5/C27/C28; D3 | U4, R30/R31, C26 |
 
 Die beiden 2,2-kΩ-Pull-ups liegen **nur bei PanelLog und an POA_VDD_CABLE**. So speisen die Pull-ups bei einem Kurzschluss dieser Versorgung keine zusätzliche Energie aus dem ungeschützten 3V3-Netz in den Sensor. MCU-Pins ausschließlich Open-Drain/hochohmig betreiben; interne Pull-ups aus. Kein aktiv getriebener High-Pegel. Die getrennten Netznamen vor und hinter den 0-Ω-Widerständen sind absichtlich erhalten.
 
@@ -53,7 +53,7 @@ D1/D3 = TPD2E2U06DRLR (C1972959), SOT-553: Pin 3 SDA, Pin 4 GND, Pin 5 SCL; Pin 
 
 ## BUFFERED — vorbereitete DNP-Option
 
-An **beiden** Enden die direkten Bypässe entfernen: POA R6/R7 und PanelLog R32/R33. POA U2/C5 und PanelLog U4/C29 bestücken. Lokale S-seitige Pull-ups: POA R10/R11=2,2 kΩ und PanelLog R30/R31=2,2 kΩ. L-seitige Pull-ups: POA R8/R9=1 kΩ; PanelLog R34/R35 für diese Variante von 2,2 kΩ auf 1 kΩ ändern. Zusammen etwa 500 Ω / 6,6 mA pro Low-Leitung bei 3,3 V. Das ist ein Ausgangspunkt für Messungen, keine qualifizierte Bestückungsfreigabe.
+An **beiden** Enden die direkten Bypässe entfernen: POA R6/R7 und PanelLog R32/R33. POA U2/C5 und PanelLog U4/C26 bestücken. Lokale S-seitige Pull-ups: POA R10/R11=2,2 kΩ und PanelLog R30/R31=2,2 kΩ. L-seitige Pull-ups: POA R8/R9=1 kΩ; PanelLog R34/R35 für diese Variante von 2,2 kΩ auf 1 kΩ ändern. Zusammen etwa 500 Ω / 6,6 mA pro Low-Leitung bei 3,3 V. Das ist ein Ausgangspunkt für Messungen, keine qualifizierte Bestückungsfreigabe.
 
 P82B715: 2=Lx, 3=Sx, 4=GND, 6=Sy, 7=Ly, 8=VCC, 1/5 NC. Betriebsspannung an beiden Enden mindestens 3,0 V und Temperaturbereich bis 85 °C beachten. Spannungsabfall, VOL, Parallel-Pull-ups und Versorgungsausfallverhalten prüfen. Die Defaultbestückung ist ausdrücklich DIRECT.
 

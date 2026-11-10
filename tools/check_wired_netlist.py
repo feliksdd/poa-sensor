@@ -30,11 +30,12 @@ def populated(ref,yes):
 if args.host:
     for pin,name in {1:'POA_VDD_CABLE',2:'GND',3:'POA_SDA_CABLE',4:'GND',5:'POA_SCL_CABLE',6:'GND'}.items():expect('J8',pin,name)
     for pin,name in {1:'+3V3',2:'GND',3:'+3V3',5:'+3V3',6:'POA_VDD_CABLE'}.items():expect('U5',pin,name)
+    expect('C26',1,'POA_VDD_CABLE');expect('U4',8,'POA_VDD_CABLE')
     expect('U3',20,'POA_SDA_MCU');expect('U3',21,'POA_SCL_MCU')
     for ref,name in [('R34','POA_SDA_CABLE'),('R35','POA_SCL_CABLE')]:
         expect(ref,1,'POA_VDD_CABLE');expect(ref,2,name);populated(ref,True)
         if components[ref].findtext('value')!='2.2k':raise SystemExit(f'{ref}: expected 2.2k')
-    for ref in ['R30','R31','U4','C29']:populated(ref,False)
+    for ref in ['R30','R31','U4','C26']:populated(ref,False)
     for ref in ['R32','R33','U5','C27','C28']:populated(ref,True)
     if 'R36' in components:raise SystemExit('Unsafe supply bypass R36 still present')
     expect('D3',3,'POA_SDA_CABLE');expect('D3',4,'GND');expect('D3',5,'POA_SCL_CABLE')
