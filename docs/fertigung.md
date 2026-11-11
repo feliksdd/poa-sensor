@@ -31,7 +31,7 @@ CELL1, Verbindungskabel, Gehäuse, Kabeleinführung und optische Maske werden vo
 
 Das [PCB](../hardware/poa-sensor.kicad_pcb) enthält die Gehäusekontur, vier NPTH-Befestigungen, Freistellungen für die Deckeldome und alle 26 elektrischen Positionen. Die Bestückung liegt auf der Oberseite; vorgesehen sind zwei Lagen und 1,6 mm FR-4. Die DNP-Positionen sind ebenfalls platziert.
 
-**Routing und Fertigungsdaten sind offen.** Die Luftlinien bleiben sichtbar; Gerber-/CPL-Dateien werden erst nach dem Routing erzeugt. Die Gehäusehöhe, Abstandshalter, Kabeleinführung und der Zellkontakt müssen am Muster abgeglichen werden.
+**Routing vorhanden; Fertigungsfreigabe noch offen.** Das PCB enthält bereits Leiterbahnen sowie konturgleiche GND-Flächen auf F.Cu und B.Cu. Die zuvor fehlende GND-Verbindung wurde mit Commit `072c1b7` geschlossen. Der abschließende Nachweis für globales GND-Via-Stitching, Bibliotheks-Footprint-Abgleich, vollständigen Referenzdruck auf F.Silkscreen und einen erneuten nativen ERC-/DRC-Lauf steht noch aus. Gerber und CPL erst aus dem vollständig geprüften Layout exportieren. Gehäusehöhe, Abstandshalter, Kabeleinführung und Zellkontakt müssen am Muster abgeglichen werden.
 
 Die normalen Leiterbahnabstände betragen 0,20 mm. Innerhalb der Standard-Footprints von U1, D1 und NTC1 sind 0,15 mm erlaubt. Nur für NTC1 unter CELL1 ist die beabsichtigte Überlappung der mechanischen Courtyards zugelassen; elektrische Abstände bleiben geprüft.
 
