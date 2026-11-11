@@ -102,6 +102,7 @@
 		(property "Reference" "R1"
 			(at 0 1.8 0)
 			(layer "F.SilkS")
+			(hide yes)
 			(uuid "bbd7a8bd-4893-4ca8-a65b-6519aefc4b2f")
 			(effects
 				(font
@@ -848,12 +849,13 @@
 	(footprint "Capacitor_SMD:C_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "3e9bcf2f-be24-47e4-8b00-6d89086361fe")
-		(at 118.5 108 180)
+		(at 118.25 108 180)
 		(descr "Capacitor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf, https://docs.google.com/spreadsheets/d/1BsfQQcO9C6DZCsRaXUlFlo91Tg2WpOkGARC1WS5S8t0/edit?usp=sharing), generated with kicad-footprint-generator")
 		(tags "capacitor")
 		(property "Reference" "C6"
 			(at 0 -1.9 0)
 			(layer "F.SilkS")
+			(hide yes)
 			(uuid "bff93ebe-fceb-4293-b0c2-821892ac9dfb")
 			(effects
 				(font
@@ -938,7 +940,6 @@
 		(sheetname "poa-sensor")
 		(sheetfile "poa-sensor.kicad_sch")
 		(attr smd)
-		(embedded_fonts no)
 		(fp_line
 			(start -0.261252 -0.735)
 			(end 0.261252 -0.735)
@@ -1066,6 +1067,7 @@
 			(net "GND")
 			(uuid "28873c2a-8f49-4117-bff2-26fa99fa70f0")
 		)
+		(embedded_fonts no)
 		(model "${KIPRJMOD}/3dmodels/standard/Capacitor_SMD.3dshapes/C_0805_2012Metric.step"
 			(offset
 				(xyz 0 0 0)
@@ -1172,7 +1174,6 @@
 		(sheetname "poa-sensor")
 		(sheetfile "poa-sensor.kicad_sch")
 		(attr smd)
-		(embedded_fonts no)
 		(fp_line
 			(start -0.153641 -0.38)
 			(end 0.153641 -0.38)
@@ -1300,6 +1301,7 @@
 			(net "GND")
 			(uuid "7ecda3e4-44b9-4f9d-80c8-8f3f024c70aa")
 		)
+		(embedded_fonts no)
 		(model "${KIPRJMOD}/3dmodels/TDK_NTCG103JF103FT1.step"
 			(offset
 				(xyz 0 0 0)
@@ -1407,6 +1409,7 @@
 		(property "Reference" "R6"
 			(at 0 -1.9 90)
 			(layer "F.SilkS")
+			(hide yes)
 			(uuid "275e7d9a-2762-44ff-863d-cb4a8611e8d6")
 			(effects
 				(font
@@ -1629,6 +1632,7 @@
 		(property "Reference" "C3"
 			(at 1.9 0 90)
 			(layer "F.SilkS")
+			(hide yes)
 			(uuid "89f019ba-880a-441f-8540-e9e0a23cfd4e")
 			(effects
 				(font
@@ -1931,12 +1935,13 @@
 	(footprint "Capacitor_SMD:C_0603_1608Metric"
 		(layer "F.Cu")
 		(uuid "5a2efc6b-98ca-4249-8661-888d8dba0119")
-		(at 134.385661 122.239262 90)
+		(at 134.385661 124 90)
 		(descr "Capacitor SMD 0603 (1608 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
 		(tags "capacitor")
 		(property "Reference" "C1"
 			(at 0.3 1.5 0)
 			(layer "F.SilkS")
+			(hide yes)
 			(uuid "f9da6708-496b-463e-a5c9-7292f6de39f9")
 			(effects
 				(font
@@ -2159,6 +2164,7 @@
 		(property "Reference" "R8"
 			(at 1.9 0 90)
 			(layer "F.SilkS")
+			(hide yes)
 			(uuid "748fbe9a-0c01-4826-b115-d587a1b0648b")
 			(effects
 				(font
@@ -2381,6 +2387,7 @@
 		(property "Reference" "R4"
 			(at 1.9 0 0)
 			(layer "F.SilkS")
+			(hide yes)
 			(uuid "ca5c6804-156a-406e-9eb8-a6259bbb1192")
 			(effects
 				(font
@@ -2740,6 +2747,7 @@
 		(property "Reference" "C4"
 			(at 2.9 0 0)
 			(layer "F.SilkS")
+			(hide yes)
 			(uuid "e6431011-3c27-45e8-813d-f4639ee7a6de")
 			(effects
 				(font
@@ -2962,6 +2970,7 @@
 		(property "Reference" "R2"
 			(at 0 -2.4 90)
 			(layer "F.SilkS")
+			(hide yes)
 			(uuid "96167b5f-258d-4fee-9106-34bc69a9cbda")
 			(effects
 				(font
@@ -3184,6 +3193,7 @@
 		(property "Reference" "R9"
 			(at 1.9 0 90)
 			(layer "F.SilkS")
+			(hide yes)
 			(uuid "15672b28-3d94-4ede-bc94-542aa74bbc0c")
 			(effects
 				(font
@@ -3628,6 +3638,7 @@
 		(property "Reference" "CELL1"
 			(at 0 -5.4 0)
 			(layer "F.SilkS")
+			(hide yes)
 			(uuid "2345bd58-6eee-44b0-9c28-ac3177eb7d94")
 			(effects
 				(font
@@ -3870,6 +3881,7 @@
 		(property "Reference" "R5"
 			(at 1.9 0 0)
 			(layer "F.SilkS")
+			(hide yes)
 			(uuid "2a7c8c7b-1ddf-4c38-8cb0-e54d2b7b1553")
 			(effects
 				(font
@@ -4314,6 +4326,7 @@
 		(property "Reference" "R12"
 			(at -0.7 2 0)
 			(layer "F.SilkS")
+			(hide yes)
 			(uuid "2b2763f3-f28d-4a83-8f57-6dcbb70cc681")
 			(effects
 				(font
@@ -4536,6 +4549,7 @@
 		(property "Reference" "U2"
 			(at 0 -3.099999 0)
 			(layer "F.SilkS")
+			(hide yes)
 			(uuid "b709c886-02d5-4350-93ad-22ad5ee43da7")
 			(effects
 				(font
@@ -5014,6 +5028,7 @@
 		(property "Reference" "R7"
 			(at 0 -1.9 90)
 			(layer "F.SilkS")
+			(hide yes)
 			(uuid "6740b3af-d486-4e8a-b02c-865025ad756d")
 			(effects
 				(font
@@ -5236,6 +5251,7 @@
 		(property "Reference" "D1"
 			(at 1.900001 0 90)
 			(layer "F.SilkS")
+			(hide yes)
 			(uuid "e110ed2b-df6b-43bd-96bf-2f41a07773f7")
 			(effects
 				(font
@@ -5604,6 +5620,7 @@
 		(property "Reference" "R10"
 			(at 1.900001 0 0)
 			(layer "F.SilkS")
+			(hide yes)
 			(uuid "d332d0c9-dd23-476f-89e7-f0a506c986b0")
 			(effects
 				(font
@@ -5820,7 +5837,7 @@
 	(footprint "Capacitor_SMD:C_0805_2012Metric"
 		(layer "F.Cu")
 		(uuid "edbf1420-59c5-4bd5-9639-8a6ded153a2e")
-		(at 132 119.5 90)
+		(at 132 119.5)
 		(descr "Capacitor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf, https://docs.google.com/spreadsheets/d/1BsfQQcO9C6DZCsRaXUlFlo91Tg2WpOkGARC1WS5S8t0/edit?usp=sharing), generated with kicad-footprint-generator")
 		(tags "capacitor")
 		(property "Reference" "C2"
@@ -6059,6 +6076,7 @@
 		(property "Reference" "RSH1"
 			(at 1.9 0 90)
 			(layer "F.SilkS")
+			(hide yes)
 			(uuid "d3d4cf80-91dd-4c11-a495-d283a2256b91")
 			(effects
 				(font
@@ -98645,7 +98663,7 @@
 		)
 	)
 	(gr_text "POA / I2C"
-		(at 124.5 113.32 0)
+		(at 124.5 105.5 0)
 		(layer "F.SilkS")
 		(uuid "569d103a-9a4c-48a2-ac50-f16b03564a28")
 		(effects
@@ -98677,7 +98695,7 @@
 			)
 		)
 	)
-	(gr_text "NTC1 direkt unter CELL1; Zellunterseite 0.4 mm ueber PCB"
+	(gr_text "NTC1 direkt unter CELL1; Zellunterseite 0.7 mm ueber PCB"
 		(at 124.5 178.92 0)
 		(layer "Dwgs.User")
 		(uuid "b36e4929-ae5c-4dc6-b3aa-5652343f7466")
