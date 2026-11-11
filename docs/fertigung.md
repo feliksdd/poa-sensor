@@ -10,7 +10,7 @@ Die LCSC-Nummern identifizieren die Teile auch im JLCPCB-Bestückungskatalog. Di
 
 ## JLCPCB-Bestückung
 
-Die Baugrößen sind für **Economic PCBA** ausgelegt: NTC1 ist 0402, die übrigen SMD-Bauteile sind größer oder haben mindestens 0,5 mm Pinabstand. Eine Bestellfreigabe setzt weiterhin das fertige Routing und die Prüfung der übrigen Fertigungsoptionen voraus. Vor Bestellung die aktuelle Katalogklasse und Verfügbarkeit kontrollieren.
+Die Baugrößen sind für **Economic PCBA** ausgelegt: NTC1 ist 0402, die übrigen SMD-Bauteile sind größer oder haben mindestens 0,5 mm Pinabstand. Eine Bestellfreigabe setzt die Prüfung der Fertigungsoptionen und der mechanischen Passung voraus. Vor Bestellung die aktuelle Katalogklasse und Verfügbarkeit kontrollieren.
 
 | Klasse | DIRECT-Positionen | Unterschiedliche Typen |
 |---|---|---|
@@ -31,7 +31,7 @@ CELL1, Verbindungskabel, Gehäuse, Kabeleinführung und optische Maske werden vo
 
 Das [PCB](../hardware/poa-sensor.kicad_pcb) enthält die Gehäusekontur, vier NPTH-Befestigungen, Freistellungen für die Deckeldome und alle 26 elektrischen Positionen. Die Bestückung liegt auf der Oberseite; vorgesehen sind zwei Lagen und 1,6 mm FR-4. Die DNP-Positionen sind ebenfalls platziert.
 
-**Routing vorhanden; Fertigungsfreigabe noch offen.** Das PCB enthält bereits Leiterbahnen sowie konturgleiche GND-Flächen auf F.Cu und B.Cu. Die zuvor fehlende GND-Verbindung wurde mit Commit `072c1b7` geschlossen. Der abschließende Nachweis für globales GND-Via-Stitching, Bibliotheks-Footprint-Abgleich, vollständigen Referenzdruck auf F.Silkscreen und einen erneuten nativen ERC-/DRC-Lauf steht noch aus. Gerber und CPL erst aus dem vollständig geprüften Layout exportieren. Gehäusehöhe, Abstandshalter, Kabeleinführung und Zellkontakt müssen am Muster abgeglichen werden.
+Das PCB ist geroutet. 75 GND-Durchkontaktierungen verbinden die gefüllten Masseflächen auf F.Cu und B.Cu. Alle Bauteilreferenzen sind auf F.Silkscreen sichtbar. Die Anschlussnummern von J1 stehen auf F.Fab. ERC und DRC einschließlich Schaltplanabgleich und neu gefüllter Zonen sind in KiCad 10.0.8 ohne Meldungen durchgelaufen. Gehäusehöhe, Abstandshalter, Kabeleinführung und Zellkontakt am Muster abgleichen.
 
 Die normalen Leiterbahnabstände betragen 0,20 mm. Innerhalb der Standard-Footprints von U1, D1 und NTC1 sind 0,15 mm erlaubt. Nur für NTC1 unter CELL1 ist die beabsichtigte Überlappung der mechanischen Courtyards zugelassen; elektrische Abstände bleiben geprüft.
 

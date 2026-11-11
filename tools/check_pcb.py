@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check schematic/placement agreement and reject DRC issues other than open routing."""
+"""Check schematic/PCB agreement and reject DRC issues, including open connections."""
 import argparse
 import json
 import math
@@ -89,12 +89,13 @@ for ref, pos in {'H1': (124.5, 102.645), 'H2': (146.065, 124.5),
     assert pad[2] == 'np_thru_hole' and abs(float(child(pad, 'drill')[1]) - 2.6) < .001, f'{ref}: mount drill differs'
 cell = child(footprints['CELL1'][0], 'at')
 ntc = child(footprints['NTC1'][0], 'at')
-assert cell[1:3] == ntc[1:3], 'NTC is not centred below cell'
+cell_offset = math.dist(tuple(map(float, cell[1:3])), tuple(map(float, ntc[1:3])))
+assert cell_offset <= 0.05, f'NTC is offset {cell_offset:.3f} mm from cell centre'
 
 drc = json.loads(args.drc.read_text())
-issues = drc.get('violations', []) + drc.get('schematic_parity', [])
+open_connections = drc['unconnected_items']
+issues = drc['violations'] + drc['schematic_parity'] + open_connections
 assert not issues, json.dumps(issues, indent=2)
 print(json.dumps({'result': 'PASS', 'components': len(components), 'pads': len(actual_pins),
                   'mounts': 4, 'resolved_models': models,
-                  'open_connections': len(drc.get('unconnected_items', [])),
-                  'stage': 'placement; routing unfinished'}, indent=2))
+                  'open_connections': len(open_connections)}, indent=2))

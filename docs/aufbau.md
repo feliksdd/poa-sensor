@@ -42,7 +42,7 @@ Eine außen aufgebrachte weiße, wetterfeste Deckelmaske reduziert die solare Er
 
 ## Platzierung, Kabel und Dachmontage
 
-- Zelle und NTC mittig unter dem Fenster; Shunt und ADC links darunter. Beim Routing den Zell-/Shunt-Strompfad kurz halten und beide Kelvin-Leitungen getrennt von den Shuntpads abnehmen. R5 muss direkt an das stromarme Ende des Shunts, nicht an einen beliebigen GND-Punkt.
+- Zelle und NTC liegen mittig unter dem Fenster. Die Kelvin-Leitungen zu R4 und R5 zweigen direkt an den beiden Shuntpads vom Zellstrompfad ab. Eine lokale Sperrfläche auf F.Cu hält den GND-Guss und Vias vom Sense-Zweig zwischen R5.1 und RSH1.2 fern. Der Zweig trifft am Shuntpad auf die Massefläche. Die durchgehende Bottom-Fläche ist außerhalb der Sperrfläche über GND-Vias mit Top verbunden.
 - Temperaturteiler, Referenzteiler, Filter und ADC-Abblockung lokal gruppiert. I²C-Brücken und optionale DNP-Pufferung liegen rechts, getrennt vom analogen Messbereich.
 - J1 liegt am unteren Rand. Pinreihenfolge links nach rechts: **1 +3V3, 2 GND, 3 SDA, 4 GND, 5 SCL, 6 GND**. D1 liegt unmittelbar davor; den ESD-Massepfad beim Routing kurz halten.
 - Das Kabel mit drei verdrillten Paaren direkt anlöten und unter der erhöhten Platine zugentlasten. Die Kabeleinführung hangabwärts im Unterteil vorsehen. Mutter und Gewindelänge müssen unter der Platine bleiben und Abstand zu den Bodendomen halten. Die Markierung auf User.1 ist ein Bauraumhinweis, kein freigegebenes Bohrbild für eine bestimmte Verschraubung.
