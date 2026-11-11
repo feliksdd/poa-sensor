@@ -60,5 +60,8 @@ if args.bom:
     if set(by_ref)!=set(components):raise SystemExit('BOM designators differ from schematic')
     for ref,c in components.items():
         fields={f.get('name'):f.text or '' for f in c.findall('./fields/field')}
-        if by_ref[ref]['LCSC']!=fields.get('LCSC',''):raise SystemExit(f'{ref}: BOM LCSC mismatch')
+        for field in ['LCSC','MPN']:
+            if by_ref[ref][field]!=fields.get(field,''):raise SystemExit(f'{ref}: BOM {field} mismatch')
+        for column,tag in [('Value','value'),('Footprint','footprint')]:
+            if by_ref[ref][column]!=(c.findtext(tag) or ''):raise SystemExit(f'{ref}: BOM {column} mismatch')
 print(json.dumps({'kind':'PanelLog host' if args.host else 'POA','components':len(components),'checked':'connector, ADC, supply, ESD, default assembly and optional BOM','result':'PASS'},indent=2))

@@ -6,10 +6,10 @@
 	(paper "A3")
 	(title_block
 		(title "POA: Referenzzelle / Temperatur / I2C zu PanelLog")
-		(date "2026-11-10")
+		(date "2026-11-11")
 		(rev "0.3")
 		(comment 1 "Ein Sensor / PanelLog; 3 m; 3 verdrillte Paare; Loetanschluss")
-		(comment 2 "DIRECT bestueckt; P82B715-Option DNP; Layout separat erforderlich")
+		(comment 2 "DIRECT bestueckt; P82B715-Option DNP; PCB-Routing offen")
 	)
 	(lib_symbols
 		(symbol "POA:+3V3"
@@ -4028,7 +4028,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C22548"
+		(property "LCSC" "C21190"
 			(at 294.64 58.42 0)
 			(hide yes)
 			(show_name no)
@@ -4040,7 +4040,7 @@
 				(justify left)
 			)
 		)
-		(property "MPN" "RC0603FR-071KL"
+		(property "MPN" "0603WAF1001T5E"
 			(at 294.64 58.42 0)
 			(hide yes)
 			(show_name no)
@@ -4417,7 +4417,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "10k NTC / 0201"
+		(property "Value" "10k NTC / 0402"
 			(at 68.58 143.51 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4428,7 +4428,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0201_0603Metric"
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
 			(at 66.04 142.24 0)
 			(hide yes)
 			(show_name no)
@@ -4462,7 +4462,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C29553871"
+		(property "LCSC" "C209959"
 			(at 66.04 142.24 0)
 			(hide yes)
 			(show_name no)
@@ -4474,7 +4474,7 @@
 				(justify left)
 			)
 		)
-		(property "MPN" "NTCG063JF103FTBA"
+		(property "MPN" "NTCG103JF103FT1"
 			(at 66.04 142.24 0)
 			(hide yes)
 			(show_name no)
@@ -5022,7 +5022,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric"
 			(at 48.26 240.03 0)
 			(hide yes)
 			(show_name no)
@@ -5056,7 +5056,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C29936"
+		(property "LCSC" "C28323"
 			(at 48.26 240.03 0)
 			(hide yes)
 			(show_name no)
@@ -5068,7 +5068,7 @@
 				(justify left)
 			)
 		)
-		(property "MPN" "CL10B105KA8NNNC"
+		(property "MPN" "CL21B105KBFNNNE"
 			(at 48.26 240.03 0)
 			(hide yes)
 			(show_name no)
@@ -5238,7 +5238,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C22548"
+		(property "LCSC" "C21190"
 			(at 314.96 58.42 0)
 			(hide yes)
 			(show_name no)
@@ -5250,7 +5250,7 @@
 				(justify left)
 			)
 		)
-		(property "MPN" "RC0603FR-071KL"
+		(property "MPN" "0603WAF1001T5E"
 			(at 314.96 58.42 0)
 			(hide yes)
 			(show_name no)
@@ -5486,7 +5486,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
+		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric"
 			(at 129.54 240.03 0)
 			(hide yes)
 			(show_name no)
@@ -5520,7 +5520,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C29936"
+		(property "LCSC" "C28323"
 			(at 129.54 240.03 0)
 			(hide yes)
 			(show_name no)
@@ -5532,7 +5532,7 @@
 				(justify left)
 			)
 		)
-		(property "MPN" "CL10B105KA8NNNC"
+		(property "MPN" "CL21B105KBFNNNE"
 			(at 129.54 240.03 0)
 			(hide yes)
 			(show_name no)

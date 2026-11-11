@@ -62,6 +62,10 @@ for ref, comp in components.items():
     assert fp[1] == comp.findtext('footprint'), f'{ref}: footprint differs'
     assert fields['Value'] == comp.findtext('value'), f'{ref}: value differs'
     for field in comp.findall('./fields/field'):
+        if field.get('name') == 'Footprint':
+            # Current KiCad PCB files carry this in the footprint identifier
+            # (fp[1]) rather than duplicating it as a custom property.
+            continue
         assert fields.get(field.get('name')) == (field.text or ''), f"{ref}: field {field.get('name')} differs"
     assert child(fp, 'path')[1].split('/')[-1] == comp.findtext('tstamps').strip(), f'{ref}: schematic link differs'
     dnp = any(p.get('name') == 'dnp' for p in comp.findall('property'))
@@ -69,7 +73,7 @@ for ref, comp in components.items():
     for pad in children(fp, 'pad'):
         net = child(pad, 'net')
         if net:
-            actual_pins[(ref, pad[1])] = net[2]
+            actual_pins[(ref, pad[1])] = net[-1]
     for model in children(fp, 'model'):
         path = Path(model[1].replace('${KIPRJMOD}', str(args.pcb.parent)))
         assert path.is_file(), f'{ref}: model missing: {path}'

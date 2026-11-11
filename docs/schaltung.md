@@ -12,7 +12,7 @@ Der Schaltplan verbindet die Signale direkt mit Leitungen. Netzlabels benennen n
 | RSH1 RT0805BRD071RL, C865286 | 1 Ω, 0,1 %, 25 ppm/K, 0805; getrennte Force-/Kelvin-Anschlüsse |
 | U1 ADS1115IDGSR, C37593 | I²C-ADC; ADDR an GND, Adresse 0x48 |
 | AIN0–AIN1 | Differenziell über R4/R5 (100 Ω) und C3 (100 nF) am Shunt |
-| AIN2 | NTC1 NTCG063JF103FTBA, 0201, thermisch an der Referenzzelle |
+| AIN2 | NTC1 NTCG103JF103FT1 (C209959), 0402, thermisch an der Referenzzelle |
 | AIN3 | Lokale analoge Versorgung / 2 über R2/R3, je 47 kΩ / 0,1 %; C7=100 nF |
 
 ALERT/RDY bleibt unbeschaltet; PanelLog pollt die Wandlungen. Kein MCU und keine Firmware auf dem POA-Board. Kein zweiter Temperaturfühler für das PV-Modul.
@@ -38,7 +38,7 @@ UV-/außentaugliches Kabel verwenden; Paarung bei der Montage erhalten. Kein Ver
 
 Die Versorgung erfolgt aus der vorhandenen PanelLog-3V3-Schiene über R36=0 Ω und J8.1. Die vorhandene PanelLog-Schnittstelle wird unverändert genutzt.
 
-Am POA-Kabeleingang C6=1 µF. C2/C6 sind Samsung CL10B105KA8NNNC (C29936), 25 V, X7R, ±10 %, 0603. R12=10 Ω plus C1=100 nF/C2=1 µF filtern die analoge Versorgung von ADC und Temperaturteilern. Der optionale P82B715 bleibt am ungefilterten Kabel-VDD und erhält C5=100 nF (DNP zusammen mit U2). Kein zusätzlicher Spannungsregler nötig. Die lokale Versorgung wird über AIN3 mitgemessen. Ein Betrieb bei ausgefallener PanelLog-3V3-Versorgung ist nicht vorgesehen; insbesondere ist keine unabhängige Nachtversorgung enthalten.
+Am POA-Kabeleingang C6=1 µF. C2/C6 sind Samsung CL21B105KBFNNNE (C28323), 50 V, X7R, ±10 %, 0805. R12=10 Ω plus C1=100 nF/C2=1 µF filtern die analoge Versorgung von ADC und Temperaturteilern. Der optionale P82B715 bleibt am ungefilterten Kabel-VDD und erhält C5=100 nF (DNP zusammen mit U2). Kein zusätzlicher Spannungsregler nötig. Die lokale Versorgung wird über AIN3 mitgemessen. Ein Betrieb bei ausgefallener PanelLog-3V3-Versorgung ist nicht vorgesehen; insbesondere ist keine unabhängige Nachtversorgung enthalten.
 
 ## DIRECT — Standardbestückung
 
@@ -63,7 +63,7 @@ P82B715: 2=Lx, 3=Sx, 4=GND, 6=Sy, 7=Ly, 8=VCC, 1/5 NC. Betriebsspannung an beide
 
 R1–R3 sind Viking AR03BTCX4702 (C2828645), je 47 kΩ, 0,1 %, 25 ppm/K, 0603. Der Temperaturkoeffizient gilt für einzelne Widerstände; eine garantierte gemeinsame Drift oder ein Tracking der drei Widerstände wird nicht vorausgesetzt. Die Temperaturdrift gehört zusammen mit den Toleranzen ins Fehlerbudget.
 
-NTC1 liegt unter/an der Referenzzelle und wird über R1=47 kΩ an +3V3_A gespeist. Bei 25 °C / 10 kΩ: ungefähr 0,579 V, 57,9 µA, 33,5 µW im NTC. Keine GPIO-Erregung und kein zusätzlicher Schalter erforderlich.
+NTC1 ist ein TDK NTCG103JF103FT1 in 0402: 10 kΩ bei 25 °C, Widerstands- und B-Wert-Toleranz je ±1 %, B25/50 typisch 3380 K, B25/85 3435 K und B25/100 typisch 3453 K. Er liegt unter/an der Referenzzelle und wird über R1=47 kΩ an +3V3_A gespeist. Bei 25 °C / 10 kΩ: ungefähr 0,579 V, 57,9 µA, 33,5 µW im NTC. Keine GPIO-Erregung und kein zusätzlicher Schalter erforderlich.
 
 Bei nominell gleichen R2/R3 gilt: VDD_local = 2 × U_AIN3; R_NTC = 47 kΩ × U_AIN2 / (VDD_local − U_AIN2). Für AIN2 und AIN3 die gleiche PGA-Spanne verwenden, z.B. ±4,096 V, und nach MUX-/PGA-Wechsel eine vollständige frische Wandlung abwarten. R/T-Kennlinie des exakten TDK-Teils statt einer über den ganzen Bereich vereinfachten Beta-Kurve verwenden.
 
@@ -74,4 +74,5 @@ Die Versorgungskorrektur ist keine vollständige Fehlerkompensation: ADC-Eingang
 - TI ADS1115: https://www.ti.com/lit/ds/symlink/ads1115.pdf
 - TI P82B715: https://www.ti.com/lit/ds/symlink/p82b715.pdf
 - TI TPD2E2U06: https://www.ti.com/lit/ds/symlink/tpd2e2u06.pdf
+- TDK NTCG103JF103FT1: https://product.tdk.com/en/search/sensor/ntc/chip-ntc-thermistor/info?part_no=NTCG103JF103FT1
 - ESP32-C6-WROOM-1: https://www.espressif.com/sites/default/files/documentation/esp32-c6-wroom-1_wroom-1u_datasheet_en.pdf
